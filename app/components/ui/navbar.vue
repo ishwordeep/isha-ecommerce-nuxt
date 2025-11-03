@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import type { NavigationMenuItem } from '@nuxt/ui'
 import Login from '~/components/auth/login.vue'
+import UserMenu from '~/layouts/components/UserMenu.vue'
 
 const route = useRoute()
-
+const authStore = useAuthStore()
 const items = computed<NavigationMenuItem[]>(() => [
   {
     label: "Women's Clothing",
@@ -37,9 +38,12 @@ const items = computed<NavigationMenuItem[]>(() => [
 
     <UNavigationMenu :items="items" highlight viewTransition />
 
-    <template #right>
+    <template v-if="!authStore.isAuthenticated" #right>
       <Login />
       <UButton variant="outline" label="Sign Up" size="md" />
+    </template>
+    <template v-else #right>
+      <UserMenu />
     </template>
 
     <template #body>

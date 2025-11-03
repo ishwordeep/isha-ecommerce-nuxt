@@ -1,0 +1,50 @@
+<script setup lang="ts">
+import type { DropdownMenuItem } from '@nuxt/ui'
+
+const items: DropdownMenuItem[][] = [
+  [
+    {
+      label: 'My Profile',
+      to: '/auth/profile',
+    },
+    {
+      label: 'My Orders',
+      to: '/auth/orders',
+    },
+    {
+      label: 'My Carts',
+      to: '/auth/cart',
+    },
+    {
+      label: 'My Wishlists',
+      to: '/auth/whishlist',
+    },
+  ],
+  [
+    {
+      label: 'Sign Out',
+      color: 'error',
+    },
+  ],
+]
+</script>
+
+<template>
+  <UDropdownMenu
+    :items="items"
+    :ui="{ content: 'w-42' }"
+    :modal="false"
+    :content="{
+      side: 'bottom-end' as any,
+    }"
+  >
+    <UButton
+      color="neutral"
+      square
+      class="rounded-full"
+      variant="subtle"
+      icon="i-lucide-user"
+      viewTransition
+    />
+  </UDropdownMenu>
+</template>
