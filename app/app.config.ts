@@ -92,5 +92,15 @@ export default defineAppConfig({
         tr: 'hover:bg-primary/10',
       },
     },
+    modal: {
+      slots: {
+        overlay: 'bg-black/60',
+      },
+    },
+    drawer: {
+      slots: {
+        overlay: 'bg-black/60',
+      },
+    },
   },
 })

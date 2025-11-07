@@ -1,5 +1,5 @@
 <template>
-  <div class="mx-auto w-full max-w-[500px] flex-1">
+  <div class="mx-auto w-full max-w-[600px] flex-1">
     <UCarousel
       ref="carousel"
       v-slot="{ item }"

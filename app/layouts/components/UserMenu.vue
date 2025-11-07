@@ -32,7 +32,7 @@ const items: DropdownMenuItem[][] = [
 <template>
   <UDropdownMenu
     :items="items"
-    :ui="{ content: 'w-42' }"
+    :ui="{ content: 'w-36' }"
     :modal="false"
     :content="{
       side: 'bottom-end' as any,

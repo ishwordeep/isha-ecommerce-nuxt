@@ -13,7 +13,7 @@
             :to="link.to"
             :key="link.to"
             class="rounded-lg p-2"
-            activeClass="bg-secondary text-white"
+            active-class="bg-secondary text-white"
           >
             {{ link.label }}
           </ULink>
@@ -22,7 +22,7 @@
           <slot name="heading">
             <h1 class="text-2xl font-bold text-black">{{ pageHeading }}</h1>
           </slot>
-          <slot></slot>
+          <slot />
         </div>
       </div>
     </main>

@@ -1,6 +1,6 @@
 <template>
   <ULink
-    class="border-default flex flex-col overflow-hidden rounded-lg border shadow-sm hover:shadow-md"
+    class="border-default flex flex-col overflow-hidden rounded-lg border text-black shadow-sm hover:shadow-md"
     to="/products/category/2"
     viewTransition
   >
@@ -9,8 +9,8 @@
       <span class="text-muted text-sm">Category</span>
       <span class="text-lg font-bold">Product</span>
       <div class="flex items-center gap-2">
-        <span class="font-bold">Rs. 1234</span>
-        <span class="text-muted text-sm line-through">Rs. 2345</span>
+        <span class="font-bold">$1234</span>
+        <span class="text-muted text-sm line-through">$2345</span>
       </div>
     </div>
   </ULink>
