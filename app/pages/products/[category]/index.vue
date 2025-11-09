@@ -1,18 +1,12 @@
 <template>
   <div class="flex flex-col gap-6">
-    <div class="flex flex-wrap items-center justify-between gap-4 border-y border-y-gray-300 py-4">
-      <div class="flex flex-col space-y-1">
+    <div class="flex flex-wrap items-end justify-between gap-4 border-y border-y-gray-300 py-4">
+      <div class="flex flex-col space-y-4">
         <h2 class="text-back text-xl font-medium">Category</h2>
         <UBreadcrumb :items="breadcrumbs" />
       </div>
 
-      <USelect
-        v-model="sortBy"
-        :items="sortOptions"
-        :ui="{
-          base: 'max-w-[200px]',
-        }"
-      />
+      <USelect v-model="sortBy" :items="sortOptions" class="max-w-[200px]" />
     </div>
 
     <div class="flex gap-6">
@@ -60,7 +54,7 @@ const breadcrumbs = ref([
   },
   {
     label: 'Category',
-    to: '/categiry',
+    to: '/products/category',
   },
 ])
 </script>

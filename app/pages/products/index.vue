@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col gap-6">
-    <div class="flex flex-wrap items-center justify-between gap-4 border-y border-y-gray-300 py-4">
-      <div class="flex flex-col space-y-1">
+    <div class="flex flex-wrap items-end justify-between gap-4 border-y border-y-gray-300 py-4">
+      <div class="flex flex-col space-y-5">
         <h2 class="text-back text-xl font-medium">All Products</h2>
         <UBreadcrumb :items="breadcrumbs" />
       </div>

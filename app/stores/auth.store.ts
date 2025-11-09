@@ -1,6 +1,12 @@
-// auth.store.ts
+// ============================================
+// FILE: stores/auth.ts
+// ============================================
 import { defineStore } from 'pinia'
-import { getCookie, setCookie, deleteCookie } from '../utils/cookie.utils'
+
+const userData = {
+  name: 'John Doe',
+  email: 'johndoe@example.com',
+}
 
 export interface User {
   id: number
@@ -28,40 +34,28 @@ export interface AuthState {
   loading: boolean
 }
 
-// Cookie options - customize as needed
-const COOKIE_OPTIONS = {
-  expires: 7, // 7 days
-  path: '/',
-  secure: import.meta.env.PROD, // Only secure in production (Vite convention)
-  sameSite: 'lax' as const,
-}
-
 export const useAuthStore = defineStore('auth', {
   state: (): AuthState => {
-    // Initialize from cookies immediately if on client
+    // Initialize from localStorage immediately if on client
     let initialState: AuthState = {
       user: null,
       accessToken: null,
       xAccessToken: null,
-      isAuthenticated: true,
+      isAuthenticated: false,
       loading: false,
     }
 
     if (typeof window !== 'undefined') {
-      const accessToken = getCookie('accessToken')
-      const userCookie = getCookie('user')
+      const accessToken = localStorage.getItem('accessToken')
+      const user = localStorage.getItem('user')
 
-      if (accessToken && userCookie) {
-        try {
-          initialState = {
-            ...initialState,
-            accessToken,
-            xAccessToken: getCookie('xAccessToken'),
-            user: JSON.parse(userCookie),
-            isAuthenticated: true,
-          }
-        } catch (e) {
-          console.error('Failed to parse user cookie:', e)
+      if (accessToken && user) {
+        initialState = {
+          ...initialState,
+          accessToken,
+          xAccessToken: localStorage.getItem('xAccessToken'),
+          user: JSON.parse(user),
+          isAuthenticated: true,
         }
       }
     }
@@ -77,24 +71,19 @@ export const useAuthStore = defineStore('auth', {
 
   actions: {
     /**
-     * Initialize auth state from cookies
+     * Initialize auth state from localStorage
      */
     initAuth() {
       if (typeof window !== 'undefined') {
-        const accessToken = getCookie('accessToken')
-        const xAccessToken = getCookie('xAccessToken')
-        const userCookie = getCookie('user')
+        const accessToken = localStorage.getItem('accessToken')
+        const xAccessToken = localStorage.getItem('xAccessToken')
+        const user = localStorage.getItem('user')
 
-        if (accessToken && userCookie) {
-          try {
-            this.accessToken = accessToken
-            this.xAccessToken = xAccessToken
-            this.user = JSON.parse(userCookie)
-            this.isAuthenticated = true
-          } catch (e) {
-            console.error('Failed to parse user cookie:', e)
-            this.clearAuth()
-          }
+        if (accessToken && user) {
+          this.accessToken = accessToken
+          this.xAccessToken = xAccessToken
+          this.user = JSON.parse(user)
+          this.isAuthenticated = true
         }
       }
     },
@@ -108,13 +97,13 @@ export const useAuthStore = defineStore('auth', {
       this.xAccessToken = xAccessToken || null
       this.isAuthenticated = true
 
-      // Save to cookies
+      // Save to localStorage
       if (typeof window !== 'undefined') {
-        setCookie('accessToken', accessToken, COOKIE_OPTIONS)
+        localStorage.setItem('accessToken', accessToken)
         if (xAccessToken) {
-          setCookie('xAccessToken', xAccessToken, COOKIE_OPTIONS)
+          localStorage.setItem('xAccessToken', xAccessToken)
         }
-        setCookie('user', JSON.stringify(user), COOKIE_OPTIONS)
+        localStorage.setItem('user', JSON.stringify(user))
       }
     },
 
@@ -127,11 +116,11 @@ export const useAuthStore = defineStore('auth', {
       this.xAccessToken = null
       this.isAuthenticated = false
 
-      // Clear cookies
+      // Clear localStorage
       if (typeof window !== 'undefined') {
-        deleteCookie('accessToken', { path: '/' })
-        deleteCookie('xAccessToken', { path: '/' })
-        deleteCookie('user', { path: '/' })
+        localStorage.removeItem('accessToken')
+        localStorage.removeItem('xAccessToken')
+        localStorage.removeItem('user')
       }
       navigateTo('/login')
     },
@@ -151,7 +140,7 @@ export const useAuthStore = defineStore('auth', {
         this.user = { ...this.user, ...userData }
 
         if (typeof window !== 'undefined') {
-          setCookie('user', JSON.stringify(this.user), COOKIE_OPTIONS)
+          localStorage.setItem('user', JSON.stringify(this.user))
         }
       }
     },

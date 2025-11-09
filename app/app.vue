@@ -18,9 +18,23 @@
 </template>
 <script setup lang="ts">
 const isInitializing = ref(true)
-
+// const authStore = useAuthStore()
 onMounted(async () => {
+  // if (!settingStore.setting && authStore.isAuthenticated) {
+  //   await settingStore.fetchSetting()
+  // }
+  // Small delay to prevent flash
   await new Promise((resolve) => setTimeout(resolve, 100))
+
   isInitializing.value = false
 })
+
+// watch(
+//   () => authStore.isAuthenticated,
+//   async () => {
+//     if (!settingStore.setting && authStore.isAuthenticated) {
+//       await settingStore.fetchSetting()
+//     }
+//   }
+// )
 </script>
