@@ -4,7 +4,7 @@
     <main class="mx-auto h-full max-w-[1440px] px-4 py-4 sm:px-6 lg:px-8">
       <div class="mt-4 flex gap-4">
         <div
-          class="bg-primary/10 sticky top-24 flex max-h-[50dvh] min-h-[50dvh] max-w-[250px] min-w-[250px] flex-col gap-2 p-4"
+          class="sticky top-24 flex max-h-[50dvh] min-h-[50dvh] max-w-[250px] min-w-[250px] flex-col gap-2 rounded-lg bg-gray-100 p-4 max-lg:hidden"
         >
           <h2 class="mb-4 text-lg font-bold">Hello, User</h2>
 
@@ -13,7 +13,7 @@
             :to="link.to"
             :key="link.to"
             class="rounded-lg p-2"
-            active-class="bg-secondary text-white"
+            active-class="bg-primary text-white"
           >
             {{ link.label }}
           </ULink>

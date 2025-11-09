@@ -68,7 +68,7 @@ export const useCheckoutStore = defineStore('checkout', () => {
   }
 
   return {
-    isLoading: readonly(isLoading),
+    isLoading,
     initializeForCheckout,
     formInputs,
     resetToOriginal,

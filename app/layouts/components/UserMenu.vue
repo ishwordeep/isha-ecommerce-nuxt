@@ -11,13 +11,10 @@ const items: DropdownMenuItem[][] = [
       label: 'My Orders',
       to: '/auth/orders',
     },
-    {
-      label: 'My Carts',
-      to: '/auth/cart',
-    },
+
     {
       label: 'My Wishlists',
-      to: '/auth/whishlist',
+      to: '/auth/wishlist',
     },
   ],
   [

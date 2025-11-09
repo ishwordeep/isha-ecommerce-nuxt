@@ -35,6 +35,9 @@ export default defineNuxtConfig({
       },
     },
   },
+  image: {
+    dir: 'assets/images',
+  },
   css: ['~/assets/css/main.css'],
   vite: {
     plugins: [tailwindcss()],

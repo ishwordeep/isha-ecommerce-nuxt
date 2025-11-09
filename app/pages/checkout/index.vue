@@ -1,61 +1,85 @@
 <template>
-  <UForm
-    :state="checkoutStore.formInputs"
-    class="flex flex-col gap-4"
-    @submit.prevent="onSubmit"
-    id="checkout-form"
-  >
-    <h2 class="text-2xl font-semibold text-black">Checkout</h2>
-    <UPageCard title="Shipping Information">
-      <div :state="{}" class="flex flex-col gap-4">
-        <UFormField label="Full Name" name="fullName">
-          <UInput v-model="checkoutStore.formInputs.name" />
-        </UFormField>
-
-        <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-          <UFormField label="Email" name="email">
-            <UInput v-model="checkoutStore.formInputs.email" />
-          </UFormField>
-
-          <UFormField label="Phone Number" name="phone">
-            <UInput v-model="checkoutStore.formInputs.phone" />
-          </UFormField>
-        </div>
-        <UFormField label="Address" name="address">
-          <UInput v-model="checkoutStore.formInputs.address" />
-        </UFormField>
-
-        <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-          <UFormField label="City" name="city">
-            <UInput v-model="checkoutStore.formInputs.city" />
-          </UFormField>
-
-          <UFormField label="Zip Code" name="zipCode">
-            <UInput v-model="checkoutStore.formInputs.zipCode" />
-          </UFormField>
-        </div>
-      </div>
-    </UPageCard>
-
-    <UPageCard title="Payment Method">
-      <URadioGroup
-        v-model="checkoutStore.formInputs.paymentMethod"
-        :items="checkoutMethods"
-        variant="card"
-        :ui="{ label: 'items-center', fieldset: 'gap-4', item: 'items-center' }"
-      >
-        <template #label="{ item }">
+  <div class="grid grid-cols-1 gap-4 min-[960px]:grid-cols-2">
+    <UForm
+      :state="checkoutStore.formInputs"
+      class="flex flex-col gap-4"
+      @submit.prevent="onSubmit"
+      id="checkout-form"
+    >
+      <h2 class="text-2xl font-semibold text-black">Checkout</h2>
+      <UPageCard>
+        <template #header>
           <div class="flex items-center gap-2">
-            <span :class="item.value === 'card' ? '-mt-2' : ''" class="text-lg">{{
-              item.icon
-            }}</span>
-            <span class="font-medium">{{ item.label }}</span>
+            <div class="header-number">1</div>
+            <span class="header-text">Contact Information</span>
           </div>
         </template>
-      </URadioGroup>
-    </UPageCard>
 
-    <UPageCard title="Order Summary">
+        <div class="flex flex-col gap-4">
+          <UFormField label="Full Name" name="fullName">
+            <UInput v-model="checkoutStore.formInputs.name" />
+          </UFormField>
+          <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <UFormField label="Email" name="email">
+              <UInput v-model="checkoutStore.formInputs.email" />
+            </UFormField>
+
+            <UFormField label="Phone Number" name="phone">
+              <UInput v-model="checkoutStore.formInputs.phone" />
+            </UFormField>
+          </div>
+        </div>
+      </UPageCard>
+
+      <UPageCard>
+        <template #header>
+          <div class="flex items-center gap-2">
+            <div class="header-number">2</div>
+            <span class="header-text">Shipping Address</span>
+          </div>
+        </template>
+
+        <div class="flex flex-col gap-4">
+          <UFormField label="Address" name="address">
+            <UInput v-model="checkoutStore.formInputs.address" />
+          </UFormField>
+          <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <UFormField label="City" name="city">
+              <UInput v-model="checkoutStore.formInputs.city" />
+            </UFormField>
+
+            <UFormField label="Zip Code" name="zipCode">
+              <UInput v-model="checkoutStore.formInputs.zipCode" />
+            </UFormField>
+          </div>
+        </div>
+      </UPageCard>
+
+      <UPageCard>
+        <template #header>
+          <div class="flex items-center gap-2">
+            <div class="header-number">3</div>
+            <span class="header-text">Payment Method</span>
+          </div>
+        </template>
+        <URadioGroup
+          v-model="checkoutStore.formInputs.paymentMethod"
+          :items="checkoutMethods"
+          variant="card"
+          :ui="{ label: 'items-center', fieldset: 'gap-4', item: 'items-center' }"
+        >
+          <template #label="{ item }">
+            <div class="flex items-center gap-2">
+              <span :class="item.value === 'card' ? '-mt-2' : ''" class="text-lg">{{
+                item.icon
+              }}</span>
+              <span class="font-medium">{{ item.label }}</span>
+            </div>
+          </template>
+        </URadioGroup>
+      </UPageCard>
+    </UForm>
+    <UPageCard class="min-[960px]::mt-12 h-max" title="Order Summary">
       <div class="flex flex-col gap-2">
         <div
           v-for="item in cartData"
@@ -115,11 +139,12 @@
             }"
             to="/checkout/confirmed"
             viewTransition
+            :disabled="disableButton"
           />
         </div>
       </div>
     </UPageCard>
-  </UForm>
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -132,6 +157,24 @@ const checkoutMethods = ref([
   { label: 'PayPal', value: 'paypal', icon: '💰️' },
   { label: 'Cash on Delivery', value: 'cod', icon: '📦' },
 ])
+
+const disableButton = ref(true)
+
+watch(
+  () => checkoutStore.formInputs,
+  (newVal) => {
+    disableButton.value = !(
+      newVal.name &&
+      newVal.email &&
+      newVal.phone &&
+      newVal.address &&
+      newVal.city &&
+      newVal.zipCode &&
+      newVal.paymentMethod
+    )
+  },
+  { deep: true }
+)
 
 const onSubmit = () => {
   // Handle form submission logic here
@@ -168,3 +211,14 @@ const cartData = ref([
   },
 ])
 </script>
+
+<style scoped>
+@reference "tailwindcss";
+.header-number {
+  @apply flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 font-bold text-blue-600;
+}
+
+.header-text {
+  @apply text-lg font-semibold;
+}
+</style>

@@ -1,117 +1,96 @@
+<template>
+  <div class="space-y-4">
+    <div
+      v-for="order in orderStore.orders"
+      :key="order._id"
+      class="rounded-xl border border-gray-200 bg-white p-6 transition-shadow hover:shadow-md"
+    >
+      <div class="mb-4 flex items-start justify-between">
+        <div>
+          <div class="mb-2 flex flex-wrap items-center gap-3">
+            <h3 class="text-lg font-bold text-gray-900">{{ order._id }}</h3>
+            <OrderStatusBadge :status="order.status" />
+          </div>
+          <div class="text-sm text-gray-500">
+            Placed on {{ order.date }} • {{ order.items }} items
+          </div>
+        </div>
+        <div class="text-right">
+          <div class="text-2xl font-bold text-gray-900">${{ order.total.toFixed(2) }}</div>
+          <UButton
+            variant="link"
+            color="primary"
+            leading-icon="i-lucide-eye"
+            size="sm"
+            label="View Details"
+            @click="viewOrderDetail(order)"
+          />
+        </div>
+      </div>
+
+      <div class="border-t pt-4">
+        <div class="flex gap-3">
+          <div
+            v-for="(product, idx) in order.products"
+            :key="idx"
+            class="flex items-center gap-2 rounded-lg bg-gray-50 p-2"
+          >
+            <div class="text-2xl">{{ product.image }}</div>
+            <div class="text-xs">
+              <div class="font-medium text-gray-900">{{ product.name }}</div>
+              <div class="text-gray-500">Qty: {{ product.qty }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-4 flex flex-wrap gap-2">
+        <button
+          class="flex-1 rounded-lg border border-gray-300 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+        >
+          Track Order
+        </button>
+        <button
+          class="flex-1 rounded-lg border border-gray-300 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+        >
+          Invoice
+        </button>
+        <button
+          class="flex-1 rounded-lg border border-gray-300 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+        >
+          Return
+        </button>
+      </div>
+    </div>
+
+    <OrderDetail v-model:open="openDetail" />
+  </div>
+</template>
+
 <script setup lang="ts">
-import { h, resolveComponent } from 'vue'
-import type { TableColumn } from '@nuxt/ui'
+import { useOrderStore } from '~/stores/order.store'
+import type { OrderResponse } from '~/services/order.service'
+import OrderDetail from './components/OrderDetail.vue'
+import OrderStatusBadge from '~/components/ui/OrderStatusBadge.vue'
+
+const openDetail = ref(false)
 
 definePageMeta({
   layout: 'auth',
   pageHeading: 'My Orders',
 })
 
-const UBadge = resolveComponent('UBadge')
+const orderStore = useOrderStore()
 
-type Payment = {
-  id: string
-  date: string
-  status: 'paid' | 'failed' | 'refunded'
-  email: string
-  amount: number
+onMounted(async () => {
+  if (!orderStore.orders?.length) {
+    await orderStore.fetchOrders()
+  }
+})
+
+const viewOrderDetail = (order: OrderResponse) => {
+  console.log(order)
+  orderStore.selectedOrder = order
+  openDetail.value = true
 }
-
-const data = ref<Payment[]>([
-  {
-    id: '4600',
-    date: '2024-03-11T15:30:00',
-    status: 'paid',
-    email: 'james.anderson@example.com',
-    amount: 594,
-  },
-  {
-    id: '4599',
-    date: '2024-03-11T10:10:00',
-    status: 'failed',
-    email: 'mia.white@example.com',
-    amount: 276,
-  },
-  {
-    id: '4598',
-    date: '2024-03-11T08:50:00',
-    status: 'refunded',
-    email: 'william.brown@example.com',
-    amount: 315,
-  },
-  {
-    id: '4597',
-    date: '2024-03-10T19:45:00',
-    status: 'paid',
-    email: 'emma.davis@example.com',
-    amount: 529,
-  },
-  {
-    id: '4596',
-    date: '2024-03-10T15:55:00',
-    status: 'paid',
-    email: 'ethan.harris@example.com',
-    amount: 639,
-  },
-])
-
-const columns: TableColumn<Payment>[] = [
-  {
-    accessorKey: 'id',
-    header: '#',
-    cell: ({ row }) => `#${row.getValue('id')}`,
-  },
-  {
-    accessorKey: 'date',
-    header: 'Date',
-    cell: ({ row }) => {
-      return new Date(row.getValue('date')).toLocaleString('en-US', {
-        day: 'numeric',
-        month: 'short',
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: false,
-      })
-    },
-  },
-  {
-    accessorKey: 'status',
-    header: 'Status',
-    cell: ({ row }) => {
-      const color = {
-        paid: 'success' as const,
-        failed: 'error' as const,
-        refunded: 'neutral' as const,
-      }[row.getValue('status') as string]
-
-      return h(UBadge, { class: 'capitalize', variant: 'subtle', color }, () =>
-        row.getValue('status')
-      )
-    },
-  },
-  {
-    accessorKey: 'email',
-    header: 'Email',
-  },
-  {
-    accessorKey: 'amount',
-    header: () => h('div', { class: 'text-right' }, 'Amount'),
-    cell: ({ row }) => {
-      const amount = Number.parseFloat(row.getValue('amount'))
-
-      const formatted = new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'EUR',
-      }).format(amount)
-
-      return h('div', { class: 'text-right font-medium' }, formatted)
-    },
-  },
-]
 </script>
-
-<template>
-  <div class="border-default border">
-    <UTable :data="data" :columns="columns" class="flex-1" />
-  </div>
-</template>
