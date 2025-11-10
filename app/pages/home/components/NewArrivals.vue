@@ -1,0 +1,63 @@
+<template>
+  <div>
+    <SectionHeader :collection="collection" />
+    <div
+      v-if="isLoading"
+      class="mt-8 grid w-full grid-cols-1 place-items-center gap-x-2 gap-y-4 min-[360px]:grid-cols-2 sm:gap-4 md:gap-6 lg:grid-cols-4"
+    >
+      <ProductSkeletonCard v-for="i in 4" :key="i" />
+    </div>
+    <div class="mt-8 flex flex-col items-center justify-center gap-2" v-else>
+      <div
+        class="grid w-full grid-cols-1 place-items-center gap-x-2 gap-y-4 min-[360px]:grid-cols-2 sm:gap-4 md:gap-6 lg:grid-cols-4"
+      >
+        <FlagProductsCard
+          :collection="collection"
+          v-for="product in productStore.newArrivals"
+          :product="product"
+          :key="product._id"
+        />
+      </div>
+      <!--View All Button-->
+      <div class="mt-8 text-center">
+        <UButton
+          :to="`/products/collection/${collection.type}`"
+          viewTransition
+          class="rounded-xl bg-gradient-to-r px-8 py-4 font-bold hover:scale-105 hover:shadow-xl"
+          :class="collection.gradient"
+          trailingIcon="i-lucide-arrow-right"
+          :ui="{
+            trailingIcon: 'h-5 w-5',
+          }"
+          :label="'View All ' + collection.title"
+        />
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { useProductStore } from '~/stores/product.store'
+import FlagProductsCard from '~/components/ui/FlagProductsCard.vue'
+import SectionHeader from '~/components/ui/SectionHeader.vue'
+import ProductSkeletonCard from '~/components/ui/ProductSkeletonCard.vue'
+
+const productStore = useProductStore()
+const isLoading = ref(true)
+const collection = {
+  title: 'New Arrivals',
+  type: 'newArrivals',
+  description: 'Check out the latest additions to our collection.',
+  gradient: 'from-blue-500 to-blue-600',
+  iconName: 'i-lucide-clock',
+  badge: 'Just In ',
+  color: '#3B82F6',
+}
+
+onMounted(async () => {
+  if (!productStore.newArrivals?.length) {
+    await productStore.fetchProductsByFlags('newArrivals')
+  }
+  isLoading.value = false
+})
+</script>

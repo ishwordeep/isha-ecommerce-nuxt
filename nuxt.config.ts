@@ -26,7 +26,14 @@ export default defineNuxtConfig({
       apiUrl: '',
     },
   },
-  modules: ['@nuxt/eslint', '@nuxt/image', '@nuxt/ui', '@nuxt/fonts', '@pinia/nuxt'],
+  modules: [
+    '@nuxt/eslint',
+    '@nuxt/image',
+    '@nuxt/ui',
+    '@nuxt/fonts',
+    '@pinia/nuxt',
+    '@vueuse/nuxt',
+  ],
   ui: {
     colorMode: false,
     theme: {
