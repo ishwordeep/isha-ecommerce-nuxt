@@ -1,23 +1,22 @@
 <template>
   <div class="mt-8">
     <SectionHeader :collection="collection" />
-    <div
-      v-if="isLoading"
-      class="mt-8 grid w-full grid-cols-1 place-items-center gap-x-2 gap-y-4 min-[360px]:grid-cols-2 sm:gap-4 md:gap-6 lg:grid-cols-4"
-    >
-      <ProductSkeletonCard v-for="i in 4" :key="i" />
-    </div>
-    <div class="mt-8 flex flex-col items-center justify-center gap-2" v-else>
-      <div
-        class="grid w-full grid-cols-1 place-items-center gap-x-2 gap-y-4 min-[360px]:grid-cols-2 sm:gap-4 md:gap-6 lg:grid-cols-4"
+
+    <div class="mt-8 flex flex-col items-center justify-center gap-2">
+      <UPageColumns
+        class="w-full columns-1 place-items-center gap-x-2 gap-y-4 min-[360px]:columns-2 sm:gap-4 md:gap-6 lg:columns-4"
       >
+        <template v-if="isLoading">
+          <ProductSkeletonCard v-for="i in 4" :key="i" />
+        </template>
         <FlagProductsCard
+          v-else
           :collection="collection"
           v-for="product in productStore.featured"
           :product="product"
           :key="product._id"
         />
-      </div>
+      </UPageColumns>
       <!--View All Button-->
       <div class="mt-8 text-center">
         <UButton
@@ -49,7 +48,7 @@ const collection = {
   type: 'featured',
   description:
     "Handpicked by our stylists. Curated selections that define this season's must-have wardrobe essentials.",
-  gradient: 'from-purple-500 to-purple-600',
+  gradient: 'from-purple-500 to-purple-600 hover:from-purple-500 hover:to-purple-700',
   iconName: 'i-lucide-star',
   badge: "Editor's Choice",
   color: '#8B5CF6',

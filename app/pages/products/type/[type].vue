@@ -2,7 +2,9 @@
   <div class="flex flex-col gap-6">
     <div class="flex flex-wrap items-end justify-between gap-4 border-y border-y-gray-300 py-4">
       <div class="flex flex-col space-y-5">
-        <h2 class="text-2xl font-medium text-black md:text-4xl">All Products</h2>
+        <h2 class="text-2xl font-medium text-black md:text-4xl">
+          {{ title }}
+        </h2>
         <UBreadcrumb :items="breadcrumbs" />
       </div>
 
@@ -22,7 +24,11 @@
       <div
         class="grid w-full grid-cols-1 justify-center gap-2 min-[450px]:grid-cols-2 sm:gap-4 lg:grid-cols-3 2xl:grid-cols-4"
       >
+        <template v-if="isLoading">
+          <UiProductSkeletonCard v-for="i in 8" :key="i" />
+        </template>
         <UiProductCard
+          v-else
           v-for="product in productStore.products"
           :product="product"
           :key="product._id"
@@ -33,7 +39,20 @@
 </template>
 
 <script setup lang="ts">
+import { useProductStore } from '~/stores/product.store'
+
+const route = useRoute()
+const productStore = useProductStore()
+const isLoading = ref(true)
+
 const sortBy = ref('bestMatch')
+
+const title = computed(() => {
+  const type = route.params.type as string
+  return type
+    ? type.replace(/([A-Z])/g, ' $1').replace(/^./, (str) => str.toUpperCase())
+    : 'All Products'
+})
 
 const sortOptions = ref([
   {
@@ -63,17 +82,20 @@ const breadcrumbs = ref([
     to: '/',
   },
   {
-    label: 'All Products',
-    to: '/products',
+    label: title.value,
+    to: '#',
   },
 ])
 
-const productStore = useProductStore()
-const isLoading = ref(true)
+watchEffect(async () => {
+  const type = route.params.type as string
+  if (!type) return
 
-onMounted(async () => {
   isLoading.value = true
-  await productStore.fetchProducts()
-  isLoading.value = false
+  try {
+    await productStore.fetchProductsByFlags(type)
+  } finally {
+    isLoading.value = false
+  }
 })
 </script>

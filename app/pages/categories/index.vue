@@ -84,30 +84,26 @@
         </div>
       </div>
     </div>
-
-    <!-- View All Categories Button -->
-    <div class="mt-12 text-center">
-      <UButton
-        size="xl"
-        color="neutral"
-        class="inline-flex items-center gap-2 rounded-xl px-8 py-4 font-bold transition-all duration-300 hover:scale-105"
-        to="/categories"
-        viewTransition
-      >
-        Browse All Categories
-        <UIcon name="i-lucide-arrow-right" class="h-5 w-5" />
-      </UButton>
-    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import SectionHero from '~/components/ui/SectionHero.vue'
 
+useSeoMeta({
+  title: 'Categories - Explore Our Fashion Collections',
+  description:
+    "Explore our diverse range of fashion categories. From everyday essentials to statement pieces, find exactly what you're looking for.",
+  ogTitle: 'Categories - Explore Our Fashion Collections',
+  ogDescription:
+    "Explore our diverse range of fashion categories. From everyday essentials to statement pieces, find exactly what you're looking for.",
+})
+
 const isLoading = ref(true)
 const categoryStore = useCategoryStore()
+
 const section = ref({
-  title: 'Shop By Categories',
+  title: 'Categories',
   description: `Explore our diverse range of fashion categories. From everyday essentials to statement pieces, find exactly what you\'re looking for.`,
 })
 onMounted(async () => {

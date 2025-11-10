@@ -2,7 +2,7 @@ export default defineAppConfig({
   ui: {
     formField: {
       slots: {
-        container: 'mt-1 relative w-full',
+        container: 'relative w-full',
       },
     },
     input: {
@@ -10,7 +10,7 @@ export default defineAppConfig({
         size: 'xl',
       },
       slots: {
-        root: 'mt-1 relative w-full',
+        root: 'relative w-full',
       },
       variants: {
         size: {
@@ -25,7 +25,7 @@ export default defineAppConfig({
         size: 'xl',
       },
       slots: {
-        base: 'mt-1 relative w-full',
+        base: 'relative w-full',
       },
       variants: {
         size: {
@@ -40,7 +40,7 @@ export default defineAppConfig({
         size: 'xl',
       },
       slots: {
-        base: 'mt-1 relative w-full',
+        base: 'relative w-full',
       },
       variants: {
         size: {
@@ -55,7 +55,7 @@ export default defineAppConfig({
         size: 'xl',
       },
       slots: {
-        root: 'mt-1 relative w-full',
+        root: 'relative w-full',
       },
       variants: {
         size: {
@@ -68,14 +68,24 @@ export default defineAppConfig({
     button: {
       defaultVariants: {
         size: 'xl',
+        color: 'primary',
       },
+
+      compoundVariants: [
+        {
+          color: 'primary',
+          variant: 'solid',
+          class:
+            'bg-gradient-to-r from-primary/70 to-primary/80 text-white hover:from-secondary/80 hover:to-secondary/90',
+        },
+      ],
     },
     inputNumber: {
       defaultVariants: {
         size: 'xl',
       },
       slots: {
-        root: 'mt-1 relative w-full',
+        root: 'relative w-full',
       },
       variants: {
         size: {

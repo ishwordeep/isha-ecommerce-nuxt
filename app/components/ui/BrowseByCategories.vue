@@ -15,18 +15,32 @@
 
     <template #content>
       <div class="mt-4 flex flex-col space-y-6">
+        <template v-if="isLoading">
+          <USkeleton v-for="i in 10" :key="i" class="h-4 w-full rounded" />
+        </template>
         <ULink
+          v-else
           class="line-clamp-1"
-          v-for="i in 10"
-          :to="`/products/category-${i}`"
-          :key="i"
+          v-for="category in categoryStore.categories"
+          :to="`/products/${category._id}`"
+          :key="category._id"
           viewTransition
         >
-          Category {{ i }}
+          {{ category.name }}
         </ULink>
       </div>
     </template>
   </UCollapsible>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+const categoryStore = useCategoryStore()
+const isLoading = ref(true)
+
+onMounted(async () => {
+  if (!categoryStore.categories?.length) {
+    await categoryStore.fetchCategories()
+  }
+  isLoading.value = false
+})
+</script>

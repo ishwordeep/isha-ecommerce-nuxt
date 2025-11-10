@@ -1,10 +1,13 @@
 <template>
-  <div>
+  <div class="relative flex min-h-screen w-full flex-col bg-gray-50">
     <UiNavbar />
-    <main class="mx-auto h-full max-w-[1440px] px-4 py-4 sm:px-6 lg:px-8">
+    <main class="mx-auto h-full w-full max-w-[1440px] flex-1 px-4 py-4 sm:px-6 lg:px-8">
       <slot />
     </main>
+    <AppFooter />
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import AppFooter from '~/layouts/components/AppFooter.vue'
+</script>

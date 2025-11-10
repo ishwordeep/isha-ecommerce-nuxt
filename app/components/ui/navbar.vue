@@ -8,19 +8,29 @@ const route = useRoute()
 const authStore = useAuthStore()
 const items = computed<NavigationMenuItem[]>(() => [
   {
-    label: "Women's Clothing",
-    to: '/',
-    active: route.path.startsWith("/women's clothing"),
+    label: 'New',
+    to: '/products/type/new',
+    active: route.path === '/products/type/new',
   },
   {
-    label: "Men's Clothing",
-    to: '/',
-    active: route.path.startsWith("/men's clothing"),
+    label: 'Categories',
+    to: '/categories',
+    active: route.path.startsWith('/categories'),
   },
   {
-    label: 'Shirts',
-    to: '/',
-    active: route.path.startsWith('/shirts'),
+    label: 'Featured',
+    to: '/products/type/featured',
+    active: route.path.startsWith('/products/type/featured'),
+  },
+  {
+    label: 'Sales',
+    to: '/sales',
+    active: route.path.startsWith('/sales'),
+  },
+  {
+    label: 'About Us',
+    to: '/about',
+    active: route.path === '/about',
   },
 ])
 </script>
@@ -32,7 +42,7 @@ const items = computed<NavigationMenuItem[]>(() => [
       container: 'max-w-[1440px]',
     }"
     :toggle="{
-      color: 'neutral',
+      color: 'primary',
       variant: 'ghost',
     }"
   >

@@ -1,28 +1,183 @@
 <template>
-  <ULink
-    class="border-default bg-tertiary flex flex-col overflow-hidden rounded-lg border text-black shadow-sm hover:shadow-md"
-    to="/products/category/2"
-    viewTransition
+  <div
+    class="group relative w-full overflow-hidden rounded-2xl border border-gray-100 bg-white transition-all duration-300 hover:border-gray-200 hover:bg-[#FAF9F5] hover:shadow-lg"
+    role="article"
+    aria-labelledby="product-title"
   >
-    <!--    <NuxtImg :src="product.image" class="aspect-[4/3] object-fill" />-->
-    <div class="item-image">{{ product.image }}</div>
-    <div class="flex flex-col gap-2 p-4">
-      <span class="text-muted text-sm">{{ product.category }}</span>
-      <span class="text-lg font-bold">{{ product.name }}</span>
-      <div class="flex items-center gap-2">
-        <span class="font-bold">{{ product.price }}</span>
-        <!--        <span class="text-muted text-sm line-through">$2345</span>-->
+    <!-- Badge -->
+    <div v-if="collection" class="absolute top-4 left-4 z-10">
+      <span
+        class="flex items-center gap-1.5 rounded-full bg-gradient-to-r px-3 py-1.5 text-xs font-bold text-white shadow-md transition-transform group-hover:scale-105"
+        :class="collection?.gradient"
+      >
+        <UIcon
+          :name="collection?.iconName || 'i-lucide-sparkles'"
+          v-if="collection?.type"
+          class="h-3.5 w-3.5"
+        />
+        {{ collection?.badge }}
+      </span>
+    </div>
+
+    <!-- Wishlist Button -->
+    <button
+      @click="toggleWishlist"
+      :aria-label="isWishlisted ? 'Remove from wishlist' : 'Add to wishlist'"
+      class="absolute top-4 right-4 z-10 flex h-9 w-9 items-center justify-center rounded-full bg-white/90 opacity-0 shadow-md backdrop-blur-sm transition-all duration-200 group-hover:opacity-100 hover:scale-110 hover:bg-rose-50"
+      :class="{ 'text-rose-500': isWishlisted }"
+    >
+      <UIcon
+        :name="isWishlisted ? 'i-lucide-heart-filled' : 'i-lucide-heart'"
+        class="h-4 w-4 text-gray-700 transition-colors"
+      />
+    </button>
+
+    <!-- Product Image -->
+    <NuxtLink
+      :to="`/products/${product.category?.name || 'category'}/${product._id}`"
+      class="block"
+    >
+      <div
+        class="relative flex aspect-square items-center justify-center overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 transition-transform duration-500 group-hover:scale-105 min-[360px]:aspect-[4/3]"
+      >
+        <div class="text-7xl md:text-8xl">
+          {{ product.image }}
+        </div>
+        <!-- Optional: Add real image later -->
+        <!-- <img :src="product.imageUrl" alt="" class="h-full w-full object-cover" /> -->
+      </div>
+    </NuxtLink>
+
+    <!-- Product Info -->
+    <div class="p-5">
+      <!-- Category & Name -->
+      <p class="mb-1 text-xs font-medium tracking-wider text-gray-500 uppercase">
+        {{ product.category?.name || '' }}
+      </p>
+      <h3
+        id="product-title"
+        class="mb-2 line-clamp-1 text-lg leading-tight font-bold text-gray-900"
+      >
+        <NuxtLink
+          :to="`/products/${product.category?.name || 'category'}/${product._id}`"
+          class="transition-colors hover:text-indigo-600"
+        >
+          {{ product.name }}
+        </NuxtLink>
+      </h3>
+
+      <!-- Color Swatches -->
+      <div class="mb-3 flex items-center gap-1.5">
+        <button
+          v-for="color in product.colors"
+          :key="color"
+          type="button"
+          @click="selectedColor = color"
+          :aria-label="`Select color ${color}`"
+          class="relative h-6 w-6 rounded-full border-2 transition-all duration-200 hover:scale-110"
+          :class="[
+            selectedColor === color
+              ? 'ring-primary/30 ring-2'
+              : color === '#FFFFFF'
+                ? 'border-gray-300'
+                : 'border-transparent',
+          ]"
+          :style="{ backgroundColor: color }"
+        >
+          <span
+            v-if="selectedColor === color"
+            class="absolute inset-0 flex items-center justify-center text-xs font-bold"
+            :class="color === '#ffffff' ? 'text-gray-800' : 'text-white'"
+          >
+            ✓
+          </span>
+        </button>
+      </div>
+
+      <!-- Size Pills -->
+      <div class="mb-4 flex flex-wrap items-center gap-1.5">
+        <button
+          v-for="size in product.sizes"
+          :key="size"
+          @click="selectedSize = size"
+          class="rounded border px-2.5 py-1.5 text-xs font-medium transition-all duration-200"
+          :class="[
+            selectedSize === size
+              ? 'border-primary/80 bg-primary/80 text-white'
+              : 'text-primary/70 hover:border-primary/50 hover:bg-primary/10 border-gray-300',
+          ]"
+        >
+          {{ size }}
+        </button>
+      </div>
+
+      <!-- Price & CTA -->
+      <div class="flex items-center justify-between">
+        <div>
+          <span class="text-lg font-bold text-gray-900 md:text-2xl">
+            ${{ product.price.toFixed(2) }}
+          </span>
+          <!--          <span v-if="product.originalPrice" class="ml-2 text-sm text-gray-500 line-through">-->
+          <!--            ${{ product.originalPrice.toFixed(2) }}-->
+          <!--          </span>-->
+        </div>
+
+        <UButton
+          @click="addToCart"
+          :disabled="!canAddToCart"
+          icon="i-lucide-shopping-cart"
+          class="flex h-10 w-10 items-center justify-center rounded-full p-0 opacity-0 shadow-lg transition-all duration-300 group-hover:opacity-100"
+          :class="{ 'cursor-not-allowed opacity-50': !canAddToCart }"
+          :aria-label="canAddToCart ? 'Add to cart' : 'Select size to add to cart'"
+        />
       </div>
     </div>
-  </ULink>
+
+    <!-- Hover Overlay -->
+    <div
+      class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+    />
+  </div>
 </template>
 
 <script setup lang="ts">
 import type { Product } from '~/services/product.service'
 
-defineProps<{
+const props = defineProps<{
   product: Product
+  collection?: {
+    title: string
+    description: string
+    gradient: string
+    iconName?: string
+    type: string
+    badge: string
+  }
 }>()
-</script>
 
-<style scoped></style>
+// Reactive state
+const selectedColor = ref(props.product.colors?.[0])
+const selectedSize = ref(props.product.sizes?.[0])
+const isWishlisted = ref(false)
+
+const canAddToCart = computed(() => {
+  return selectedSize.value && selectedColor.value
+})
+
+const toggleWishlist = () => {
+  isWishlisted.value = !isWishlisted.value
+  // Emit or use Pinia store
+}
+
+const addToCart = () => {
+  if (!canAddToCart.value) return
+  // Emit event or use cart store
+  console.log('Added to cart:', {
+    id: props.product._id,
+    name: props.product.name,
+    color: selectedColor.value,
+    size: selectedSize.value,
+    price: props.product.price,
+  })
+}
+</script>

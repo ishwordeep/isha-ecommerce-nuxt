@@ -2,8 +2,8 @@ export interface Product {
   _id?: string
   name?: string
   image?: string
-  color?: string
-  size?: string
+  colors?: string[]
+  sizes?: string[]
   qty: number
   price: number
   category?: {
