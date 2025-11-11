@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { NavigationMenuItem } from '@nuxt/ui'
 import Login from '~/components/auth/login.vue'
+import SignUp from '~/components/auth/signup.vue'
 import UserMenu from '~/layouts/components/UserMenu.vue'
 import UserCart from '~/layouts/components/UserCart.vue'
 
@@ -54,7 +55,7 @@ const items = computed<NavigationMenuItem[]>(() => [
 
     <template v-if="!authStore.isAuthenticated" #right>
       <Login />
-      <UButton variant="outline" label="Sign Up" size="md" />
+      <SignUp />
     </template>
     <template v-else #right>
       <UserCart />

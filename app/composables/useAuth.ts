@@ -1,6 +1,7 @@
 import { useAuthStore } from '~/stores/auth.store'
 import AuthService from '~/services/auth.service'
 import type { LoginCredentials, RegisterCredentials } from '~/stores/auth.store'
+import path from 'path'
 
 export const useAuth = () => {
   const authStore = useAuthStore()
@@ -32,8 +33,8 @@ export const useAuth = () => {
 
     authStore.setLoading(false)
 
-    if (data) {
-      authStore.setAuth(data.user, data.accessToken, data.xAccessToken)
+    if (data?.data) {
+      authStore.setAuth(data.data.user ?? '', data.data.accessToken, data.data.xAccessToken)
       return { success: true, data }
     }
 
@@ -44,9 +45,14 @@ export const useAuth = () => {
    * Logout user
    */
   const logout = async () => {
+    const route = useRoute()
     await AuthService.logout()
     authStore.clearAuth()
-    navigateTo('/login')
+    if (path.basename(route.path).startsWith('/auth')) {
+      navigateTo('/')
+    } else {
+      navigateTo('#')
+    }
   }
 
   /**

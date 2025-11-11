@@ -24,6 +24,7 @@ export interface LoginCredentials {
 
 export interface RegisterCredentials extends LoginCredentials {
   name: string
+  phone?: string
 }
 
 export interface AuthState {
@@ -31,6 +32,8 @@ export interface AuthState {
   accessToken: string | null
   xAccessToken: string | null
   isAuthenticated: boolean
+  // hydrated indicates whether the store has read localStorage / finished client-side initialization
+  hydrated: boolean
   loading: boolean
 }
 
@@ -42,20 +45,23 @@ export const useAuthStore = defineStore('auth', {
       accessToken: null,
       xAccessToken: null,
       isAuthenticated: false,
+      hydrated: false,
       loading: false,
     }
 
     if (typeof window !== 'undefined') {
       const accessToken = localStorage.getItem('accessToken')
-      const user = localStorage.getItem('user')
+      const user = localStorage.getItem('user') ?? ''
 
-      if (accessToken && user) {
+      console.log('here')
+      if (accessToken && accessToken !== 'undefined') {
         initialState = {
           ...initialState,
           accessToken,
           xAccessToken: localStorage.getItem('xAccessToken'),
-          user: JSON.parse(user),
+          user: user ? JSON.parse(user) : null,
           isAuthenticated: true,
+          hydrated: true,
         }
       }
     }
@@ -67,24 +73,30 @@ export const useAuthStore = defineStore('auth', {
     getUser: (state): User | null => state.user,
     isLoggedIn: (state): boolean => state.isAuthenticated,
     isLoading: (state): boolean => state.loading,
+    isHydrated: (state): boolean => state.hydrated,
   },
 
   actions: {
     /**
      * Initialize auth state from localStorage
      */
-    initAuth() {
+    async initAuth() {
+      this.loading = true
       if (typeof window !== 'undefined') {
         const accessToken = localStorage.getItem('accessToken')
         const xAccessToken = localStorage.getItem('xAccessToken')
-        const user = localStorage.getItem('user')
+        const user = localStorage.getItem('user') ?? ''
 
-        if (accessToken && user) {
+        if (accessToken) {
           this.accessToken = accessToken
           this.xAccessToken = xAccessToken
-          this.user = JSON.parse(user)
+          this.user = user ? JSON.parse(user) : null
           this.isAuthenticated = true
         }
+
+        // mark hydrated even if no token present so UI can render correct unauthenticated state
+        this.hydrated = true
+        this.loading = false
       }
     },
 
@@ -96,6 +108,7 @@ export const useAuthStore = defineStore('auth', {
       this.accessToken = accessToken
       this.xAccessToken = xAccessToken || null
       this.isAuthenticated = true
+      this.hydrated = true
 
       // Save to localStorage
       if (typeof window !== 'undefined') {
@@ -115,6 +128,7 @@ export const useAuthStore = defineStore('auth', {
       this.accessToken = null
       this.xAccessToken = null
       this.isAuthenticated = false
+      this.hydrated = true
 
       // Clear localStorage
       if (typeof window !== 'undefined') {
@@ -122,7 +136,6 @@ export const useAuthStore = defineStore('auth', {
         localStorage.removeItem('xAccessToken')
         localStorage.removeItem('user')
       }
-      navigateTo('/login')
     },
 
     /**

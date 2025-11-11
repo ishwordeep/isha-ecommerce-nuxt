@@ -1,17 +1,23 @@
+import AxiosService from './axios.service'
+import type { ListResponse, RootServiceInterface } from './index.service'
+
 export interface SliderResponse {
   _id: string
-  slug: string
-  isActive: boolean
   image: string
-  displayOrder?: number
-  createdAt?: string
-  updatedAt?: string
+  displayOrder: number
+  isActive: boolean
   isButtonEnabled: boolean
-  button?: {
-    link: string
-    title: string
-    textColor: string
-    bgColor: string
-  }
-  __v?: number
+  createdAt: string
+  updatedAt: string
+  __v: number
+  id: string
 }
+
+class SliderService {
+  async fetchSliders(): Promise<RootServiceInterface<ListResponse<SliderResponse>>> {
+    const url = `/frontend/slider`
+    return await AxiosService.get<ListResponse<SliderResponse>>(url)
+  }
+}
+
+export default new SliderService()

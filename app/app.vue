@@ -4,7 +4,7 @@
     <NuxtLayout>
       <!-- Loading Screen -->
       <div
-        v-show="isInitializing"
+        v-show="isInitializing || !isHydrated"
         class="fixed inset-0 z-50 flex items-center justify-center bg-white"
       >
         <div
@@ -18,14 +18,21 @@
 </template>
 <script setup lang="ts">
 const isInitializing = ref(true)
-// const authStore = useAuthStore()
+const authStore = useAuthStore()
+// Global hydration flag for app-wide usage
+const isHydrated = useState<boolean>('isHydrated', () => false)
+
 onMounted(async () => {
+  // initialize auth from localStorage on client to avoid UI flash
   // if (!settingStore.setting && authStore.isAuthenticated) {
   //   await settingStore.fetchSetting()
   // }
   // Small delay to prevent flash
   await new Promise((resolve) => setTimeout(resolve, 100))
+  await authStore.initAuth()
 
+  // Mark app as hydrated globally once auth init completes
+  isHydrated.value = true
   isInitializing.value = false
 })
 

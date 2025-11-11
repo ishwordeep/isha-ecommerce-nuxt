@@ -10,9 +10,7 @@ interface LoginResponse {
 }
 
 interface RegisterResponse {
-  user: User
-  accessToken: string
-  xAccessToken?: string
+  data: { user: User; accessToken: string; xAccessToken?: string }
 }
 
 interface AuthServiceResponse<T> {

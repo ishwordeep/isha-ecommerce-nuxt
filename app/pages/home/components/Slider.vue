@@ -18,7 +18,7 @@ const isMdUp = useMediaQuery('(min-width: 768px)')
 
 <template>
   <UCarousel
-    v-if="isLoading"
+    v-if="isLoading && !sliderStore.sliders?.length"
     :items="skeletonItems"
     v-slot="{ item }"
     dots
@@ -29,11 +29,12 @@ const isMdUp = useMediaQuery('(min-width: 768px)')
       dots: '!bottom-4',
       prev: '!start-4',
       next: '!end-4',
+      viewport: 'rounded-xl',
     }"
   >
     <USkeleton
       :key="item"
-      class="aspect-[4/3] w-full rounded-lg sm:aspect-[16/9] xl:aspect-[21/9]"
+      class="aspect-[4/3] w-full rounded-xl sm:aspect-[16/9] xl:aspect-[21/9]"
     />
   </UCarousel>
   <UCarousel
@@ -49,12 +50,13 @@ const isMdUp = useMediaQuery('(min-width: 768px)')
       dots: '!bottom-4',
       prev: '!start-4',
       next: '!end-4',
+      viewport: 'rounded-xl',
     }"
   >
     <NuxtImg
       :src="item"
       loading="lazy"
-      class="aspect-[4/3] h-full w-full object-cover sm:aspect-[16/9] xl:aspect-[21/9]"
+      class="aspect-[4/3] h-full w-full rounded-xl object-cover sm:aspect-[16/9] xl:aspect-[21/9]"
     />
   </UCarousel>
 </template>

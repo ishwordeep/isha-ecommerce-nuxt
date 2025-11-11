@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { DropdownMenuItem } from '@nuxt/ui'
+import { useAuth } from '~/composables/useAuth'
 
+const auth = useAuth()
 const items: DropdownMenuItem[][] = [
   [
     {
@@ -21,6 +23,9 @@ const items: DropdownMenuItem[][] = [
     {
       label: 'Sign Out',
       color: 'error',
+      onClick: async () => {
+        await auth.logout()
+      },
     },
   ],
 ]
