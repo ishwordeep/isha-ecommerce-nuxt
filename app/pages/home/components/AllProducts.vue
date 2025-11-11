@@ -30,7 +30,8 @@
         @click="loadMore"
         :loading="loadingMore"
         size="xl"
-        class="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-gray-900 to-gray-800 px-10 py-4 font-bold text-white transition-all duration-300 hover:scale-105 hover:from-gray-900 hover:to-gray-950 hover:shadow-2xl"
+        class="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-gray-900 to-gray-800 px-10 py-4 font-bold text-white transition-all duration-300 hover:scale-105 hover:from-gray-900 hover:to-gray-950 hover:shadow-2xl disabled:cursor-not-allowed disabled:from-gray-600 disabled:to-gray-700"
+        :disabled="(productStore.products?.length || 0) >= (productStore.pagination?.total || 0)"
       >
         Load More Products
         <UIcon name="i-lucide-arrow-right" class="h-5 w-5" />
@@ -45,17 +46,25 @@ import HomeProductCard from '~/components/ui/HomeProductCard.vue'
 const isLoading = ref(true)
 const loadingMore = ref(false)
 const productStore = useProductStore()
+const currentPage = ref(1)
 
 onMounted(async () => {
   if (!productStore.products?.length) {
-    await productStore.fetchProducts()
+    await productStore.fetchProducts({
+      page: 1,
+      limit: 12,
+    })
   }
   isLoading.value = false
 })
 
 const loadMore = async () => {
   loadingMore.value = true
-  await productStore.fetchProducts()
+  currentPage.value += 1
+  await productStore.loadMoreProducts({
+    page: currentPage.value,
+    limit: 12,
+  })
   loadingMore.value = false
 }
 </script>

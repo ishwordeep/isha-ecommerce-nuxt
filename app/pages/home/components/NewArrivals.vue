@@ -1,10 +1,10 @@
 <template>
-  <div>
+  <div v-if="!isLoading && productStore.flagCollections.new?.length" class="mt-8">
     <SectionHeader :collection="collection" />
 
     <div class="mt-8 flex flex-col items-center justify-center gap-2">
-      <UPageColumns
-        class="w-full columns-1 place-items-center gap-x-2 gap-y-4 min-[360px]:columns-2 sm:gap-4 md:gap-6 lg:columns-4"
+      <div
+        class="grid w-full grid-cols-1 place-items-center gap-x-2 gap-y-4 min-[360px]:grid-cols-2 sm:gap-4 md:gap-6 lg:grid-cols-4"
       >
         <template v-if="isLoading">
           <ProductSkeletonCard v-for="i in 4" :key="i" />
@@ -13,15 +13,15 @@
         <FlagProductsCard
           v-else
           :collection="collection"
-          v-for="product in productStore.newArrivals"
+          v-for="product in productStore.flagCollections.new"
           :product="product"
           :key="product._id"
         />
-      </UPageColumns>
+      </div>
       <!--View All Button-->
       <div class="mt-8 text-center">
         <UButton
-          :to="`/products/type/${collection.type}`"
+          to="products/collection/new"
           viewTransition
           class="rounded-xl bg-gradient-to-r px-8 py-4 font-bold hover:scale-105 hover:shadow-xl"
           :class="collection.gradient"
@@ -56,7 +56,7 @@ const collection = {
 
 onMounted(async () => {
   if (!productStore.newArrivals?.length) {
-    await productStore.fetchProductsByFlags('newArrivals')
+    await productStore.fetchProductsByFlags('new')
   }
   isLoading.value = false
 })

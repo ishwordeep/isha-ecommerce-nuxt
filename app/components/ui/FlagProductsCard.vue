@@ -38,11 +38,18 @@
       class="block"
     >
       <div
-        class="relative flex aspect-square items-center justify-center overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 transition-transform duration-500 group-hover:scale-105 min-[360px]:aspect-[4/3]"
+        class="relative flex aspect-square items-center justify-center overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 transition-transform duration-500 group-hover:scale-105"
       >
-        <div class="text-7xl md:text-8xl">
-          {{ product.image }}
-        </div>
+        <NuxtImg
+          v-if="product.image"
+          :src="product.image"
+          alt="Product Image"
+          class="group-hover:scale- 105 h-full w-full object-cover transition-transform duration-300"
+          width="400"
+          height="400"
+          priority
+        />
+        <USkeleton v-else class="h-full w-full" />
         <!-- Optional: Add real image later -->
         <!-- <img :src="product.imageUrl" alt="" class="h-full w-full object-cover" /> -->
       </div>

@@ -146,7 +146,7 @@ const subscribe = async () => {
 const shopLinks = [
   {
     label: 'New Arrivals',
-    url: '/products/type/newArrivals',
+    url: '/products/type/new',
   },
   { label: 'Best Sellers', url: '/products/type/trending' },
   { label: 'Featured Picks', url: '/products/type/trending' },

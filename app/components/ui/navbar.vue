@@ -9,8 +9,8 @@ const authStore = useAuthStore()
 const items = computed<NavigationMenuItem[]>(() => [
   {
     label: 'New',
-    to: '/products/type/new',
-    active: route.path === '/products/type/new',
+    to: '/products/collection/new',
+    active: route.path === '/products/collection/new',
   },
   {
     label: 'Categories',
@@ -19,8 +19,8 @@ const items = computed<NavigationMenuItem[]>(() => [
   },
   {
     label: 'Featured',
-    to: '/products/type/featured',
-    active: route.path.startsWith('/products/type/featured'),
+    to: '/products/collection/featured',
+    active: route.path.startsWith('/products/collection/featured'),
   },
   {
     label: 'Sales',

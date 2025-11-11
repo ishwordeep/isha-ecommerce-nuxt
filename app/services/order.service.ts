@@ -1,4 +1,4 @@
-import type { Product } from '~/services/product.service'
+import type { ProductResponse } from '~/services/product.service'
 
 export interface OrderResponse {
   _id: string
@@ -6,5 +6,5 @@ export interface OrderResponse {
   status: string
   total: number
   items: number
-  products: Product[]
+  products: ProductResponse[]
 }

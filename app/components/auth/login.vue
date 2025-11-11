@@ -1,6 +1,10 @@
 <script setup lang="ts">
+import { useAuth } from '~/composables/useAuth'
+
 const open = ref(false)
 const showPassword = ref(false)
+const auth = useAuth()
+const toast = useToast()
 defineShortcuts({
   o: () => (open.value = !open.value),
 })
@@ -11,8 +15,21 @@ const inputs = reactive({
 })
 
 const onSubmit = async () => {
-  console.log(inputs)
-  open.value = false
+  const response = await auth.login({
+    email: inputs.email,
+    password: inputs.password,
+  })
+  console.log(response)
+  if (response.success) {
+    open.value = false
+  } else {
+    toast.add({
+      color: 'error',
+      title: 'Login Failed',
+      description: response.error?.message ?? 'An error occurred during login.',
+      duration: 5000,
+    })
+  }
 }
 </script>
 

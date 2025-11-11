@@ -29,7 +29,7 @@
         </template>
         <UiProductCard
           v-else
-          v-for="product in productStore.products"
+          v-for="product in collectionProducts"
           :product="product"
           :key="product._id"
         />
@@ -41,16 +41,20 @@
 <script setup lang="ts">
 import { useProductStore } from '~/stores/product.store'
 
+type flags = 'new' | 'trending' | 'featured'
+
 const route = useRoute()
 const productStore = useProductStore()
 const isLoading = ref(true)
 
 const sortBy = ref('bestMatch')
+const flag = route.params.type as string
+
+const collectionProducts = computed(() => productStore.flagCollections[flag as flags] || [])
 
 const title = computed(() => {
-  const type = route.params.type as string
-  return type
-    ? type.replace(/([A-Z])/g, ' $1').replace(/^./, (str) => str.toUpperCase())
+  return flag
+    ? flag.replace(/([A-Z])/g, ' $1').replace(/^./, (str) => str.toUpperCase())
     : 'All Products'
 })
 

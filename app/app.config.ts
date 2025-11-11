@@ -76,7 +76,7 @@ export default defineAppConfig({
           color: 'primary',
           variant: 'solid',
           class:
-            'bg-gradient-to-r from-primary/70 to-primary/80 text-white hover:from-secondary/80 hover:to-secondary/90',
+            'bg-gradient-to-r from-primary/70 to-primary/80 text-white hover:from-secondary/40 hover:to-secondary/90',
         },
       ],
     },
