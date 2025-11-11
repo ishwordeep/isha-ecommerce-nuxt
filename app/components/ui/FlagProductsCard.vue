@@ -33,10 +33,7 @@
     </button>
 
     <!-- Product Image -->
-    <NuxtLink
-      :to="`/products/${product.category?.name || 'category'}/${product._id}`"
-      class="block"
-    >
+    <NuxtLink :to="`/products/${product._id}`" class="block">
       <div
         class="relative flex aspect-square items-center justify-center overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 transition-transform duration-500 group-hover:scale-105"
       >
@@ -59,16 +56,13 @@
     <div class="p-5">
       <!-- Category & Name -->
       <p class="mb-1 text-xs font-medium tracking-wider text-gray-500 uppercase">
-        {{ product.category?.name || '' }}
+        {{ product.categoryDetails?.name || '' }}
       </p>
       <h3
         id="product-title"
         class="mb-2 line-clamp-1 text-lg leading-tight font-bold text-gray-900"
       >
-        <NuxtLink
-          :to="`/products/${product.category?.name || 'category'}/${product._id}`"
-          class="transition-colors hover:text-indigo-600"
-        >
+        <NuxtLink :to="`/products/${product._id}`" class="transition-colors hover:text-indigo-600">
           {{ product.name }}
         </NuxtLink>
       </h3>
@@ -148,10 +142,10 @@
 </template>
 
 <script setup lang="ts">
-import type { Product } from '~/services/product.service'
+import type { ProductResponse } from '~/services/product.service'
 
 const props = defineProps<{
-  product: Product
+  product: ProductResponse
   collection?: {
     title: string
     description: string

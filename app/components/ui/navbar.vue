@@ -9,6 +9,11 @@ const route = useRoute()
 const authStore = useAuthStore()
 const items = computed<NavigationMenuItem[]>(() => [
   {
+    label: 'Home',
+    to: '/',
+    active: route.path === '/',
+  },
+  {
     label: 'New',
     to: '/products/collection/new',
     active: route.path === '/products/collection/new',

@@ -1,13 +1,17 @@
 <template>
-  <div class="mx-auto w-full max-w-[600px] flex-1">
+  <div class="mx-auto aspect-square w-full max-w-[550px] flex-1">
     <UCarousel
       ref="carousel"
       v-slot="{ item }"
-      :items="images"
+      loop
+      :items="images || []"
       class="mx-auto w-full"
       @select="onSelect"
+      :ui="{
+        viewport: 'rounded-md',
+      }"
     >
-      <NuxtImg :src="item" class="aspect-[4/3] h-full w-full object-fill" />
+      <NuxtImg :src="item" class="mx-auto aspect-square h-full w-full rounded-md object-cover" />
     </UCarousel>
 
     <!-- Thumbnails -->
@@ -17,13 +21,13 @@
         class="scrollbar-hide flex justify-center gap-4 overflow-x-auto scroll-smooth py-4"
       >
         <div
-          v-for="(item, index) in images"
+          v-for="(item, index) in images || []"
           :key="index"
           class="size-11 cursor-pointer opacity-25 transition-all hover:opacity-100"
           :class="{ 'opacity-100': activeIndex === index }"
           @click="select(index)"
         >
-          <NuxtImg :src="item" class="aspect-square min-w-[50px] rounded-sm" />
+          <NuxtImg :src="item" class="aspect-square min-w-[50px] rounded-sm object-cover" />
         </div>
       </div>
 
@@ -51,30 +55,21 @@
 </template>
 
 <script setup lang="ts">
-const images = [
-  'https://picsum.photos/640/640?random=1',
-  'https://picsum.photos/640/640?random=2',
-  'https://picsum.photos/640/640?random=3',
-  'https://picsum.photos/640/640?random=4',
-  'https://picsum.photos/640/640?random=5',
-  'https://picsum.photos/640/640?random=6',
-  'https://picsum.photos/640/640?random=1',
-  'https://picsum.photos/640/640?random=2',
-  'https://picsum.photos/640/640?random=3',
-  'https://picsum.photos/640/640?random=4',
-  'https://picsum.photos/640/640?random=5',
-  'https://picsum.photos/640/640?random=6',
-  'https://picsum.photos/640/640?random=1',
-  'https://picsum.photos/640/640?random=2',
-  'https://picsum.photos/640/640?random=3',
-  'https://picsum.photos/640/640?random=4',
-  'https://picsum.photos/640/640?random=5',
-  'https://picsum.photos/640/640?random=6',
-]
+const productStore = useProductStore()
 
 const carousel = useTemplateRef('carousel')
 const activeIndex = ref(0)
 const thumbContainer = ref<HTMLElement | null>(null)
+
+const images = computed(() => {
+  const product = productStore.selectedProduct
+  if (!product) return []
+
+  const singleImage = product.image ? [product.image] : []
+  const multipleImages = product.images ?? []
+
+  return [...singleImage, ...multipleImages]
+})
 
 function onSelect(index: number) {
   activeIndex.value = index

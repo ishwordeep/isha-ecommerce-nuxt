@@ -8,10 +8,18 @@
       <ProductImages />
 
       <div class="flex flex-col space-y-4">
-        <h3 class="text-md font-bold text-black md:text-lg 2xl:text-xl">Bootcut Jeans</h3>
+        <h3 class="text-md font-bold text-black md:text-lg 2xl:text-xl">
+          {{ productStore.selectedProduct?.name }}
+        </h3>
         <p class="border-b-default border-b pb-4 text-sm md:text-base 2xl:text-lg">
           Category
-          <ULink to="/products/category" class="text-blue-500" viewTransition>Men's Clothing</ULink>
+          <ULink
+            :to="`/categories/${productStore.selectedProduct?.categoryDetails?._id || ''}`"
+            class="text-blue-500"
+            viewTransition
+          >
+            {{ productStore.selectedProduct?.categoryDetails?.name || '' }}
+          </ULink>
         </p>
 
         <!--Colors-->
@@ -40,7 +48,7 @@
               :key="index"
               @click="selectedSize = size"
               :variant="selectedSize === size ? 'solid' : 'outline'"
-              class="w-12 text-center"
+              class="min-w-12 text-center"
               square
               :ui="{
                 label: 'w-full text-sm text-center',
@@ -54,7 +62,8 @@
         <p
           class="text-md text-primary border-b-default border-b pb-4 font-bold md:text-lg 2xl:text-xl"
         >
-          Rs. 3500 &nbsp; <span class="text-secondary line-through">Rs. 4000</span>
+          ${{ productStore.selectedProduct?.price || '' }} &nbsp;
+          <!-- <span class="text-secondary line-through">Rs. 4000</span> -->
         </p>
 
         <UFormField name="quantity" label="Quantity">
@@ -67,7 +76,15 @@
           <UButton icon="i-lucide-share-2" variant="outline" />
         </div>
 
-        <UBadge color="error" class="max-w-max" variant="soft" size="xl">Save Rs. 500</UBadge>
+        <UBadge
+          v-if="productStore.selectedProduct?.discount ?? 0 > 0"
+          color="error"
+          class="max-w-max"
+          variant="soft"
+          size="xl"
+        >
+          - ${{ productStore.selectedProduct?.discount || 0 }}%
+        </UBadge>
       </div>
     </div>
   </div>
@@ -78,24 +95,46 @@ import ProductImages from '~/pages/products/[category]/components/ProductImages.
 
 const quantity = ref(1)
 
-const availableColors = ref(['#000000', '#FFFFFF', '#FF0000', '#00FF00', '#0000FF'])
-const availableSizes = ref(['S', 'M', 'L', 'XL', 'XXL'])
+const productStore = useProductStore()
 
-const selectedSize = ref<string>('')
-const selectedColor = ref<string>('')
+const availableColors = computed(() => {
+  return productStore.selectedProduct?.colors || []
+})
+const availableSizes = computed(() => {
+  return productStore.selectedProduct?.sizes || []
+})
 
-const breadcrumbs = ref([
+const category = computed(() => {
+  return {
+    label: productStore.selectedProduct?.categoryDetails?.name || 'Category',
+    to: `/categories/${productStore.selectedProduct?.categoryDetails?._id || ''}`,
+  }
+})
+
+const selectedSize = ref<string>(unref(availableSizes.value[0] || ''))
+const selectedColor = ref<string>(unref(availableColors.value[0] || ''))
+
+const breadcrumbs = computed(() => [
   {
     label: 'Home',
     to: '/',
   },
   {
-    label: 'Category',
-    to: '/products/category',
+    label: category.value.label,
+    to: category.value.to,
   },
   {
-    label: 'Product',
-    to: '/products/category/product',
+    label: productStore.selectedProduct?.name || 'Product',
+    to: `/products/${productStore.selectedProduct?._id || ''}`,
   },
 ])
+
+watchEffect(async () => {
+  const route = useRoute()
+  const { id } = route.params
+  await productStore.fetchProductById(id as string)
+  if (productStore.selectedProduct?._id !== id) {
+    console.log(productStore.selectedProduct)
+  }
+})
 </script>

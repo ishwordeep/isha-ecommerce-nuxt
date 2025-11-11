@@ -3,7 +3,7 @@
     class="group cursor-pointer overflow-hidden rounded-2xl border border-gray-200 bg-white transition-all duration-300 hover:border-gray-300 hover:shadow-xl"
   >
     <!-- Product Image -->
-    <NuxtLink :to="`/products/${product.categoryDetails?.name || 'category'}/${product._id}`">
+    <NuxtLink :to="`/products/${product._id}`">
       <div
         class="relative flex aspect-square items-center justify-center overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100"
       >
@@ -36,20 +36,15 @@
     <!-- Product Info -->
     <div class="p-4">
       <h3 class="mb-2 line-clamp-2 text-sm leading-tight font-bold text-gray-900">
-        <NuxtLink
-          :to="`/products/${product.categoryDetails?.name || 'category'}/${product._id}`"
-          class="transition-colors hover:text-indigo-600"
-        >
+        <NuxtLink :to="`/products/${product._id}`" class="transition-colors hover:text-indigo-600">
           {{ product.name }}
         </NuxtLink>
       </h3>
       <div class="flex items-center justify-between">
         <span class="text-xl font-bold text-gray-900">${{ product.price.toFixed(2) }}</span>
         <span
-          class="group:hover:translate-x-0 flex translate-x-2 items-center gap-1 text-xs font-medium text-blue-600 opacity-0 opacity-100 transition-all duration-300"
-          @click="
-            navigateTo(`/products/${product.categoryDetails?.name || 'category'}/${product._id}`)
-          "
+          class="group:hover:translate-x-0 flex translate-x-2 items-center gap-1 text-xs font-medium text-blue-600 opacity-0 transition-all duration-300 group-hover:opacity-100"
+          @click="navigateTo(`/products/${product._id}`)"
         >
           View
           <UIcon name="i-lucide-arrow-right" class="h-3 w-3" />

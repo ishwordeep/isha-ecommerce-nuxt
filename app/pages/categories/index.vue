@@ -18,12 +18,12 @@
         <!-- Square Image Container -->
         <div
           class="relative mb-4 aspect-square overflow-hidden rounded-2xl shadow-lg transition-all duration-300 hover:shadow-2xl"
+          @click="navigateTo(`/categories/${category.slug}`)"
         >
           <!-- Background Gradient -->
           <div
             :class="[
               'absolute inset-0 bg-gradient-to-br transition-transform duration-500 group-hover:scale-105',
-              category.bgColor,
             ]"
           />
 
@@ -40,13 +40,13 @@
 
           <!-- Category Image/Icon -->
           <div class="absolute inset-0 flex items-center justify-center">
-            <div
-              :class="[
-                'text-8xl transition-all duration-300 group-hover:scale-125 group-hover:rotate-6',
-              ]"
-            >
-              {{ category.image }}
-            </div>
+            <NuxtImg
+              v-if="category.image"
+              :src="category.image"
+              alt="Category Image"
+              class="h-full w-full object-contain transition-all duration-300 group-hover:scale-125 group-hover:rotate-6"
+            />
+            <div v-else class="h-full w-full bg-gray-200" />
           </div>
 
           <!-- Item Count Badge -->
@@ -54,7 +54,7 @@
             <span
               class="rounded-full bg-white/90 px-3 py-1 text-xs font-bold text-gray-900 shadow-md backdrop-blur-sm"
             >
-              {{ category.itemCount }} items
+              {{ category.productCount }} items
             </span>
           </div>
 

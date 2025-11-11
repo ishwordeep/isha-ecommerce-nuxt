@@ -22,7 +22,7 @@
           v-else
           class="line-clamp-1"
           v-for="category in categoryStore.categories"
-          :to="`/products/${category._id}`"
+          :to="`/categories/${category.slug}`"
           :key="category._id"
           viewTransition
         >

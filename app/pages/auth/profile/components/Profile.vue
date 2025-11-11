@@ -43,20 +43,28 @@
     </div>
     <div class="space-y-3">
       <div class="flex items-center gap-3">
-        <div class="profile-image text-4xl">{{ userProfile.avatar }}</div>
+        <div class="profile-image">
+          <NuxtImg
+            v-if="authStore.user?.image"
+            :src="authStore.user?.image"
+            alt="Profile Image"
+            class="h-16 w-16 rounded-full object-cover"
+          />
+          <div v-else class="profile-image text-4xl">{{ authStore.user?.image || '👤' }}</div>
+        </div>
         <div>
-          <div class="font-semibold text-gray-900">{{ userProfile.name }}</div>
+          <div class="font-semibold text-gray-900">{{ authStore.user?.name || 'User' }}</div>
           <div class="text-sm text-gray-500">Customer since Nov 2025</div>
         </div>
       </div>
       <div class="border-t-default space-y-2 border-t pt-3">
         <div class="flex justify-between text-sm">
           <span class="text-gray-600">Email</span>
-          <span class="font-medium text-gray-900">{{ userProfile.email }}</span>
+          <span class="font-medium text-gray-900">{{ authStore.user?.email }}</span>
         </div>
         <div class="flex justify-between text-sm">
           <span class="text-gray-600">Phone</span>
-          <span class="font-medium text-gray-900">{{ userProfile.phone }}</span>
+          <span class="font-medium text-gray-900">{{ authStore.user?.phone }}</span>
         </div>
       </div>
     </div>
@@ -66,25 +74,19 @@
 <script setup lang="ts">
 const openModal = ref(false)
 
-const userProfile = ref({
-  name: 'John Doe',
-  email: 'john.doe@example.com',
-  phone: '+1 234 567 8900',
-  avatar: '👤',
-  address: '123 Main St, Anytown, USA',
-})
+const authStore = useAuthStore()
 
 const inputs = reactive({
-  name: userProfile.value?.name || '',
-  email: userProfile.value?.email || '',
-  phone: userProfile.value?.phone || '',
-  address: userProfile.value?.address || '',
+  name: authStore.user?.name || '',
+  email: authStore.user?.email || '',
+  phone: authStore.user?.phone || '',
+  address: authStore.user?.address || '',
 })
 
 const reset = () => {
-  inputs.name = userProfile.value.name
-  inputs.email = userProfile.value.email
-  inputs.phone = userProfile.value.phone
+  inputs.name = authStore.user?.name || ''
+  inputs.email = authStore.user?.email || ''
+  inputs.phone = authStore.user?.phone || ''
 }
 
 const handleClose = () => {

@@ -3,6 +3,7 @@ import type { DropdownMenuItem } from '@nuxt/ui'
 import { useAuth } from '~/composables/useAuth'
 
 const auth = useAuth()
+const authStore = useAuthStore()
 const items: DropdownMenuItem[][] = [
   [
     {
@@ -23,7 +24,7 @@ const items: DropdownMenuItem[][] = [
     {
       label: 'Sign Out',
       color: 'error',
-      onClick: async () => {
+      action: async () => {
         await auth.logout()
       },
     },
@@ -40,7 +41,11 @@ const items: DropdownMenuItem[][] = [
       side: 'bottom-end' as any,
     }"
   >
+    <UButton v-if="authStore.user?.image">
+      {{ authStore.user?.image }}
+    </UButton>
     <UButton
+      v-else
       color="neutral"
       square
       class="rounded-full"

@@ -80,7 +80,7 @@ const sortOptions = ref([
     value: 'asc:price',
   },
 ])
-const breadcrumbs = ref([
+const breadcrumbs = computed(() => [
   {
     label: 'Home',
     to: '/',

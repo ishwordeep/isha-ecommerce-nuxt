@@ -146,10 +146,10 @@ const subscribe = async () => {
 const shopLinks = [
   {
     label: 'New Arrivals',
-    url: '/products/type/new',
+    url: '/products/collection/new',
   },
-  { label: 'Best Sellers', url: '/products/type/trending' },
-  { label: 'Featured Picks', url: '/products/type/trending' },
+  { label: 'Best Sellers', url: '/products/collection/trending' },
+  { label: 'Featured Picks', url: '/products/collection/trending' },
   { label: 'Gift Cards', url: '#' },
   {
     label: 'Sale',

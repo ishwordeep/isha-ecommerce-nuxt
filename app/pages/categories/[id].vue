@@ -1,10 +1,10 @@
 <template>
   <div>
     <div class="flex flex-col gap-6">
-      <div class="flex flex-wrap items-end justify-between gap-4 border-y border-y-gray-300 py-4">
+      <div class="flex flex-wrap items-end justify-between gap-4 border-b border-b-gray-300 py-4">
         <div class="flex flex-col space-y-5">
           <h2 class="text-2xl font-medium text-black md:text-4xl">
-            {{ productStore.currentCategory || 'All Products' }}
+            {{ title }}
           </h2>
           <UBreadcrumb :items="breadcrumbs" />
         </div>
@@ -30,11 +30,15 @@
           </template>
 
           <UiProductCard
-            v-else
+            v-else-if="productStore.categoryProducts?.length && !isLoading"
             v-for="product in productStore.categoryProducts"
             :product="product"
             :key="product._id"
           />
+
+          <div v-else class="col-span-full py-20 text-center text-gray-500">
+            No products found in this category.
+          </div>
         </div>
       </div>
     </div>
@@ -49,6 +53,10 @@ const sortBy = ref('bestMatch')
 const productStore = useProductStore()
 const isLoading = ref(true)
 
+import { unref } from 'vue'
+
+const title = computed(() => unref(productStore.currentCategory) ?? 'All Products')
+
 const route = useRoute()
 
 const breadcrumbs = computed(() => [
@@ -57,13 +65,13 @@ const breadcrumbs = computed(() => [
     to: '/',
   },
   {
-    label: productStore.currentCategory || 'Category',
+    label: title.value,
     to: '#',
   },
 ])
 
 watchEffect(async () => {
-  const categoryId = route.params.category?.toString()
+  const categoryId = route.params.id?.toString()
   if (!categoryId) return
 
   isLoading.value = true
