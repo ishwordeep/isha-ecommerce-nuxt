@@ -10,8 +10,24 @@ const orderData = [
     total: 284.99,
     items: 3,
     products: [
-      { name: 'Denim Jacket', image: '🧥', color: 'Blue', size: 'M', qty: 1, price: 89.99 },
-      { name: 'White Sneakers', image: '👟', color: 'White', size: '10', qty: 2, price: 65.0 },
+      {
+        _id: '1',
+        name: 'Denim Jacket',
+        image: '🧥',
+        color: 'Blue',
+        size: 'M',
+        qty: 1,
+        price: 89.99,
+      },
+      {
+        _id: '2',
+        name: 'White Sneakers',
+        image: '👟',
+        color: 'White',
+        size: '10',
+        qty: 2,
+        price: 65.0,
+      },
     ],
   },
   {
@@ -21,7 +37,15 @@ const orderData = [
     total: 120.0,
     items: 1,
     products: [
-      { name: 'Black Dress', image: '👗', color: 'Black', size: 'M', qty: 1, price: 120.0 },
+      {
+        _id: '3',
+        name: 'Black Dress',
+        image: '👗',
+        color: 'Black',
+        size: 'M',
+        qty: 1,
+        price: 120.0,
+      },
     ],
   },
   {
@@ -31,8 +55,24 @@ const orderData = [
     total: 179.98,
     items: 2,
     products: [
-      { name: 'Cotton T-Shirt', image: '👕', color: 'White', size: 'L', qty: 2, price: 29.99 },
-      { name: 'Leather Bag', image: '👜', color: 'Brown', size: 'One Size', qty: 1, price: 150.0 },
+      {
+        _id: '4',
+        name: 'Cotton T-Shirt',
+        image: '👕',
+        color: 'White',
+        size: 'L',
+        qty: 2,
+        price: 29.99,
+      },
+      {
+        _id: '5',
+        name: 'Leather Bag',
+        image: '👜',
+        color: 'Brown',
+        size: 'One Size',
+        qty: 1,
+        price: 150.0,
+      },
     ],
   },
 ]

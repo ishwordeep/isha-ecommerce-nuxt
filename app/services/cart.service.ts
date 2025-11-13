@@ -1,0 +1,34 @@
+import AxiosService from './axios.service'
+import type { ItemResponse, ListResponse, RootServiceInterface } from './index.service'
+
+export interface CartResponse {
+  _id: string
+  userId: string
+  createdAt: string
+  updatedAt: string
+  items: Item[]
+}
+export interface Item {
+  productId: string
+  quantity: number
+  color: string
+  size: string
+  name: string
+  image: string
+  price: number
+  discount: number
+}
+
+class CartService {
+  async fetchCartItems(): Promise<RootServiceInterface<ItemResponse<CartResponse>>> {
+    const url = `/cart`
+    return await AxiosService.get<ItemResponse<CartResponse>>(url)
+  }
+
+  async addToCart(payload: CartPayload): Promise<RootServiceInterface<ItemResponse<CartResponse>>> {
+    const url = `/cart`
+    return await AxiosService.post<ItemResponse<CartResponse>>(url, payload)
+  }
+}
+
+export default new CartService()

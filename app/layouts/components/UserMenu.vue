@@ -24,7 +24,7 @@ const items: DropdownMenuItem[][] = [
     {
       label: 'Sign Out',
       color: 'error',
-      action: async () => {
+      onSelect: async () => {
         await auth.logout()
       },
     },
@@ -38,7 +38,8 @@ const items: DropdownMenuItem[][] = [
     :ui="{ content: 'w-36' }"
     :modal="false"
     :content="{
-      side: 'bottom-end' as any,
+      side: 'bottom',
+      align: 'end',
     }"
   >
     <UButton v-if="authStore.user?.image">

@@ -124,7 +124,7 @@
         </div>
 
         <UButton
-          @click="addToCart"
+          @click="handleAddToCart(product)"
           :disabled="!canAddToCart"
           icon="i-lucide-shopping-cart"
           class="flex h-10 w-10 items-center justify-center rounded-full p-0 opacity-0 shadow-lg transition-all duration-300 group-hover:opacity-100"
@@ -160,6 +160,8 @@ const props = defineProps<{
 const selectedColor = ref(props.product.colors?.[0])
 const selectedSize = ref(props.product.sizes?.[0])
 const isWishlisted = ref(false)
+const cartStore = useCartStore()
+const toast = useToast()
 
 const canAddToCart = computed(() => {
   return selectedSize.value && selectedColor.value
@@ -169,16 +171,13 @@ const toggleWishlist = () => {
   isWishlisted.value = !isWishlisted.value
   // Emit or use Pinia store
 }
+const { addToCart } = useAddToCart()
 
-const addToCart = () => {
-  if (!canAddToCart.value) return
-  // Emit event or use cart store
-  console.log('Added to cart:', {
-    id: props.product._id,
-    name: props.product.name,
-    color: selectedColor.value,
-    size: selectedSize.value,
-    price: props.product.price,
+const handleAddToCart = (product: ProductResponse) => {
+  addToCart({
+    product,
+    selectedColor: selectedColor.value,
+    selectedSize: selectedSize.value,
   })
 }
 </script>

@@ -12,7 +12,7 @@
         <FlagProductsCard
           v-else
           :collection="collection"
-          v-for="product in productStore.flagCollections.trending"
+          v-for="product in productStore.flagCollections.trending.slice(0, 4)"
           :product="product"
           :key="product._id"
         />

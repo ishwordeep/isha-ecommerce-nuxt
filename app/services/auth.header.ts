@@ -12,8 +12,8 @@ export default function AuthHeader(): AuthHeaders {
 
   // Check if we're in the browser environment
   if (typeof window !== 'undefined') {
-    accessToken = getCookie('accessToken')
-    xAccessToken = getCookie('xAccessToken')
+    accessToken = localStorage.getItem('accessToken')
+    xAccessToken = localStorage.getItem('xAccessToken')
   }
 
   return {

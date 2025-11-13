@@ -2,6 +2,13 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import ProductService, { type ProductResponse } from '~/services/product.service'
 import type { PaginationInterface, QueryInterface } from '~/services/index.service'
+type ProductFlag = 'new' | 'trending' | 'featured'
+
+interface FlagCollections {
+  new: ProductResponse[]
+  trending: ProductResponse[]
+  featured: ProductResponse[]
+}
 
 export const useProductStore = defineStore('product', () => {
   const isLoading = ref(false)
@@ -14,10 +21,10 @@ export const useProductStore = defineStore('product', () => {
   const currentCategory = ref<string | null>(null)
   const pagination = ref<PaginationInterface | null>(null)
 
-  const flagCollections = ref({
-    new: [] as ProductResponse[],
-    featured: [] as ProductResponse[],
-    trending: [] as ProductResponse[],
+  const flagCollections = ref<FlagCollections>({
+    new: [],
+    trending: [],
+    featured: [],
   })
 
   const fetchProducts = async ({ page = 1, limit = 12, search = '' }: QueryInterface) => {
@@ -53,18 +60,18 @@ export const useProductStore = defineStore('product', () => {
     }
   }
 
-  const fetchProductsByFlags = async (flag: string) => {
-    if (flag! in ['newArrivals', 'trending', 'featured']) {
+  const fetchProductsByFlags = async (flag: ProductFlag) => {
+    const validFlags: ProductFlag[] = ['new', 'trending', 'featured']
+    if (!validFlags.includes(flag)) {
       console.error('Invalid flag provided:', flag)
       return
     }
+
     isLoading.value = true
     try {
-      // Simulate API call
       const response = await ProductService.getProductsByFlag(flag)
       if (response.data?.success) {
-        console.log('Fetched products for flag:', flag, response.data?.data?.data)
-        flagCollections.value[flag] = response.data.data?.data
+        flagCollections.value[flag] = response.data.data || []
       } else {
         flagCollections.value[flag] = []
       }
@@ -94,7 +101,7 @@ export const useProductStore = defineStore('product', () => {
     try {
       const response = await ProductService.getProductsByCategory(categoryId, '')
       if (response.data?.success) {
-        categoryProducts.value = response.data?.data?.data || null
+        categoryProducts.value = response.data?.data || null
         currentCategory.value = categoryProducts.value?.[0]?.categoryDetails?.name || null
         return
       }

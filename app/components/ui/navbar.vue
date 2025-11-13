@@ -7,6 +7,9 @@ import UserCart from '~/layouts/components/UserCart.vue'
 
 const route = useRoute()
 const authStore = useAuthStore()
+
+const openLoginModal = ref(false)
+
 const items = computed<NavigationMenuItem[]>(() => [
   {
     label: 'Home',
@@ -59,7 +62,7 @@ const items = computed<NavigationMenuItem[]>(() => [
     <UNavigationMenu :items="items" highlight viewTransition />
 
     <template v-if="!authStore.isAuthenticated" #right>
-      <Login />
+      <Login v-model:open="openLoginModal" />
       <SignUp />
     </template>
     <template v-else #right>

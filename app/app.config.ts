@@ -112,5 +112,10 @@ export default defineAppConfig({
         overlay: 'bg-black/60',
       },
     },
+    slideover: {
+      slots: {
+        overlay: 'bg-black/60',
+      },
+    },
   },
 })
