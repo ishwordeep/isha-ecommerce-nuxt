@@ -35,6 +35,12 @@
 <script setup lang="ts">
 const sortBy = ref('bestMatch')
 
+const pagination = reactive({
+  page: 1,
+  limit: 12,
+  search: '',
+})
+
 const sortOptions = ref([
   {
     label: 'Best Match',
@@ -73,7 +79,7 @@ const isLoading = ref(true)
 
 onMounted(async () => {
   isLoading.value = true
-  await productStore.fetchProducts()
+  await productStore.fetchProducts(pagination)
   isLoading.value = false
 })
 </script>
