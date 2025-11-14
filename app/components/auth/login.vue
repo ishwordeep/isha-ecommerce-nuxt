@@ -36,8 +36,6 @@ const onSubmit = async () => {
     email: inputs.email,
     password: inputs.password,
   })
-  console.log(response)
-  console.log(response)
   if (response.success) {
     // close modal by emitting update
     open.value = false

@@ -1,20 +1,60 @@
-// ============================================
-// FILE: stores/auth.ts
-// ============================================
 import { defineStore } from 'pinia'
+import type { Address, User } from '~/services/auth.service'
 
-const userData = {
-  name: 'John Doe',
-  email: 'johndoe@example.com',
+type Mode = 'add' | 'edit'
+
+export interface AddressForm {
+  street: string
+  city: string
+  state: string
+  zipCode: string
+  country: string
+  isDefault: boolean
 }
 
-export interface User {
-  id: number
-  email: string
+export interface UserProfileForm {
   name: string
-  role?: string
+  phone?: string
+  image?: string
+  email?: string
+}
 
-  [key: string]: any
+const mapAddressToForm = (address: Address | null): AddressForm => {
+  if (!address) return emptyAddressForm()
+  return {
+    street: address.street,
+    city: address.city,
+    state: address.state,
+    zipCode: address.zipCode,
+    country: address.country,
+    isDefault: address.isDefault,
+  }
+}
+
+const emptyAddressForm = (): AddressForm => ({
+  street: '',
+  city: '',
+  state: '',
+  zipCode: '',
+  country: '',
+  isDefault: false,
+})
+
+const emptyUserProfileForm = (): UserProfileForm => ({
+  name: '',
+  phone: '',
+  image: '',
+  email: '',
+})
+
+const mapUserToProfileForm = (user: User | null): UserProfileForm => {
+  if (!user) return emptyUserProfileForm()
+  return {
+    name: user.name,
+    phone: user.phone,
+    image: user.image,
+    email: user.email,
+  }
 }
 
 export interface LoginCredentials {
@@ -27,135 +67,132 @@ export interface RegisterCredentials extends LoginCredentials {
   phone?: string
 }
 
-export interface AuthState {
-  user: User | null
-  accessToken: string | null
-  xAccessToken: string | null
-  isAuthenticated: boolean
-  // hydrated indicates whether the store has read localStorage / finished client-side initialization
-  hydrated: boolean
-  loading: boolean
-}
+export const useAuthStore = defineStore('auth', () => {
+  const user = ref<User | null>(null)
+  const accessToken = ref<string | null>(null)
+  const xAccessToken = ref<string | null>(null)
+  const isAuthenticated = ref<boolean>(false)
+  const isHydrated = ref<boolean>(false)
+  const isLoading = ref<boolean>(false)
+  const mode = ref<Mode>('add')
+  const selectedAddress = ref<Address | null>(null)
+  const addressFormInputs = reactive<AddressForm>(emptyAddressForm())
+  const userProfileFormInputs = reactive<UserProfileForm>(emptyUserProfileForm())
+  const isFetchingProfile = ref<boolean>(false)
+  const setLoading = (loading: boolean): void => {
+    isLoading.value = loading
+  }
 
-export const useAuthStore = defineStore('auth', {
-  state: (): AuthState => {
-    // Initialize from localStorage immediately if on client
-    let initialState: AuthState = {
-      user: null,
-      accessToken: null,
-      xAccessToken: null,
-      isAuthenticated: false,
-      hydrated: false,
-      loading: false,
+  const setIsFetchingProfile = (loading: boolean): void => {
+    isFetchingProfile.value = loading
+  }
+
+  const initializeUserProfileForm = async () => {
+    isLoading.value = true
+    try {
+      if (user.value) Object.assign(userProfileFormInputs, mapUserToProfileForm(user.value))
+    } finally {
+      isLoading.value = false
     }
+  }
+
+  const initializeAddressForAdd = () => {
+    mode.value = 'add'
+    Object.assign(addressFormInputs, emptyAddressForm())
+  }
+
+  const initializeAddressForEdit = async (address: Address) => {
+    mode.value = 'edit'
+    isLoading.value = true
+    try {
+      selectedAddress.value = address
+      if (address) Object.assign(addressFormInputs, mapAddressToForm(address))
+    } finally {
+      isLoading.value = false
+    }
+  }
+
+  //
+  if (typeof window !== 'undefined') {
+    const token = localStorage.getItem('accessToken')
+    if (token && token !== 'undefined') {
+      accessToken.value = token
+      xAccessToken.value = localStorage.getItem('xAccessToken') ?? null
+      isAuthenticated.value = true
+      isHydrated.value = true
+    }
+  }
+
+  const initAuth = async (): Promise<void> => {
+    isLoading.value = true
+    if (typeof window !== 'undefined') {
+      const token = localStorage.getItem('accessToken')
+      const xToken = localStorage.getItem('xAccessToken')
+
+      if (token) {
+        accessToken.value = token
+        xAccessToken.value = xToken ?? null
+        isAuthenticated.value = true
+      }
+      isHydrated.value = true
+    }
+    isLoading.value = false
+  }
+
+  const setAuth = (token: string, xToken?: string): void => {
+    accessToken.value = token
+    xAccessToken.value = xToken ?? null
+    isAuthenticated.value = true
+    isHydrated.value = true
 
     if (typeof window !== 'undefined') {
-      const accessToken = localStorage.getItem('accessToken')
-      const user = localStorage.getItem('user') ?? ''
-
-      console.log('here')
-      if (accessToken && accessToken !== 'undefined') {
-        initialState = {
-          ...initialState,
-          accessToken,
-          xAccessToken: localStorage.getItem('xAccessToken'),
-          user: user ? JSON.parse(user) : null,
-          isAuthenticated: true,
-          hydrated: true,
-        }
-      }
+      localStorage.setItem('accessToken', token)
+      if (xToken) localStorage.setItem('xAccessToken', xToken)
     }
+  }
 
-    return initialState
-  },
+  const clearAuth = (): void => {
+    user.value = null
+    accessToken.value = null
+    xAccessToken.value = null
+    isAuthenticated.value = false
+    isHydrated.value = true
 
-  getters: {
-    getUser: (state): User | null => state.user,
-    isLoggedIn: (state): boolean => state.isAuthenticated,
-    isLoading: (state): boolean => state.loading,
-    isHydrated: (state): boolean => state.hydrated,
-  },
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('accessToken')
+      localStorage.removeItem('xAccessToken')
+    }
+  }
 
-  actions: {
-    /**
-     * Initialize auth state from localStorage
-     */
-    async initAuth() {
-      this.loading = true
-      if (typeof window !== 'undefined') {
-        const accessToken = localStorage.getItem('accessToken')
-        const xAccessToken = localStorage.getItem('xAccessToken')
-        const user = localStorage.getItem('user') ?? ''
+  const setUser = (_user: User): void => {
+    user.value = _user as User
+  }
 
-        if (accessToken) {
-          this.accessToken = accessToken
-          this.xAccessToken = xAccessToken
-          this.user = user ? JSON.parse(user) : null
-          this.isAuthenticated = true
-        }
+  const resetAddressForm = (): void => {
+    Object.assign(addressFormInputs, emptyAddressForm())
+  }
 
-        // mark hydrated even if no token present so UI can render correct unauthenticated state
-        this.hydrated = true
-        this.loading = false
-      }
-    },
-
-    /**
-     * Set user and tokens after successful login
-     */
-    setAuth(user: User, accessToken: string, xAccessToken?: string) {
-      this.user = user
-      this.accessToken = accessToken
-      this.xAccessToken = xAccessToken || null
-      this.isAuthenticated = true
-      this.hydrated = true
-
-      // Save to localStorage
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('accessToken', accessToken)
-        if (xAccessToken) {
-          localStorage.setItem('xAccessToken', xAccessToken)
-        }
-        localStorage.setItem('user', JSON.stringify(user))
-      }
-    },
-
-    /**
-     * Clear auth state and logout
-     */
-    clearAuth() {
-      this.user = null
-      this.accessToken = null
-      this.xAccessToken = null
-      this.isAuthenticated = false
-      this.hydrated = true
-
-      // Clear localStorage
-      if (typeof window !== 'undefined') {
-        localStorage.removeItem('accessToken')
-        localStorage.removeItem('xAccessToken')
-        localStorage.removeItem('user')
-      }
-    },
-
-    /**
-     * Set loading state
-     */
-    setLoading(loading: boolean) {
-      this.loading = loading
-    },
-
-    /**
-     * Update user information
-     */
-    updateUser(userData: Partial<User>) {
-      if (this.user) {
-        this.user = { ...this.user, ...userData }
-
-        if (typeof window !== 'undefined') {
-          localStorage.setItem('user', JSON.stringify(this.user))
-        }
-      }
-    },
-  },
+  return {
+    initAuth,
+    setAuth,
+    clearAuth,
+    setUser,
+    initializeUserProfileForm,
+    initializeAddressForAdd,
+    initializeAddressForEdit,
+    resetAddressForm,
+    setLoading,
+    setIsFetchingProfile,
+    isFetchingProfile,
+    user,
+    accessToken,
+    xAccessToken,
+    isAuthenticated,
+    isHydrated,
+    isLoading,
+    selectedAddress,
+    mode,
+    addressFormInputs,
+    userProfileFormInputs,
+  }
 })

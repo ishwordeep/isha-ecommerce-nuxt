@@ -30,6 +30,9 @@ onMounted(async () => {
   // Small delay to prevent flash
   await new Promise((resolve) => setTimeout(resolve, 100))
   await authStore.initAuth()
+  if (!authStore.user && authStore.isAuthenticated) {
+    await useAuth().fetchCurrentUser()
+  }
 
   // Mark app as hydrated globally once auth init completes
   isHydrated.value = true

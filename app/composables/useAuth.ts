@@ -1,7 +1,8 @@
 import { useAuthStore } from '~/stores/auth.store'
-import AuthService from '~/services/auth.service'
-import type { LoginCredentials, RegisterCredentials } from '~/stores/auth.store'
+import AuthService, { type Address } from '~/services/auth.service'
+import type { AddressForm, LoginCredentials, RegisterCredentials } from '~/stores/auth.store'
 import path from 'path'
+import authService from '~/services/auth.service'
 
 export const useAuth = () => {
   const authStore = useAuthStore()
@@ -15,8 +16,10 @@ export const useAuth = () => {
     authStore.setLoading(false)
 
     if (data?.data) {
-      const user = data.data.user ?? credentials
-      authStore.setAuth(user, data.data.accessToken, data.data.xAccessToken)
+      authStore.setAuth(data.data.accessToken, data.data.xAccessToken)
+      authStore.setIsFetchingProfile(true)
+      await fetchCurrentUser()
+      authStore.setIsFetchingProfile(false)
       return { success: true, data }
     }
 
@@ -34,7 +37,10 @@ export const useAuth = () => {
     authStore.setLoading(false)
 
     if (data?.data) {
-      authStore.setAuth(data.data.user ?? '', data.data.accessToken, data.data.xAccessToken)
+      authStore.setAuth(data.data.accessToken, data.data.xAccessToken)
+      authStore.setIsFetchingProfile(true)
+      await fetchCurrentUser()
+      authStore.setIsFetchingProfile(false)
       return { success: true, data }
     }
 
@@ -45,14 +51,8 @@ export const useAuth = () => {
    * Logout user
    */
   const logout = async () => {
-    const route = useRoute()
-    await AuthService.logout()
+    // await AuthService.logout()
     authStore.clearAuth()
-    if (path.basename(route.path).startsWith('/auth')) {
-      navigateTo('/')
-    } else {
-      navigateTo('#')
-    }
   }
 
   /**
@@ -61,9 +61,9 @@ export const useAuth = () => {
   const fetchCurrentUser = async () => {
     const { data, error } = await AuthService.getCurrentUser()
 
-    if (data) {
-      authStore.updateUser(data)
-      return { success: true, data }
+    if (data?.success && data.data) {
+      authStore.setUser(data.data)
+      return { success: true, data: data.data }
     }
 
     if (error) {
@@ -71,6 +71,18 @@ export const useAuth = () => {
     }
 
     return { success: false, error }
+  }
+
+  const addShippingAddress = async (_address: AddressForm) => {
+    try {
+      const response = await AuthService.addShippingAddress(_address)
+      if (response.data?.success && response.data.data) {
+        authStore.setUser(response.data.data)
+      }
+      return response
+    } catch (error) {
+      console.error('Error adding shipping address:', error)
+    }
   }
 
   return {
@@ -84,5 +96,6 @@ export const useAuth = () => {
     register,
     logout,
     fetchCurrentUser,
+    addShippingAddress,
   }
 }

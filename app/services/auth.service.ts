@@ -1,5 +1,31 @@
 import AxiosService from './axios.service'
-import type { LoginCredentials, RegisterCredentials, User } from '~/stores/auth.store'
+import type { LoginCredentials, RegisterCredentials } from '~/stores/auth.store'
+import type { ItemResponse, RootServiceInterface } from './index.service'
+export interface Address {
+  _id: string
+  street: string
+  city: string
+  state: string
+  zipCode: string
+  country: string
+  isDefault: boolean
+  createdAt: string
+  updatedAt: string
+}
+
+export interface User {
+  shippingAddresses: Address[]
+  _id: string
+  email: string
+  password: string
+  phone: string
+  name: string
+  role: string
+  createdAt: string
+  updatedAt: string
+  image?: string
+  __v: number
+}
 
 interface LoginResponse {
   data: {
@@ -46,8 +72,8 @@ class AuthService {
   /**
    * Get current user profile
    */
-  async getCurrentUser(): Promise<AuthServiceResponse<User>> {
-    return await AxiosService.get<User>('/auth/me')
+  async getCurrentUser(): Promise<AuthServiceResponse<ItemResponse<User>>> {
+    return await AxiosService.get<ItemResponse<User>>('/user/profile')
   }
 
   /**
@@ -91,6 +117,12 @@ class AuthService {
       { message: string },
       { oldPassword: string; newPassword: string }
     >('/auth/change-password', { oldPassword, newPassword })
+  }
+
+  async addShippingAddress(
+    payload: AddressForm
+  ): Promise<RootServiceInterface<ItemResponse<User>>> {
+    return await AxiosService.post<ItemResponse<User>>('/user/shipping-address', payload)
   }
 }
 

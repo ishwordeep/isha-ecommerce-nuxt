@@ -14,14 +14,16 @@
           <div
             class="sticky top-24 flex max-h-[50dvh] min-h-[50dvh] max-w-[250px] min-w-[250px] flex-col gap-2 rounded-lg bg-gray-100 p-4 max-lg:hidden"
           >
-            <h2 class="mb-4 text-lg font-bold">Hello, User</h2>
+            <h2 class="mb-4 text-lg font-bold">
+              Hello, {{ authStore.user?.name.split(' ')[0] || '' }}
+            </h2>
 
             <ULink
               v-for="link in links"
               :to="link.to"
               :key="link.to"
               class="rounded-lg p-2"
-              active-class="bg-primary text-white"
+              active-class="bg-secondary/60 font-semibold text-black"
             >
               {{ link.label }}
             </ULink>
@@ -62,6 +64,10 @@ const links = ref([
   {
     label: 'My Profile',
     to: '/auth/profile',
+  },
+  {
+    label: 'My Addresses',
+    to: '/auth/addresses',
   },
   {
     label: 'My Orders',
