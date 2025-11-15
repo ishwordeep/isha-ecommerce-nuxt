@@ -79,24 +79,31 @@
         </URadioGroup>
       </UPageCard>
     </UForm>
-    <UPageCard class="min-[960px]::mt-12 h-max" title="Order Summary">
-      <div class="flex flex-col gap-2">
+    <UPageCard class="h-max min-[960px]:mt-12" title="Order Summary">
+      <div class="relative flex max-h-[90dvh] flex-col gap-2 overflow-y-auto pr-2 sm:max-h-[60dvh]">
         <div
-          v-for="item in cartData"
-          :key="item.id"
+          v-for="item in cartStore.carts"
+          :key="item.productId"
           class="border-b-default mt-1 flex items-start gap-4 border-b pb-4"
         >
-          <div class="text-5xl">{{ item.image }}</div>
+          <div class="border-default aspect-square w-[80px] shrink rounded-md border">
+            <NuxtImg
+              :src="item.image"
+              alt="Product Image"
+              class="h-full w-full rounded-md object-cover"
+              v-if="item.image"
+            />
+          </div>
           <div class="flex flex-1 flex-col gap-1">
             <h3 class="line-clamp-2 text-lg font-semibold text-black">{{ item.name }}</h3>
             <div class="flex items-center gap-2">
               <span class="text-sm font-medium">Color:</span>
               <span
-                :style="{ backgroundColor: item.colors[0] }"
+                :style="{ backgroundColor: item.color }"
                 class="border-default h-5 w-5 rounded-sm border"
               ></span>
               <span class="text-sm font-medium">Size:</span>
-              <span class="text-sm">{{ item.sizes[0] }}</span>
+              <span class="text-sm">{{ item.size }}</span>
             </div>
             <div class="flex items-center gap-2"></div>
             <div
@@ -109,22 +116,20 @@
           </div>
         </div>
 
-        <div class="flex flex-col gap-2">
+        <div
+          class="border-t-default sticky bottom-0 mt-4 flex flex-col gap-2 border-t-2 bg-white pt-4"
+        >
           <div class="flex items-center justify-between">
             <span>Subtotal:</span>
-            <span class="text-lg">
-              ${{ cartData.reduce((total, item) => total + item.price, 0).toFixed(2) }}
-            </span>
+            <span class="text-lg"> ${{ totals.subtotal.toFixed(2) }} </span>
           </div>
           <div class="flex items-center justify-between">
             <span>Shipping:</span>
-            <span class="text-lg">$5</span>
+            <span class="text-lg">${{ totals.shipping.toFixed(2) }}</span>
           </div>
           <div class="flex items-center justify-between">
             <span class="font-bold text-black">Total:</span>
-            <span class="text-primary text-lg font-bold"
-              >${{ cartData.reduce((total, item) => total + item.price + 5, 0).toFixed(2) }}</span
-            >
+            <span class="text-primary text-lg font-bold">${{ totals.total.toFixed(2) }}</span>
           </div>
 
           <UButton
@@ -148,15 +153,23 @@
 </template>
 
 <script lang="ts" setup>
+import { useCartStore } from '~/stores/cart.store'
 import { useCheckoutStore } from '~/stores/checkout.store'
-
 const checkoutStore = useCheckoutStore()
-
+const cartStore = useCartStore()
 const checkoutMethods = ref([
   { label: 'Credit / Debit Card', value: 'card', icon: '💳' },
   { label: 'PayPal', value: 'paypal', icon: '💰️' },
   { label: 'Cash on Delivery', value: 'cod', icon: '📦' },
 ])
+
+const totals = computed(() => {
+  return {
+    subtotal: cartStore.cartTotal,
+    shipping: (cartStore.carts?.length || 0) > 0 ? 5 : 0,
+    total: cartStore.cartTotal + ((cartStore.carts?.length || 0) > 0 ? 5 : 0),
+  }
+})
 
 const disableButton = ref(true)
 

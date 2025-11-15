@@ -127,7 +127,7 @@
           @click="handleAddToCart(product)"
           :disabled="!canAddToCart"
           icon="i-lucide-shopping-cart"
-          class="flex h-10 w-10 items-center justify-center rounded-full p-0 opacity-0 shadow-lg transition-all duration-300 group-hover:opacity-100"
+          class="pointer-events-none flex h-10 w-10 items-center justify-center rounded-full p-0 opacity-0 shadow-lg transition-all duration-300 group-hover:pointer-events-auto group-hover:opacity-100"
           :class="{ 'cursor-not-allowed opacity-50': !canAddToCart }"
           :aria-label="canAddToCart ? 'Add to cart' : 'Select size to add to cart'"
         />

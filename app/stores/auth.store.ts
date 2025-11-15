@@ -9,6 +9,7 @@ export interface AddressForm {
   state: string
   zipCode: string
   country: string
+  apartment: string
   isDefault: boolean
 }
 
@@ -28,6 +29,7 @@ const mapAddressToForm = (address: Address | null): AddressForm => {
     zipCode: address.zipCode,
     country: address.country,
     isDefault: address.isDefault,
+    apartment: address.apartment,
   }
 }
 
@@ -37,6 +39,7 @@ const emptyAddressForm = (): AddressForm => ({
   state: '',
   zipCode: '',
   country: '',
+  apartment: '',
   isDefault: false,
 })
 

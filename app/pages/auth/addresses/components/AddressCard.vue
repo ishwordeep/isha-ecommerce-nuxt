@@ -48,7 +48,11 @@ const onDelete = async () => {
         <h3 class="text-base leading-6 font-semibold text-gray-900 dark:text-white">
           {{ address.street || 'Home' }}
         </h3>
-        <p>{{ address.city }}, {{ address.state }} {{ address.zipCode }}</p>
+        <p>
+          {{ address.apartment ? address.apartment + ',' : '' }} {{ address.city }},
+          {{ address.state }}
+        </p>
+        <p>{{ address.zipCode }}</p>
         <p>{{ address.country }}</p>
         <!-- <p>Phone: {{ address.phone }}</p> -->
         <UBadge v-if="address.isDefault" color="info" variant="soft" class="absolute top-2 right-2">

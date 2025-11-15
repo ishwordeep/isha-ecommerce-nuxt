@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import type { CartResponse, Item } from '~/services/cart.service'
+import type { Item } from '~/services/cart.service'
 import CartService from '~/services/cart.service'
 
 export interface CartPayload {
@@ -13,6 +13,7 @@ export interface CartPayload {
 export const useCartStore = defineStore('cart', () => {
   const isLoading = ref(false)
   const carts = ref<Item[] | null>(null)
+  const cartTotal = ref<number>(0)
   const fetchCarts = async () => {
     isLoading.value = true
     try {
@@ -21,6 +22,11 @@ export const useCartStore = defineStore('cart', () => {
       if (response.data?.success) {
         console.log(response.data?.data)
         carts.value = response.data.data?.items as Item[]
+        cartTotal.value =
+          response.data.data?.items.reduce(
+            (total: number, item: Item) => total + item.price * item.quantity,
+            0
+          ) || 0
       }
     } catch (error) {
       console.log('Error', error)
@@ -48,5 +54,6 @@ export const useCartStore = defineStore('cart', () => {
     fetchCarts,
     carts,
     addToCart,
+    cartTotal,
   }
 })

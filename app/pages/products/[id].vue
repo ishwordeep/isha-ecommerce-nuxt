@@ -71,7 +71,7 @@
         </UFormField>
 
         <div class="flex space-x-2">
-          <UButton label="Add To Cart" class="max-w-32 justify-center" />
+          <UButton label="Add To Cart" class="max-w-32 justify-center" @click="handleAddToCart" />
           <UButton icon="i-lucide-heart" variant="outline" />
           <UButton icon="i-lucide-share-2" variant="outline" />
         </div>
@@ -92,6 +92,7 @@
 
 <script setup lang="ts">
 import ProductImages from '~/pages/products/[category]/components/ProductImages.vue'
+import type { ProductResponse } from '~/services/product.service'
 
 const quantity = ref(1)
 
@@ -137,4 +138,16 @@ watchEffect(async () => {
     console.log(productStore.selectedProduct)
   }
 })
+
+const { addToCart } = useAddToCart()
+
+const handleAddToCart = () => {
+  const product = productStore.selectedProduct as ProductResponse
+  addToCart({
+    product: product,
+    quantity: quantity.value,
+    selectedColor: selectedColor.value,
+    selectedSize: selectedSize.value,
+  })
+}
 </script>

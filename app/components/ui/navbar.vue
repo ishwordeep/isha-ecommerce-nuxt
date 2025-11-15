@@ -2,8 +2,8 @@
 import type { NavigationMenuItem } from '@nuxt/ui'
 import Login from '~/components/auth/login.vue'
 import SignUp from '~/components/auth/signup.vue'
-import UserMenu from '~/layouts/components/UserMenu.vue'
 import UserCart from '~/layouts/components/UserCart.vue'
+import UserMenu from '~/layouts/components/UserMenu.vue'
 
 const route = useRoute()
 const authStore = useAuthStore()
@@ -15,6 +15,11 @@ const items = computed<NavigationMenuItem[]>(() => [
     label: 'Home',
     to: '/',
     active: route.path === '/',
+  },
+  {
+    label: 'Shop',
+    to: '/products',
+    active: route.path.startsWith('/products'),
   },
   {
     label: 'New',

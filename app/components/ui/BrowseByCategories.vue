@@ -1,5 +1,5 @@
 <template>
-  <UCollapsible class="flex w-full flex-col gap-2" default-open>
+  <UCollapsible class="sticky top-20 flex w-full flex-col gap-2" default-open>
     <UButton
       class="group"
       label="Browse by Categories"

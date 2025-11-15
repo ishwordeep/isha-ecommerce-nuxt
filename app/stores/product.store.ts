@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import ProductService, { type ProductResponse } from '~/services/product.service'
 import type { PaginationInterface, QueryInterface } from '~/services/index.service'
+import ProductService, { type ProductResponse } from '~/services/product.service'
 type ProductFlag = 'new' | 'trending' | 'featured'
 
 interface FlagCollections {
@@ -27,12 +27,18 @@ export const useProductStore = defineStore('product', () => {
     featured: [],
   })
 
-  const fetchProducts = async ({ page = 1, limit = 12, search = '' }: QueryInterface) => {
+  const fetchProducts = async ({
+    page = 1,
+    limit = 12,
+    search = '',
+    sort = '',
+  }: QueryInterface) => {
     isLoading.value = true
     try {
-      const response = await ProductService.fetchProducts({ page, limit, search })
+      const response = await ProductService.fetchProducts({ page, limit, search, sort })
       if (response.data?.success) {
         products.value = response.data?.data || null
+        pagination.value = response.data?.pagination || null
       }
     } catch (error) {
       console.error('Error fetching products', error)
@@ -41,10 +47,15 @@ export const useProductStore = defineStore('product', () => {
     }
   }
 
-  const loadMoreProducts = async ({ page = 1, limit = 12, search = '' }: QueryInterface) => {
+  const loadMoreProducts = async ({
+    page = 1,
+    limit = 12,
+    search = '',
+    sort = '',
+  }: QueryInterface) => {
     isLoading.value = true
     try {
-      const response = await ProductService.fetchProducts({ page, limit, search })
+      const response = await ProductService.fetchProducts({ page, limit, search, sort })
       if (response.data?.success) {
         if (products.value) {
           products.value = products.value.concat(response.data?.data || [])

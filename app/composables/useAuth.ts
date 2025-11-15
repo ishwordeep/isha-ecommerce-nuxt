@@ -1,8 +1,6 @@
-import { useAuthStore } from '~/stores/auth.store'
-import AuthService, { type Address } from '~/services/auth.service'
+import AuthService from '~/services/auth.service'
 import type { AddressForm, LoginCredentials, RegisterCredentials } from '~/stores/auth.store'
-import path from 'path'
-import authService from '~/services/auth.service'
+import { useAuthStore } from '~/stores/auth.store'
 
 export const useAuth = () => {
   const authStore = useAuthStore()

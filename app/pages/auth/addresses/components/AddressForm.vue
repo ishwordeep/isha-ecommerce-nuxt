@@ -30,15 +30,19 @@
         </UFormField>
 
         <UFormField label="State" name="state" required>
-          <UInput v-model="authStore.addressFormInputs.state" orientation="vertical" />
+          <UInput v-model="authStore.addressFormInputs.state" />
         </UFormField>
 
-        <UFormField label="Street" name="street" required>
-          <UInput v-model="authStore.addressFormInputs.street" orientation="vertical" />
+        <UFormField label="Street" name="street">
+          <UInput v-model="authStore.addressFormInputs.street" />
+        </UFormField>
+
+        <UFormField label="Apartment" name="apartment">
+          <UInput v-model="authStore.addressFormInputs.apartment" />
         </UFormField>
 
         <UFormField label="Zip Code" name="zipCode" required>
-          <UInput v-model="authStore.addressFormInputs.zipCode" orientation="vertical" />
+          <UInput v-model="authStore.addressFormInputs.zipCode" />
         </UFormField>
 
         <UCheckbox
@@ -97,6 +101,8 @@ const schema = z.object({
   zipCode: z.string().min(1, 'Zip Code is required'),
   country: z.string().min(1, 'Country is required'),
   street: z.string().optional(),
+  apartment: z.string().optional(),
+  isDefault: z.boolean().optional(),
 })
 
 watch(

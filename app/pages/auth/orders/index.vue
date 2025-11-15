@@ -1,6 +1,8 @@
 <template>
   <div class="space-y-4">
+    <OrderSkeleton v-if="state.fetching" />
     <div
+      v-else
       v-for="order in orderStore.orders"
       :key="order._id"
       class="rounded-xl border border-gray-200 bg-white p-6 transition-shadow hover:shadow-md"
@@ -28,7 +30,7 @@
         </div>
       </div>
 
-      <div class="border-t pt-4">
+      <div class="border-t border-t-gray-300 pt-4">
         <div class="flex gap-3">
           <div
             v-for="(product, idx) in order.products"
@@ -68,12 +70,16 @@
 </template>
 
 <script setup lang="ts">
-import { useOrderStore } from '~/stores/order.store'
-import type { OrderResponse } from '~/services/order.service'
-import OrderDetail from './components/OrderDetail.vue'
 import OrderStatusBadge from '~/components/ui/OrderStatusBadge.vue'
+import type { OrderResponse } from '~/services/order.service'
+import { useOrderStore } from '~/stores/order.store'
+import OrderDetail from './components/OrderDetail.vue'
+import OrderSkeleton from './components/OrderSkeleton.vue'
 
 const openDetail = ref(false)
+const state = reactive({
+  fetching: false,
+})
 
 definePageMeta({
   layout: 'auth',
@@ -83,9 +89,11 @@ definePageMeta({
 const orderStore = useOrderStore()
 
 onMounted(async () => {
+  state.fetching = true
   if (!orderStore.orders?.length) {
     await orderStore.fetchOrders()
   }
+  state.fetching = false
 })
 
 const viewOrderDetail = (order: OrderResponse) => {

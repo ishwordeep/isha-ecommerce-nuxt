@@ -35,7 +35,7 @@
     <!-- Product Image -->
     <NuxtLink :to="`/products/${product._id}`" class="block">
       <div
-        class="relative flex aspect-square items-center justify-center overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 transition-transform duration-500 group-hover:scale-105 min-[360px]:aspect-[4/3]"
+        class="relative flex aspect-square items-center justify-center overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 transition-transform duration-500 group-hover:scale-105"
       >
         <NuxtImg
           v-if="product.image"
@@ -128,7 +128,7 @@
           @click="handleAddToCart(product)"
           :disabled="!canAddToCart"
           icon="i-lucide-shopping-cart"
-          class="flex h-10 w-10 items-center justify-center rounded-full p-0 opacity-0 shadow-lg transition-all duration-300 group-hover:opacity-100"
+          class="pointer-events-none flex h-10 w-10 items-center justify-center rounded-full p-0 opacity-0 shadow-lg transition-all duration-300 group-hover:pointer-events-auto group-hover:opacity-100"
           :class="{ 'cursor-not-allowed opacity-50': !canAddToCart }"
           :aria-label="canAddToCart ? 'Add to cart' : 'Select size to add to cart'"
         />

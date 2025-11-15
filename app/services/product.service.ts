@@ -40,10 +40,12 @@ class ProductService {
     limit,
     search,
     category,
+    sort,
   }: QueryInterface): Promise<RootServiceInterface<ListResponse<ProductResponse>>> {
     const params = new URLSearchParams({ page: String(page), limit: String(limit) })
     if (search) params.append('search', search)
     if (category) params.append('category', category)
+    if (sort) params.append('sort', sort)
     const url = `/frontend/product?${params.toString()}`
     return await AxiosService.get<ListResponse<ProductResponse>>(url)
   }

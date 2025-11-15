@@ -1,7 +1,7 @@
-import { useCartStore } from '~/stores/cart.store'
 import { useToast } from '#imports' // or your toast import path
 import type { Item } from '~/services/cart.service'
 import type { ProductResponse } from '~/services/product.service'
+import { useCartStore } from '~/stores/cart.store'
 
 interface AddToCartOptions {
   product: ProductResponse
@@ -44,6 +44,8 @@ export const useAddToCart = () => {
 
       if (existingItem) {
         existingItem.quantity += payload.quantity
+        cartStore.cartTotal += product.price * payload.quantity
+        existingItem.price = quantity * product.price
       } else {
         cartStore.carts?.push({
           ...payload,

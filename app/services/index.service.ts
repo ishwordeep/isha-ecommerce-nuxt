@@ -28,4 +28,5 @@ export interface QueryInterface {
   limit: number
   search?: string
   category?: string
+  sort?: string
 }

@@ -113,7 +113,7 @@
                   </template>
                 </UInput>
                 <span class="text-primary font-medium"
-                  >${{ item.price }} &nbsp;
+                  >${{ item.price * item.quantity }} &nbsp;
                   <!--                <span class="text-secondary line-through">$4000</span>-->
                 </span>
               </div>
@@ -134,7 +134,7 @@
       <div class="border-t-default flex flex-col gap-4 border-t bg-gray-50 p-4">
         <div class="flex items-center justify-between">
           <span class="text-lg font-semibold">Total:</span>
-          <span class="text-primary text-2xl font-bold">$209.99</span>
+          <span class="text-primary text-2xl font-bold">${{ cartStore.cartTotal }}</span>
         </div>
         <UButton
           label="Proceed to Checkout"

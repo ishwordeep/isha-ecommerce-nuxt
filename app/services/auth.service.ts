@@ -1,5 +1,5 @@
-import AxiosService from './axios.service'
 import type { LoginCredentials, RegisterCredentials } from '~/stores/auth.store'
+import AxiosService from './axios.service'
 import type { ItemResponse, RootServiceInterface } from './index.service'
 export interface Address {
   _id: string
@@ -8,6 +8,7 @@ export interface Address {
   state: string
   zipCode: string
   country: string
+  apartment: string
   isDefault: boolean
   createdAt: string
   updatedAt: string
