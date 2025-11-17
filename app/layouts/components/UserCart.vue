@@ -15,7 +15,6 @@
       class="rounded-full"
       variant="ghost"
       icon="i-lucide-shopping-cart"
-      viewTransition
     />
 
     <template #header>

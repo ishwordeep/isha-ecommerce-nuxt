@@ -56,7 +56,6 @@ const items = computed<NavigationMenuItem[]>(() => [
       container: 'max-w-[1440px]',
     }"
     :toggle="{
-      color: 'primary',
       variant: 'ghost',
     }"
   >
@@ -76,7 +75,7 @@ const items = computed<NavigationMenuItem[]>(() => [
     </template>
 
     <template #body>
-      <UNavigationMenu :items="items" orientation="vertical" class="-mx-2.5" />
+      <UNavigationMenu color="neutral" :items="items" orientation="vertical" class="-mx-2.5" />
     </template>
   </UHeader>
 </template>
