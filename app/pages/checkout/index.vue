@@ -80,7 +80,7 @@
       </UPageCard>
     </UForm>
     <UPageCard class="h-max min-[960px]:mt-12" title="Order Summary">
-      <div class="relative flex max-h-[90dvh] flex-col gap-2 overflow-y-auto pr-2 sm:max-h-[60dvh]">
+      <div class="relative flex max-h-[90dvh] flex-col gap-2 overflow-y-auto pr-2 sm:max-h-[57dvh]">
         <div
           v-for="item in cartStore.carts"
           :key="item.productId"
@@ -140,7 +140,6 @@
             color="primary"
             :ui="{
               label: 'w-full text-center',
-              base: 'py-2 sm:py-3',
             }"
             to="/checkout/confirmed"
             viewTransition

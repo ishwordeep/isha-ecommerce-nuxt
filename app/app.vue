@@ -1,5 +1,5 @@
 <template>
-  <UApp>
+  <UApp :toaster="toaster">
     <NuxtRouteAnnouncer />
     <NuxtLayout>
       <!-- Loading Screen -->
@@ -21,7 +21,7 @@ const isInitializing = ref(true)
 const authStore = useAuthStore()
 // Global hydration flag for app-wide usage
 const isHydrated = useState<boolean>('isHydrated', () => false)
-
+const toaster = { position: 'bottom-center', max: 3 } as const
 onMounted(async () => {
   // initialize auth from localStorage on client to avoid UI flash
   // if (!settingStore.setting && authStore.isAuthenticated) {

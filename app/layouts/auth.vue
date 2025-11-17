@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="relative min-h-screen w-full">
     <!-- Wait for client-side auth initialization to avoid flashing unauthenticated UI -->
     <div v-if="!isHydrated" class="fixed inset-0 z-50 flex items-center justify-center bg-white">
       <div
@@ -9,7 +9,7 @@
 
     <template v-else-if="isAuthenticated">
       <UiNavbar />
-      <main class="mx-auto h-full max-w-[1440px] px-4 py-4 sm:px-6 lg:px-8">
+      <main class="mx-auto h-full max-w-[1440px] flex-1 px-4 py-4 sm:px-6 lg:px-8">
         <div class="mt-4 flex gap-4">
           <div
             class="sticky top-24 flex max-h-[50dvh] min-h-[50dvh] max-w-[250px] min-w-[250px] flex-col gap-2 rounded-lg bg-gray-100 p-4 max-lg:hidden"
@@ -36,6 +36,7 @@
           </div>
         </div>
       </main>
+      <UiFooter />
     </template>
     <template v-else>
       <div

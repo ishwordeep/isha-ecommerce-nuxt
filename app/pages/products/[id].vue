@@ -3,7 +3,7 @@
     <UBreadcrumb :items="breadcrumbs" />
     <hr class="my-4 border-gray-300" />
 
-    <div class="mt-8 grid grid-cols-1 gap-8 sm:grid-cols-2">
+    <div class="grid grid-cols-1 gap-2 sm:mt-8 sm:grid-cols-2 sm:gap-4 lg:gap-8">
       <!--Images-->
       <ProductImages />
 

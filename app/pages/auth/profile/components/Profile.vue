@@ -25,16 +25,12 @@
             <UFormField name="phone" label="Phone" required>
               <UInput v-model="inputs.phone" />
             </UFormField>
-
-            <UFormField name="address" label="Address" required>
-              <UInput v-model="inputs.address" />
-            </UFormField>
           </UForm>
         </template>
 
         <template #footer>
           <div class="flex w-full justify-end gap-2">
-            <UButton label="Cancel" variant="outline" @click="handleClose" />
+            <UButton label="Cancel" variant="subtle" color="neutral" @click="handleClose" />
             <UButton type="submit" label="Save" form="profile-form" />
           </div>
         </template>
@@ -80,7 +76,6 @@ const inputs = reactive({
   name: authStore.user?.name || '',
   email: authStore.user?.email || '',
   phone: authStore.user?.phone || '',
-  address: authStore.user?.address || '',
 })
 
 const reset = () => {

@@ -1,11 +1,12 @@
 <template>
   <div>
-    <h3 class="text-vlack mb-4 text-lg font-bold">{{ title }}</h3>
+    <h3 class="mb-4 text-lg font-bold text-black">{{ title }}</h3>
     <ul class="space-y-3">
       <li v-for="link in links" :key="link.url">
         <NuxtLink
           :to="link.url"
           class="inline-block text-gray-700 transition-all duration-200 hover:translate-x-1 hover:text-black"
+          viewTransition
         >
           {{ link.label }}
         </NuxtLink>
