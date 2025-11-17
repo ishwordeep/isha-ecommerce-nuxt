@@ -10,52 +10,11 @@
     <template v-else-if="isAuthenticated">
       <UiNavbar />
       <main class="mx-auto h-full max-w-[1440px] flex-1 px-4 py-4 sm:px-6 lg:px-8">
-        <div class="mt-4 flex gap-4 max-lg:flex-col">
-          <div
-            class="sticky top-24 flex max-h-[50dvh] min-h-[50dvh] max-w-[250px] min-w-[250px] flex-col gap-2 rounded-lg bg-gray-100 p-4 max-lg:hidden"
-            v-if="isLgUp"
-          >
-            <h2 class="mb-4 text-lg font-bold">
-              Hello, {{ authStore.user?.name.split(' ')[0] || '' }}
-            </h2>
-
-            <ULink
-              v-for="link in links"
-              :to="link.to"
-              :key="link.to"
-              class="rounded-lg p-2"
-              active-class="bg-secondary/60 font-semibold text-black"
-            >
-              {{ link.label }}
-            </ULink>
-          </div>
-          <UDropdownMenu
-            v-else
-            :items="links"
-            class="lg:hidden"
-            :modal="false"
-            :ui="{
-              content: 'w-(--reka-dropdown-menu-trigger-width)',
-            }"
-            viewTransition
-          >
-            <UButton
-              color="neutral"
-              square
-              class="w-max capitalize"
-              variant="outline"
-              trailing-icon="i-lucide-chevron-down"
-              viewTransition
-              :label="'My ' + selectedPage"
-            />
-          </UDropdownMenu>
-
-          <div class="flex w-full flex-col gap-4">
-            <slot name="heading">
-              <h1 class="text-2xl font-bold text-black">{{ pageHeading }}</h1>
-            </slot>
-            <slot />
-          </div>
+        <div class="flex w-full flex-col gap-4">
+          <slot name="heading">
+            <h1 class="text-2xl font-bold text-black">{{ pageHeading }}</h1>
+          </slot>
+          <slot />
         </div>
       </main>
       <UiFooter />
@@ -81,34 +40,6 @@
 </template>
 
 <script setup lang="ts">
-import Login from '~/components/auth/login.vue'
-
-const isLgUp = useMediaQuery('(min-width: 1024px)')
-
-const selectedPage = computed(() => {
-  const path = useRoute().path
-  return path.split('/')[2] || 'profile'
-})
-
-const links = ref([
-  {
-    label: 'My Profile',
-    to: '/auth/profile',
-  },
-  {
-    label: 'My Addresses',
-    to: '/auth/addresses',
-  },
-  {
-    label: 'My Orders',
-    to: '/auth/orders',
-  },
-  {
-    label: 'My Wishlist',
-    to: '/auth/wishlist',
-  },
-])
-
 const route = useRoute()
 const authStore = useAuthStore()
 const { isAuthenticated } = storeToRefs(authStore)

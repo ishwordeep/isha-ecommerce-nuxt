@@ -11,12 +11,15 @@ const items: DropdownMenuItem[][] = [
       to: '/auth/profile',
     },
     {
+      label: 'My Addresses',
+      to: '/auth/addresses',
+    },
+    {
       label: 'My Orders',
       to: '/auth/orders',
     },
-
     {
-      label: 'My Wishlists',
+      label: 'My Wishlist',
       to: '/auth/wishlist',
     },
   ],

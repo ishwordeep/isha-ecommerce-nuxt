@@ -8,17 +8,17 @@
       @click="openForm = true"
     />
 
-    <template v-if="authStore.isFetchingProfile">
-      <AddressSkeletonCard v-for="n in 3" :key="n" />
-    </template>
-
-    <AddressCard
-      v-else
-      v-for="address in authStore.user?.shippingAddresses"
-      :key="address._id"
-      :address="address"
-    />
-
+    <div class="grid grid-cols-1 gap-3 md:grid-cols-2">
+      <template v-if="authStore.isFetchingProfile">
+        <AddressSkeletonCard v-for="n in 4" :key="n" />
+      </template>
+      <AddressCard
+        v-else
+        v-for="address in authStore.user?.shippingAddresses"
+        :key="address._id"
+        :address="address"
+      />
+    </div>
     <AddressForm mode="add" v-model:open="openForm" />
   </div>
 </template>

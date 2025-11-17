@@ -1,6 +1,6 @@
 <template>
   <footer
-    class="from-tertiary/20 to-tertiary/80 relative mt-20 w-full overflow-hidden bg-gradient-to-r text-black"
+    class="from-tertiary/20 to-tertiary/80 relative mt-12 w-full overflow-hidden bg-gradient-to-r text-black"
   >
     <div class="mx-auto max-w-[1440px] px-6">
       <!-- Main Footer Content -->
@@ -41,13 +41,10 @@
         </div>
 
         <!-- Shop Links -->
-        <FooterLinks title="Shop" :links="shopLinks" />
+        <FooterLinks class="lg:col-span-2" title="Shop" :links="shopLinks" />
 
         <!-- Customer Service -->
         <FooterLinks title="Customer Service" :links="customerLinks" />
-
-        <!-- About -->
-        <FooterLinks title="About" :links="aboutLinks" />
       </div>
 
       <!-- Newsletter Signup -->
@@ -158,14 +155,6 @@ const customerLinks = [
   { label: 'Returns & Exchanges', url: '#' },
   { label: 'Size Guide', url: '#' },
   { label: 'Track Order', url: '#' },
-]
-
-const aboutLinks = [
-  { label: 'Our Story', url: '#' },
-  { label: 'Careers', url: '#' },
-  { label: 'Sustainability', url: '#' },
-  { label: 'Press', url: '#' },
-  { label: 'Blog', url: '#' },
 ]
 </script>
 

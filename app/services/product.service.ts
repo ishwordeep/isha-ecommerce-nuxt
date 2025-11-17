@@ -25,8 +25,15 @@ export interface ProductResponse {
   tags: string[]
   createdAt?: string
   updatedAt: string
+  faqs: Faq[]
   __v: number
   categoryDetails: CategoryDetails
+}
+
+export interface Faq {
+  _id: string
+  question: string
+  answer: string
 }
 
 export interface CategoryDetails {

@@ -49,11 +49,33 @@ export const useCartStore = defineStore('cart', () => {
     }
   }
 
+  const removeFromCart = async (itemId: string) => {
+    isLoading.value = true
+    try {
+      const response = await CartService.removeFromCart(itemId)
+      if (response.data?.success) {
+        carts.value = carts.value?.filter((item) => item._id !== itemId) || null
+        cartTotal.value =
+          carts.value?.reduce(
+            (total: number, item: Item) => total + item.price * item.quantity,
+            0
+          ) || 0
+      }
+      return response
+    } catch (error) {
+      console.log('Error', error)
+      // Handle error if needed
+    } finally {
+      isLoading.value = false
+    }
+  }
+
   return {
     isLoading,
     fetchCarts,
     carts,
     addToCart,
     cartTotal,
+    removeFromCart,
   }
 })

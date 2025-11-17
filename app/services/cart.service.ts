@@ -1,5 +1,5 @@
 import AxiosService from './axios.service'
-import type { ItemResponse, ListResponse, RootServiceInterface } from './index.service'
+import type { ItemResponse, RootServiceInterface } from './index.service'
 
 export interface CartResponse {
   _id: string
@@ -17,6 +17,7 @@ export interface Item {
   image: string
   price: number
   discount: number
+  _id: string
 }
 
 class CartService {
@@ -28,6 +29,11 @@ class CartService {
   async addToCart(payload: CartPayload): Promise<RootServiceInterface<ItemResponse<CartResponse>>> {
     const url = `/cart`
     return await AxiosService.post<ItemResponse<CartResponse>>(url, payload)
+  }
+
+  async removeFromCart(itemId: string): Promise<RootServiceInterface<ItemResponse<CartResponse>>> {
+    const url = `/cart/${itemId}`
+    return await AxiosService.delete<ItemResponse<CartResponse>>(url)
   }
 }
 

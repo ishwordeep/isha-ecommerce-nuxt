@@ -21,25 +21,11 @@ const items = computed<NavigationMenuItem[]>(() => [
     to: '/products',
     active: route.path === '/products',
   },
-  {
-    label: 'New',
-    to: '/products/collection/new',
-    active: route.path === '/products/collection/new',
-  },
-  {
-    label: 'Categories',
-    to: '/categories',
-    active: route.path.startsWith('/categories'),
-  },
+
   {
     label: 'Featured',
     to: '/products/collection/featured',
     active: route.path.startsWith('/products/collection/featured'),
-  },
-  {
-    label: 'Sales',
-    to: '/sales',
-    active: route.path.startsWith('/sales'),
   },
   {
     label: 'About Us',

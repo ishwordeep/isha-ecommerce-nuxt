@@ -7,6 +7,8 @@ export default defineNuxtConfig({
   devServer: {
     port: 6002,
   },
+
+  ssr: true,
   srcDir: 'app',
   app: {
     head: {
@@ -26,14 +28,7 @@ export default defineNuxtConfig({
       apiUrl: '',
     },
   },
-  modules: [
-    '@nuxt/eslint',
-    '@nuxt/image',
-    '@nuxt/ui',
-    '@nuxt/fonts',
-    '@pinia/nuxt',
-    '@vueuse/nuxt',
-  ],
+  modules: ['@nuxt/eslint', '@nuxt/image', '@nuxt/ui', '@nuxt/fonts', '@pinia/nuxt'],
   ui: {
     colorMode: false,
     theme: {
@@ -47,6 +42,9 @@ export default defineNuxtConfig({
   },
   css: ['~/assets/css/main.css'],
   vite: {
+    css: {
+      devSourcemap: false,
+    },
     plugins: [tailwindcss()],
   },
 })

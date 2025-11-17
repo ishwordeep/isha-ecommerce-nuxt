@@ -97,6 +97,7 @@
                       class="mr-2"
                       size="sm"
                       variant="ghost"
+                      :disabled="item.quantity <= 1"
                       @click="stepQuantity(item, 'decrease')"
                     />
                   </template>
@@ -123,6 +124,7 @@
               color="error"
               icon="i-lucide-trash"
               class="top-1 right-1 max-sm:absolute"
+              @click="handleOpenDelete(item)"
             />
           </div>
         </template>
@@ -148,16 +150,40 @@
       </div>
     </template>
   </UDrawer>
+
+  <UModal title="Remove from cart" v-model:open="openDelete" :ui="{ title: '!text-2xl' }">
+    <template #body> Are you sure you want to remove this item from your cart? </template>
+    <template #footer>
+      <div class="flex w-full justify-end gap-2">
+        <UButton label="Cancel" variant="outline" @click="handleCloseDelete" />
+        <UButton label="Confirm" color="error" @click="removeItem" :loading="state.isLoading" />
+      </div>
+    </template>
+  </UModal>
 </template>
 
 <script setup lang="ts">
 import type { Item } from '~/services/cart.service'
 
 const open = ref(false)
+const openDelete = ref(false)
+const selectedItem = ref<Item | null>(null)
+
+const handleOpenDelete = (item: Item) => {
+  selectedItem.value = item
+  openDelete.value = true
+}
+
+const handleCloseDelete = () => {
+  selectedItem.value = null
+  openDelete.value = false
+}
+
 const cartStore = useCartStore()
 const state = reactive({
   isFetching: false,
   isUpdating: false,
+  isDeleting: false,
 })
 
 onMounted(async () => {
@@ -176,14 +202,23 @@ const stepQuantity = async (item: Item, type: 'increase' | 'decrease') => {
         }
       })
     } else {
-      console.log('Decreasing Quantity', item.productId, item.quantity--)
       cartStore.carts?.find((cartItem) => {
         if (cartItem.productId === item.productId) {
           cartItem.quantity -= 1
         }
       })
     }
+    cartStore.cartTotal =
+      cartStore.carts?.reduce((total, item) => total + item.price * item.quantity, 0) || 0
     state.isUpdating = false
   }, 500)
+}
+
+const removeItem = async () => {
+  if (!selectedItem.value) return
+  state.isDeleting = true
+  await cartStore.removeFromCart(selectedItem.value._id)
+  state.isDeleting = false
+  openDelete.value = false
 }
 </script>

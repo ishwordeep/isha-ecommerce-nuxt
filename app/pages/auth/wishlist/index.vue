@@ -17,47 +17,61 @@
       class="grid grid-cols-1 gap-6 min-[370px]:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
     >
       <div
-        v-for="item in wishlistItems"
-        :key="item.id"
-        class="group relative overflow-hidden rounded-xl border border-gray-200 bg-white transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+        v-for="product in wishlistItems"
+        class="group cursor-pointer overflow-hidden rounded-2xl border border-gray-200 bg-white transition-all duration-300 hover:border-gray-300 hover:shadow-xl"
       >
-        <!-- Image Container -->
-        <div
-          class="relative aspect-square overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 transition duration-500"
-          @click="navigateTo(`/products/${item.id}`)"
-        >
-          <NuxtImg
-            :src="item.image"
-            :alt="item.name"
-            v-if="item.image"
-            class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-110"
-          />
-        </div>
-
-        <!-- Content -->
-        <div class="p-5">
-          <h3
-            class="line-clamp-1 text-base font-bold text-gray-900"
-            @click="navigateTo(`/products/${item.id}`)"
+        <!-- Product Image -->
+        <NuxtLink :to="`/products/${product._id}`">
+          <div
+            class="relative flex aspect-square items-center justify-center overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100"
           >
-            {{ item.name }}
-          </h3>
-
-          <div class="mt-3 flex items-baseline gap-2">
-            <span class="text-2xl font-bold text-gray-900"> ${{ item.price.toFixed(2) }} </span>
-            <!-- <span class="text-sm text-gray-500 line-through">$99.99</span> -->
-          </div>
-
-          <!-- Add to Cart Button -->
-          <div class="mt-2 flex items-center gap-2">
-            <UButton
-              leadingIcon="i-lucide-shopping-cart"
-              size="md"
-              class="flex-1 justify-center font-semibold"
-              label="Add to Cart"
+            <!--        <div class="text-6xl transition-transform duration-300 group-hover:scale-105">-->
+            <!--          {{ product.image }}-->
+            <!--        </div>-->
+            <NuxtImg
+              v-if="product.image"
+              :src="product.image || '/images/placeholder.png'"
+              alt="Product Image"
+              class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+              width="400"
+              height="300"
+              priority
             />
-            <UButton leading-icon="i-lucide-trash" size="md" color="error" variant="outline" />
+
+            <USkeleton v-else class="h-full w-full" />
+
+            <UButton
+              square
+              size="xs"
+              class="absolute top-2 right-2 z-10"
+              icon="i-lucide-trash-2"
+              color="error"
+              variant="subtle"
+            />
           </div>
+        </NuxtLink>
+
+        <!-- Product Info -->
+        <div class="p-4">
+          <h3 class="mb-2 line-clamp-1 text-sm leading-tight font-bold text-gray-900">
+            <NuxtLink
+              :to="`/products/${product._id}`"
+              class="transition-colors hover:text-indigo-600"
+            >
+              {{ product.name }}
+            </NuxtLink>
+          </h3>
+          <div class="flex items-center justify-between">
+            <span class="text-xl font-bold text-gray-900">${{ product.price.toFixed(2) }}</span>
+          </div>
+          <UButton
+            square
+            size="sm"
+            label="Add to Cart"
+            class="mt-2 w-full justify-center"
+            leading-icon="i-lucide-shopping-cart"
+            color="secondary"
+          />
         </div>
       </div>
     </div>

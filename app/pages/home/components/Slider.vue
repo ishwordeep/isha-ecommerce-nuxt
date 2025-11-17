@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { useMediaQuery } from '@vueuse/core'
+import { useMediaQuery } from '~/composables/useMediaQuery'
+import type { SliderResponse } from '~/services/slider.service'
 
 const isLoading = ref(true)
 const sliderStore = useSliderStore()
@@ -42,7 +43,7 @@ const isMdUp = useMediaQuery('(min-width: 768px)')
     v-slot="{ item }"
     dots
     loop
-    :items="sliderStore.sliders?.map((slider) => slider.image) ?? []"
+    :items="sliderStore.sliders?.map((slider: SliderResponse) => slider.image) ?? []"
     class="w-full"
     :arrows="isMdUp"
     :autoplay="{ delay: 4000 }"
