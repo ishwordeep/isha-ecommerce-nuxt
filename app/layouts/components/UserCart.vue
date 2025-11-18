@@ -156,7 +156,7 @@
     <template #footer>
       <div class="flex w-full justify-end gap-2">
         <UButton label="Cancel" variant="outline" @click="handleCloseDelete" />
-        <UButton label="Confirm" color="error" @click="removeItem" :loading="state.isLoading" />
+        <UButton label="Confirm" color="error" @click="removeItem" :loading="state.isDeleting" />
       </div>
     </template>
   </UModal>

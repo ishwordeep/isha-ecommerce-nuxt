@@ -40,7 +40,7 @@ const milestones = [
 
     <div class="relative">
       <div
-        class="absolute left-1/2 hidden h-full w-1 -translate-x-1/2 transform bg-gradient-to-b from-blue-200 via-purple-200 to-pink-200 md:block"
+        class="absolute left-1/2 hidden h-full w-1 -translate-x-1/2 transform bg-linear-to-b from-blue-200 via-purple-200 to-pink-200 md:block"
       />
 
       <div class="space-y-12">

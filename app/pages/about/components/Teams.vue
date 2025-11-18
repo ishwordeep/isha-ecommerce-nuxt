@@ -44,7 +44,7 @@ const team = [
           class="overflow-hidden border border-gray-200 transition-all duration-300 hover:shadow-xl"
         >
           <div
-            class="flex aspect-square items-center justify-center bg-gradient-to-br from-blue-100 to-purple-100 text-8xl"
+            class="flex aspect-square items-center justify-center bg-linear-to-br from-blue-100 to-purple-100 text-8xl"
           >
             {{ member.image }}
           </div>

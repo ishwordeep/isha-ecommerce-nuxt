@@ -29,10 +29,10 @@ const stats = [
         </p>
       </div>
       <div
-        class="absolute top-0 right-0 h-64 w-64 rounded-full bg-gradient-to-br from-blue-200/40 to-purple-200/40 blur-3xl"
+        class="absolute top-0 right-0 h-64 w-64 rounded-full bg-linear-to-br from-blue-200/40 to-purple-200/40 blur-3xl"
       />
       <div
-        class="absolute bottom-0 left-0 h-96 w-96 rounded-full bg-gradient-to-tr from-orange-200/40 to-pink-200/40 blur-3xl"
+        class="absolute bottom-0 left-0 h-96 w-96 rounded-full bg-linear-to-tr from-orange-200/40 to-pink-200/40 blur-3xl"
       />
     </div>
 

@@ -44,7 +44,7 @@ const values = [
       <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
         <div v-for="(value, i) in values" :key="i" class="group text-center">
           <div
-            :class="`h-20 w-20 bg-gradient-to-br ${value.gradient} mx-auto mb-6 flex items-center justify-center rounded-2xl shadow-lg transition-transform group-hover:scale-110`"
+            :class="`h-20 w-20 bg-linear-to-br ${value.gradient} mx-auto mb-6 flex items-center justify-center rounded-2xl shadow-lg transition-transform group-hover:scale-110`"
           >
             <UIcon :name="value.icon" class="h-10 w-10 text-white" />
           </div>
