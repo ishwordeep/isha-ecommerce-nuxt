@@ -75,7 +75,7 @@ export const useAuth = () => {
     try {
       const response = await AuthService.addShippingAddress(_address)
       if (response.data?.success && response.data.data) {
-        authStore.setUser(response.data.data)
+        authStore.addShippingAddress(response.data.data)
       }
       return response
     } catch (error) {

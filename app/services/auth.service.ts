@@ -122,8 +122,8 @@ class AuthService {
 
   async addShippingAddress(
     payload: AddressForm
-  ): Promise<RootServiceInterface<ItemResponse<User>>> {
-    return await AxiosService.post<ItemResponse<User>>('/user/shipping-address', payload)
+  ): Promise<RootServiceInterface<ItemResponse<Address>>> {
+    return await AxiosService.post<ItemResponse<Address>>('/user/shipping-address', payload)
   }
 }
 

@@ -23,7 +23,7 @@
         <UButton
           to="products/collection/new"
           viewTransition
-          class="rounded-xl bg-gradient-to-r px-8 py-4 font-bold hover:scale-105 hover:shadow-xl"
+          class="rounded-xl bg-linear-to-r px-8 py-4 font-bold hover:scale-105 hover:shadow-xl"
           :class="collection.gradient"
           trailingIcon="i-lucide-arrow-right"
           :ui="{
@@ -37,10 +37,10 @@
 </template>
 
 <script setup lang="ts">
-import { useProductStore } from '~/stores/product.store'
 import FlagProductsCard from '~/components/ui/FlagProductsCard.vue'
-import SectionHeader from '~/components/ui/SectionHeader.vue'
 import ProductSkeletonCard from '~/components/ui/ProductSkeletonCard.vue'
+import SectionHeader from '~/components/ui/SectionHeader.vue'
+import { useProductStore } from '~/stores/product.store'
 
 const productStore = useProductStore()
 const isLoading = ref(true)

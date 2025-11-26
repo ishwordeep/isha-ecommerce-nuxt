@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import type { PaginationInterface, QueryInterface } from '~/services/index.service'
 import ProductService, { type ProductResponse } from '~/services/product.service'
-type ProductFlag = 'new' | 'trending' | 'featured'
+export type ProductFlag = 'new' | 'trending' | 'featured'
 
 interface FlagCollections {
   new: ProductResponse[]

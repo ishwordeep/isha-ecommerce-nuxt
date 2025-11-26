@@ -3,7 +3,7 @@ const productStore = useProductStore()
 
 const items = computed(
   () =>
-    productStore.selectedProduct?.faqs.map((faq) => ({
+    productStore.selectedProduct?.faqs?.map((faq) => ({
       label: faq.question,
       content: faq.answer,
     })) || []
@@ -23,6 +23,9 @@ const items = computed(
         body: 'text-gray-600 text-base md:text-md xl:text-lg text-left',
         item: 'border border-gray-500  px-2  last:border-b',
       }"
+      v-if="items.length"
     />
+
+    <div v-else class="text-gray-500">No FAQs available for this product.</div>
   </div>
 </template>

@@ -4,14 +4,14 @@
     <SectionHero :section="section" />
     <!-- Categories Grid -->
     <div
-      class="mt-8 grid [grid-template-columns:repeat(auto-fit,minmax(150px,1fr))] gap-3 sm:[grid-template-columns:repeat(auto-fit,minmax(200px,1fr))] md:[grid-template-columns:repeat(auto-fit,minmax(200px,1fr))] xl:gap-6"
+      class="mt-8 grid grid-cols-[repeat(auto-fill,minmax(150px,1fr))] gap-3 sm:grid-cols-[repeat(auto-fill,minmax(200px,1fr))] md:grid-cols-[repeat(auto-fill,minmax(200px,1fr))] xl:gap-6"
     >
       <template v-if="isLoading">
         <USkeleton v-for="i in 6" :key="i" class="h-48 w-full rounded-2xl" />
       </template>
       <div
         v-else
-        v-for="category in categoryStore.categories?.slice(0, 6)"
+        v-for="category in categoryStore.categories"
         :key="category._id"
         class="group cursor-pointer"
       >
@@ -23,7 +23,7 @@
           <!-- Background Gradient -->
           <div
             :class="[
-              'absolute inset-0 bg-gradient-to-br transition-transform duration-500 group-hover:scale-105',
+              'absolute inset-0 bg-linear-to-br transition-transform duration-500 group-hover:scale-105',
             ]"
           />
 
@@ -46,7 +46,7 @@
               alt="Category Image"
               class="h-full w-full object-contain transition-all duration-300 group-hover:scale-125 group-hover:rotate-6"
             />
-            <div v-else class="h-24 w-24 rounded-full bg-gray-200" />
+            <div v-else class="h-full w-full bg-gray-200" />
           </div>
 
           <!-- Item Count Badge -->
@@ -84,30 +84,26 @@
         </div>
       </div>
     </div>
-
-    <!-- View All Categories Button -->
-    <div class="mt-12 text-center">
-      <UButton
-        size="xl"
-        color="neutral"
-        class="inline-flex items-center gap-2 rounded-xl px-8 py-4 font-bold transition-all duration-300 hover:scale-105"
-        to="/categories"
-        viewTransition
-      >
-        Browse All Categories
-        <UIcon name="i-lucide-arrow-right" class="h-5 w-5" />
-      </UButton>
-    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import SectionHero from '~/components/ui/SectionHero.vue'
 
+useSeoMeta({
+  title: 'Categories - Explore Our Fashion Collections',
+  description:
+    "Explore our diverse range of fashion categories. From everyday essentials to statement pieces, find exactly what you're looking for.",
+  ogTitle: 'Categories - Explore Our Fashion Collections',
+  ogDescription:
+    "Explore our diverse range of fashion categories. From everyday essentials to statement pieces, find exactly what you're looking for.",
+})
+
 const isLoading = ref(true)
 const categoryStore = useCategoryStore()
+
 const section = ref({
-  title: 'Shop By Categories',
+  title: 'Categories',
   description: `Explore our diverse range of fashion categories. From everyday essentials to statement pieces, find exactly what you\'re looking for.`,
 })
 onMounted(async () => {

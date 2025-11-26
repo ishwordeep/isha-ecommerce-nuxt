@@ -171,6 +171,29 @@ export const useAuthStore = defineStore('auth', () => {
     user.value = _user as User
   }
 
+  const addShippingAddress = (address: Address): void => {
+    if (user.value) {
+      user.value.shippingAddresses.push(address)
+    }
+  }
+
+  const updateShippingAddress = (updatedAddress: Address): void => {
+    if (!user.value?.shippingAddresses) return
+
+    // 1. Replace the existing address
+    user.value.shippingAddresses = user.value.shippingAddresses.map((addr) =>
+      addr._id === updatedAddress._id ? updatedAddress : addr
+    )
+
+    // 2. If this address is now default → make it the ONLY default
+    if (updatedAddress.isDefault) {
+      user.value.shippingAddresses = user.value.shippingAddresses.map((addr) => ({
+        ...addr,
+        isDefault: addr._id === updatedAddress._id,
+      }))
+    }
+  }
+
   const resetAddressForm = (): void => {
     Object.assign(addressFormInputs, emptyAddressForm())
   }
@@ -197,5 +220,7 @@ export const useAuthStore = defineStore('auth', () => {
     mode,
     addressFormInputs,
     userProfileFormInputs,
+    addShippingAddress,
+    updateShippingAddress,
   }
 })
