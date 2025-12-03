@@ -105,6 +105,8 @@
 const orderStore = useOrderStore()
 
 onMounted(() => {
-  console.log(orderStore.selectedOrder)
+  if (!orderStore.selectedOrder) {
+    navigateTo('/')
+  }
 })
 </script>

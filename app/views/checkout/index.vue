@@ -150,7 +150,7 @@
         </div>
 
         <!-- Totals -->
-        <div class="sticky bottom-0 border-t-2 border-gray-900 bg-white pt-4">
+        <div class="sticky bottom-0 border-t border-gray-600 bg-white pt-4">
           <div class="space-y-2">
             <div class="flex justify-between">
               <span>Subtotal</span>
@@ -170,7 +170,7 @@
             type="submit"
             form="checkout-form"
             label="Place Order"
-            class="mt-4 w-full"
+            class="mt-4 w-full justify-center"
             color="primary"
             :disabled="disableButton"
             :loading="isPlacingOrder"
@@ -266,8 +266,9 @@ const onSubmit = async () => {
     shippingFee: totals.value.shipping,
   }
   const response = await checkoutStore.saveOrder(payload)
-  console.log(response)
-  await navigateTo('/checkout/confirmed')
+  if (response?.data?.success) {
+    await navigateTo('/checkout/confirmed')
+  }
 }
 </script>
 

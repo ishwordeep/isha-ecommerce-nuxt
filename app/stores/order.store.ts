@@ -7,7 +7,7 @@ export const useOrderStore = defineStore('order', () => {
   const isLoading = ref(false)
   const selectedOrder = ref<OrderResponse | null>(null)
   const orders = ref<OrderResponse[] | null>(null)
-
+  const orderFailed = ref(false)
   const saveOrder = async (orderData: CheckoutForm) => {
     isLoading.value = true
     try {
@@ -18,6 +18,7 @@ export const useOrderStore = defineStore('order', () => {
       }
     } catch (error) {
       console.error('Error saving order:', error)
+      orderFailed.value = true
     } finally {
       isLoading.value = false
     }
@@ -28,5 +29,6 @@ export const useOrderStore = defineStore('order', () => {
     selectedOrder,
     saveOrder,
     orders,
+    orderFailed,
   }
 })
