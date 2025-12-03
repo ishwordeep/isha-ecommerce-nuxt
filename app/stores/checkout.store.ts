@@ -1,77 +1,63 @@
 import { defineStore } from 'pinia'
-import { ref, readonly, reactive, computed } from 'vue'
+import { reactive, ref } from 'vue'
+import type { Address } from '~/services/auth.service'
+import OrderService, { type OrderResponse } from '~/services/order.service'
+import type { ProductResponse } from '~/services/product.service'
 
 export interface CheckoutForm {
-  name: string
-  email: string
-  phone: string
-  address: string
-  city: string
-  zipCode: string
-  paymentMethod?: string
-}
-
-const mapCheckoutToForm = (checkout: CheckoutForm | null): CheckoutForm => {
-  if (!checkout) return emptyForm()
-
-  return {
-    name: checkout.name ?? '',
-    email: checkout.email ?? '',
-    phone: checkout.phone ?? '',
-    address: checkout.address ?? '',
-    city: checkout.city ?? '',
-    zipCode: checkout.zipCode ?? '',
-    paymentMethod: checkout.paymentMethod ?? '',
-  }
+  items: Partial<ProductResponse>[]
+  subtotal: number
+  discountTotal: number
+  shippingFee: number
+  grandTotal: number
+  shippingAddress: Partial<Address>
+  paymentMethod: string
+  notes: string
 }
 
 const emptyForm = (): CheckoutForm => ({
-  name: '',
-  email: '',
-  phone: '',
-  address: '',
-  city: '',
-  zipCode: '',
+  items: [],
+  subtotal: 0,
+  discountTotal: 0,
+  shippingFee: 0,
+  grandTotal: 0,
+  shippingAddress: {
+    apartment: '',
+    _id: '',
+    street: '',
+    city: '',
+    state: '',
+    zipCode: '',
+    country: '',
+  },
   paymentMethod: '',
+  notes: '',
 })
 
 export const useCheckoutStore = defineStore('checkout', () => {
   const isLoading = ref(false)
-  const checkoutData = ref<CheckoutForm | null>(null)
   const formInputs = reactive<CheckoutForm>(emptyForm())
+  const orderStore = useOrderStore()
 
-  const initializeForCheckout = async () => {
+  const saveOrder = async (orderData: CheckoutForm) => {
     isLoading.value = true
     try {
-      const data = {
-        name: 'John Doe',
-        email: 'johndoe@example.com',
-        phone: '123-456-7890',
-        address: '123 Main St',
-        city: 'Anytown',
-        zipCode: '12345',
-        paymentMethod: 'credit_card',
+      const response = await OrderService.saveOrder(orderData)
+      if (response.data?.success) {
+        orderStore.orders = [...(orderStore.orders || []), response.data.data as OrderResponse]
+        orderStore.selectedOrder = response.data?.data
       }
-      checkoutData.value = data
-      if (data) Object.assign(formInputs, mapCheckoutToForm(data))
+      return response
+    } catch (error) {
+      console.error('Error saving order:', error)
     } finally {
       isLoading.value = false
     }
   }
 
-  const resetToOriginal = () => {
-    Object.assign(formInputs, mapCheckoutToForm(checkoutData.value))
-  }
-
-  const reset = async () => {
-    await initializeForCheckout()
-  }
-
   return {
     isLoading,
-    initializeForCheckout,
     formInputs,
-    resetToOriginal,
-    reset,
+    saveOrder,
   }
 })

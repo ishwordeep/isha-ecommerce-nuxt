@@ -18,7 +18,7 @@
         </template>
 
         <div class="flex flex-col gap-4">
-          <UFormField label="Full Name" name="fullName">
+          <!-- <UFormField label="Full Name" name="fullName">
             <UInput v-model="checkoutStore.formInputs.name" />
           </UFormField>
           <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -28,42 +28,50 @@
             <UFormField label="Phone Number" name="phone">
               <UInput v-model="checkoutStore.formInputs.phone" />
             </UFormField>
-          </div>
+          </div> -->
+          <UFormField label="Notes" name="notes">
+            <UTextarea v-model="checkoutStore.formInputs.notes" :rows="3" />
+          </UFormField>
         </div>
       </UPageCard>
 
       <!-- 2. Shipping Address (Saved Addresses Only) -->
-      <UPageCard>
+      <UPageCard
+        :ui="{
+          header: 'justify-between items-center flex gap-4 w-full',
+        }"
+      >
         <template #header>
-          <div class="flex w-full items-center justify-between">
-            <div class="flex items-center gap-2">
-              <div class="header-number">2</div>
-              <span class="header-text">Shipping Address</span>
-            </div>
-            <UButton
-              label="Change"
-              size="sm"
-              variant="link"
-              leadingIcon="i-lucide-pencil"
-              @click="openAddressModal = true"
-            />
+          <div class="flex items-center gap-2">
+            <div class="header-number">2</div>
+            <span class="header-text">Shipping Address</span>
           </div>
+          <UButton
+            label="Change"
+            size="sm"
+            variant="link"
+            leadingIcon="i-lucide-pencil"
+            @click="openAddressModal = true"
+          />
         </template>
 
         <!-- Selected Address Display -->
         <div
-          v-if="selectedAddress"
+          v-if="authStore.selectedAddress"
           class="flex flex-col gap-2 rounded-lg bg-gray-50 p-5 dark:bg-gray-900"
         >
           <p class="font-medium text-gray-900 dark:text-white">
-            {{ selectedAddress.street }}
-            {{ selectedAddress.apartment ? `, ${selectedAddress.apartment}` : '' }}
+            {{ authStore.selectedAddress.street }}
+            {{
+              authStore.selectedAddress.apartment ? `, ${authStore.selectedAddress.apartment}` : ''
+            }}
           </p>
           <p class="text-sm text-gray-600 dark:text-gray-400">
-            {{ selectedAddress.city }}, {{ selectedAddress.state }} {{ selectedAddress.zipCode }}
+            {{ authStore.selectedAddress.city }}, {{ authStore.selectedAddress.state }}
+            {{ authStore.selectedAddress.zipCode }}
           </p>
           <p class="text-sm text-gray-600 dark:text-gray-400">
-            {{ selectedAddress.country }}
+            {{ authStore.selectedAddress.country }}
           </p>
         </div>
 
@@ -146,7 +154,7 @@
           <div class="space-y-2">
             <div class="flex justify-between">
               <span>Subtotal</span>
-              <span>${{ totals.subtotal.toFixed(2) }}</span>
+              <span>${{ totals.subTotal.toFixed(2) }}</span>
             </div>
             <div class="flex justify-between">
               <span>Shipping</span>
@@ -173,11 +181,7 @@
   </div>
 
   <!-- Address Selection Modal -->
-  <AddressSelectionModal
-    v-model:open="openAddressModal"
-    :current-address="selectedAddress"
-    @select="handleAddressSelect"
-  />
+  <AddressSelectionModal v-model:open="openAddressModal" @select="handleAddressSelect" />
 </template>
 
 <script lang="ts" setup>
@@ -192,42 +196,35 @@ const authStore = useAuthStore()
 
 const openAddressModal = ref(false)
 
-// Only store the full address for display
-const selectedAddress = ref<Address | null>(null)
-// Only store the ID for submission
-const selectedAddressId = ref<string | null>(null)
-
 const isPlacingOrder = ref(false)
 
 const checkoutMethods = ref([
-  { label: 'Credit / Debit Card', value: 'card', icon: 'Credit Card' },
-  { label: 'PayPal', value: 'paypal', icon: 'PayPal' },
-  { label: 'Cash on Delivery', value: 'cod', icon: 'Package' },
+  { label: 'Credit / Debit Card', value: 'card', icon: '💳' },
+  { label: 'PayPal', value: 'paypal', icon: '🅿️' },
+  { label: 'Cash on Delivery', value: 'cod', icon: '💵' },
 ])
 
 const totals = computed(() => {
-  const subtotal = cartStore.cartTotal
-  const shipping = cartStore.carts.length > 0 ? 5 : 0
+  const subTotal = cartStore.cartTotal
+  const shipping = (cartStore.carts?.length || 0) > 0 ? 5 : 0
   return {
-    subtotal,
+    subTotal,
     shipping,
-    total: subtotal + shipping,
+    total: subTotal + shipping,
   }
 })
 
 const disableButton = computed(() => {
   return !(
-    checkoutStore.formInputs.name &&
-    checkoutStore.formInputs.email &&
-    checkoutStore.formInputs.phone &&
-    selectedAddressId.value && // Must have address selected
+    // checkoutStore.formInputs.name &&
+    // checkoutStore.formInputs.email &&
+    // checkoutStore.formInputs.phone &&
     checkoutStore.formInputs.paymentMethod
   )
 })
 
 const handleAddressSelect = (address: Address) => {
-  selectedAddress.value = address // For display
-  selectedAddressId.value = address._id // For submission only
+  authStore.selectedAddress = address // For display
   openAddressModal.value = false
 }
 
@@ -237,9 +234,9 @@ const populateUserData = () => {
 
   const user = authStore.user
 
-  if (user.name) checkoutStore.formInputs.name = user.name
-  if (user.email) checkoutStore.formInputs.email = user.email
-  if (user.phone) checkoutStore.formInputs.phone = user.phone
+  // if (user.name) checkoutStore.formInputs.name = user.name
+  // if (user.email) checkoutStore.formInputs.email = user.email
+  // if (user.phone) checkoutStore.formInputs.phone = user.phone
 
   // Auto-select default address
   const defaultAddr = user.shippingAddresses?.find((a) => a.isDefault)
@@ -252,19 +249,24 @@ watch(() => authStore.user, populateUserData, { immediate: true })
 onMounted(populateUserData)
 
 const onSubmit = async () => {
-  if (!selectedAddressId.value) return
+  if (!authStore.selectedAddress) return
+  const selectedAddress = authStore.selectedAddress
+  const { _id, isDefault, ...shippingAddress } = selectedAddress
 
+  const products = cartStore.carts?.map(({ _id, discount, ...product }) => product)
   isPlacingOrder.value = true
 
   const payload = {
     ...checkoutStore.formInputs,
-    shippingAddressId: selectedAddressId.value, // Only ID sent
+    shippingAddress: shippingAddress,
+    items: products || [],
+    grandTotal: totals.value.total,
+    subtotal: totals.value.subTotal,
+    discountTotal: 0,
+    shippingFee: totals.value.shipping,
   }
-
-  console.log('Order placed:', payload)
-
-  // Example: await placeOrderApi(payload)
-  // Then navigate
+  const response = await checkoutStore.saveOrder(payload)
+  console.log(response)
   await navigateTo('/checkout/confirmed')
 }
 </script>

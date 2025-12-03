@@ -14,7 +14,7 @@ export interface ListResponse<T> {
   data: T[] | null
   message: string
   success: boolean
-  pagination: PaginationInterface
+  pagination?: PaginationInterface
 }
 
 export interface ItemResponse<T> {

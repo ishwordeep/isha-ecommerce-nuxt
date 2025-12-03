@@ -116,6 +116,7 @@ const showAddForm = ref(false)
 watch(isOpen, (newVal) => {
   if (newVal && authStore.user?.shippingAddresses) {
     const defaultAddress = authStore.user.shippingAddresses.find((addr) => addr.isDefault)
+    if (selectedAddressId.value) return // Don't override if already selected
     if (defaultAddress) {
       selectedAddressId.value = defaultAddress._id
     } else if (authStore.user.shippingAddresses.length > 0) {
@@ -125,6 +126,7 @@ watch(isOpen, (newVal) => {
 })
 
 const selectAddress = (address: Address) => {
+  console.log(address)
   selectedAddressId.value = address._id
 }
 
