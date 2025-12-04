@@ -25,9 +25,7 @@
         <div
           class="grid w-full grid-cols-1 justify-center gap-2 min-[450px]:grid-cols-2 sm:gap-4 lg:grid-cols-3 2xl:grid-cols-4"
         >
-          <template v-if="isLoading">
-            <UiProductSkeletonCard v-for="i in 8" :key="i" />
-          </template>
+          <UiProductSkeletonCard v-if="isLoading" v-for="n in 8" :key="n" />
 
           <UiProductCard
             v-else-if="productStore.categoryProducts?.length && !isLoading"

@@ -40,6 +40,8 @@
 </template>
 
 <script setup lang="ts">
+import Login from '~/components/auth/login.vue'
+
 const route = useRoute()
 const authStore = useAuthStore()
 const { isAuthenticated } = storeToRefs(authStore)

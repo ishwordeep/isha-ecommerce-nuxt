@@ -7,7 +7,7 @@ import UserMenu from '~/layouts/components/UserMenu.vue'
 
 const route = useRoute()
 const authStore = useAuthStore()
-
+const settingStore = useSettingStore()
 const openLoginModal = ref(false)
 
 const items = computed<NavigationMenuItem[]>(() => [
@@ -46,7 +46,13 @@ const items = computed<NavigationMenuItem[]>(() => [
     }"
   >
     <template #title>
-      <UIcon name="i-lucide-shopping-cart" class="h-6 w-6" />
+      <NuxtImg
+        :src="settingStore.setting?.logoUrl"
+        v-if="settingStore.setting?.logoUrl"
+        :alt="settingStore.setting?.name || 'Logo'"
+        class="h-14 w-auto"
+      />
+      <UIcon name="i-lucide-shopping-cart" class="h-6 w-6" v-else />
     </template>
 
     <UNavigationMenu :items="items" highlight viewTransition />

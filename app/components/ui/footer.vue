@@ -1,41 +1,44 @@
 <template>
   <footer
-    class="from-tertiary/20 to-tertiary/80 relative mt-12 w-full overflow-hidden bg-gradient-to-r text-black"
+    class="from-tertiary/20 to-tertiary/80 relative mt-12 w-full overflow-hidden bg-linear-to-r text-black"
   >
     <div class="mx-auto max-w-[1440px] px-6">
       <!-- Main Footer Content -->
       <div class="grid grid-cols-1 gap-12 py-16 md:grid-cols-2 lg:grid-cols-5">
         <!-- Brand Column -->
         <div class="lg:col-span-2">
-          <h2 class="e mb-4 text-3xl font-bold">Fashion Store</h2>
+          <h2 class="e mb-4 text-3xl font-bold">
+            {{ settingStore.setting?.name || 'Fashion Store' }}
+          </h2>
           <p class="mb-6 leading-relaxed text-gray-700">
             Your destination for premium fashion and timeless style. We curate the finest
             collections to help you express your unique personality.
           </p>
           <div class="flex gap-4">
             <UButton
-              to="#"
+              v-if="settingStore.setting?.facebook"
+              :to="settingStore.setting?.facebook || '#'"
               icon="i-simple-icons-facebook"
               variant="solid"
               class="icon-button hover:bg-blue-600"
+              target="_blank"
             />
             <UButton
-              to="#"
+              v-if="settingStore.setting?.instagram"
+              :to="settingStore.setting?.instagram || '#'"
               icon="i-simple-icons-instagram"
               variant="solid"
               class="icon-button hover:bg-pink-600"
+              target="_blank"
             />
+
             <UButton
-              to="#"
-              icon="i-simple-icons-twitter"
+              v-if="settingStore.setting?.tiktok"
+              :to="settingStore.setting?.tiktok || '#'"
+              icon="i-simple-icons-tiktok"
               variant="solid"
-              class="icon-button hover:bg-blue-400"
-            />
-            <UButton
-              to="#"
-              icon="i-simple-icons-pinterest"
-              variant="solid"
-              class="icon-button hover:bg-red-600"
+              class="icon-button text-white hover:bg-black"
+              target="_blank"
             />
           </div>
         </div>
@@ -104,6 +107,7 @@ import FooterLinks from '~/components/ui/FooterLinks.vue'
 const email = ref('')
 const loading = ref(false)
 const toast = useToast()
+const settingStore = useSettingStore()
 const subscribe = async () => {
   if (!email.value || !/\S+@\S+\.\S+/.test(email.value)) {
     toast.add({

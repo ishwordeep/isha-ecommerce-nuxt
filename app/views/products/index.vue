@@ -22,28 +22,32 @@
       <div
         class="grid w-full grid-cols-1 justify-center gap-2 min-[420px]:grid-cols-2 sm:gap-4 lg:grid-cols-3 2xl:grid-cols-4"
       >
+        <UiProductSkeletonCard v-if="state.isFetching" v-for="n in 8" :key="n" />
         <UiProductCard
           v-for="product in productStore.products"
           :product="product"
           :key="product._id"
+          v-else
         />
+        <UiProductSkeletonCard v-if="state.isFetchingMore" v-for="n in 4" :key="'skeleton-' + n" />
       </div>
     </div>
 
     <!-- Loading More Spinner -->
-    <div v-if="state.isLoadingMore" class="col-span-full py-12 text-center">
+    <div v-if="state.isFetchingMore" class="col-span-full py-12 text-center">
       <USpinner size="xl" />
     </div>
 
     <!-- Infinite Scroll Trigger -->
-    <div v-if="hasMore && !state.isLoadingMore" ref="loadMoreTrigger" class="h-10" />
+    <div v-if="hasMore && !state.isFetchingMore" ref="loadMoreTrigger" class="h-10" />
   </div>
 </template>
 
 <script setup lang="ts">
 const state = reactive({
   sortBy: 'bestMatch' as string,
-  isLoadingMore: false,
+  isFetchingMore: false,
+  isFetching: true,
 })
 
 const loadMoreTrigger = ref<HTMLElement | null>(null)
@@ -99,7 +103,6 @@ const breadcrumbs = ref([
 ])
 
 const productStore = useProductStore()
-const isLoading = ref(true)
 
 // Setup intersection observer
 function setupInfiniteScroll() {
@@ -112,7 +115,7 @@ function setupInfiniteScroll() {
 
   observer.value = new IntersectionObserver(
     async ([entry]) => {
-      if (entry?.isIntersecting && hasMore.value && !state.isLoadingMore) {
+      if (entry?.isIntersecting && hasMore.value && !state.isFetchingMore) {
         await loadMore()
       }
     },
@@ -132,9 +135,9 @@ function setupInfiniteScroll() {
 
 // Load more products
 async function loadMore() {
-  if (state.isLoadingMore || !hasMore.value) return
+  if (state.isFetchingMore || !hasMore.value) return
 
-  state.isLoadingMore = true
+  state.isFetchingMore = true
   currentPage.value += 1
 
   try {
@@ -146,16 +149,15 @@ async function loadMore() {
     console.error('Error loading more products:', error)
     currentPage.value -= 1 // Revert page increment on error
   } finally {
-    state.isLoadingMore = false
+    state.isFetchingMore = false
   }
 }
 
 // Initial load
 onMounted(async () => {
-  isLoading.value = true
   currentPage.value = 1
-  await productStore.fetchProducts({ ...queryParams.value, page: 1 })
-  isLoading.value = false
+  productStore.fetchProducts({ ...queryParams.value, page: 1 })
+  state.isFetching = false
   setupInfiniteScroll()
 })
 
@@ -164,9 +166,9 @@ watch(
   () => state.sortBy,
   async () => {
     currentPage.value = 1
-    isLoading.value = true
+    state.isFetching = true
     await productStore.fetchProducts({ ...queryParams.value, page: 1 })
-    isLoading.value = false
+    state.isFetching = false
     window.scrollTo({ top: 0, behavior: 'smooth' })
 
     // Reinitialize observer after sort
