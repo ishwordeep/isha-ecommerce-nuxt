@@ -14,7 +14,7 @@
             Your destination for premium fashion and timeless style. We curate the finest
             collections to help you express your unique personality.
           </p>
-          <div class="flex gap-4">
+          <div class="flex gap-2">
             <UButton
               v-if="settingStore.setting?.facebook"
               :to="settingStore.setting?.facebook || '#'"
