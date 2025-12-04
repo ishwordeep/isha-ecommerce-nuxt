@@ -1,5 +1,5 @@
 <template>
-  <div class="rounded-xl border border-gray-200 bg-white p-6">
+  <UPageCard class="rounded-xl">
     <div class="mb-4 flex items-center justify-between">
       <h3 class="text-lg font-bold text-gray-900">Profile Information</h3>
 
@@ -64,7 +64,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </UPageCard>
 </template>
 
 <script setup lang="ts">

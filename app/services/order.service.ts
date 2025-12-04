@@ -1,6 +1,14 @@
-import type { Address } from 'cluster'
+import type { Address } from './auth.service'
 import AxiosService from './axios.service'
 import type { ItemResponse, RootServiceInterface } from './index.service'
+
+export enum OrderStatus {
+  PENDING_PAYMENT = 'PENDING_PAYMENT',
+  PAID = 'PAID',
+  SHIPPED = 'SHIPPED',
+  COMPLETED = 'COMPLETED',
+  CANCELLED = 'CANCELLED',
+}
 
 export interface Item {
   productId: string
@@ -13,6 +21,8 @@ export interface Item {
 }
 
 export interface OrderResponse {
+  _id: string
+  userId: string
   orderNumber: string
   items: Item[]
   subtotal: number
@@ -20,12 +30,11 @@ export interface OrderResponse {
   shippingFee: number
   grandTotal: number
   shippingAddress: Address
-  status: string
+  status: OrderStatus
   paymentMethod: string
   paymentStatus: string
   notes: string
   isDeleted: boolean
-  _id: string
   createdAt: string
   updatedAt: string
   __v: number
@@ -33,6 +42,10 @@ export interface OrderResponse {
 }
 
 class OrderService {
+  async fetchOrders(): Promise<RootServiceInterface<ItemResponse<OrderResponse[]>>> {
+    return await AxiosService.get('/order/user')
+  }
+
   async saveOrder(
     orderData: CheckoutForm
   ): Promise<RootServiceInterface<ItemResponse<OrderResponse>>> {

@@ -10,15 +10,18 @@
       <div class="mb-4 flex items-start justify-between">
         <div>
           <div class="mb-2 flex flex-wrap items-center gap-3">
-            <h3 class="text-lg font-bold text-gray-900">{{ order._id }}</h3>
+            <h3 class="text-md font-bold text-gray-900 sm:text-lg">{{ order.orderNumber }}</h3>
             <OrderStatusBadge :status="order.status" />
           </div>
           <div class="text-sm text-gray-500">
-            Placed on {{ order.date }} • {{ order.items }} items
+            Placed on {{ new Date(order.createdAt).toLocaleDateString() }} •
+            {{ order.items.length }} items
           </div>
         </div>
         <div class="text-right">
-          <div class="text-2xl font-bold text-gray-900">${{ order.total.toFixed(2) }}</div>
+          <div class="text-lg font-bold text-gray-900 sm:text-xl lg:text-2xl">
+            ${{ order.grandTotal.toFixed(2) }}
+          </div>
           <UButton
             variant="link"
             color="primary"
@@ -31,18 +34,29 @@
       </div>
 
       <div class="border-t border-t-gray-300 pt-4">
-        <div class="flex gap-3">
-          <div
-            v-for="(product, idx) in order.products"
+        <div class="flex flex-wrap gap-3">
+          <NuxtLink
+            v-for="(product, idx) in order.items"
             :key="idx"
             class="flex items-center gap-2 rounded-lg bg-gray-50 p-2"
+            :to="`/products/${product.productId}`"
+            viewTransition
           >
-            <div class="text-2xl">{{ product.image }}</div>
+            <div
+              class="aspect-square w-16 rounded-md border border-gray-200 dark:border-gray-700 dark:bg-gray-900"
+            >
+              <NuxtImg
+                :src="product.image"
+                :alt="product.name"
+                class="h-full w-full rounded-md object-cover"
+                v-if="product.image"
+              />
+            </div>
             <div class="text-xs">
               <div class="font-medium text-gray-900">{{ product.name }}</div>
-              <div class="text-gray-500">Qty: {{ Math.floor(Math.random() * 1000) }}</div>
+              <div class="text-gray-500">Qty: {{ product.quantity }}</div>
             </div>
-          </div>
+          </NuxtLink>
         </div>
       </div>
 

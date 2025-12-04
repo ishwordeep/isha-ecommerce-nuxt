@@ -5,6 +5,9 @@ import OrderService, { type OrderResponse } from '~/services/order.service'
 import type { ProductResponse } from '~/services/product.service'
 
 export interface CheckoutForm {
+  name: string
+  email: string
+  phone: string
   items: Partial<ProductResponse>[]
   subtotal: number
   discountTotal: number
@@ -16,6 +19,9 @@ export interface CheckoutForm {
 }
 
 const emptyForm = (): CheckoutForm => ({
+  name: '',
+  email: '',
+  phone: '',
   items: [],
   subtotal: 0,
   discountTotal: 0,

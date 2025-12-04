@@ -8,6 +8,21 @@ export const useOrderStore = defineStore('order', () => {
   const selectedOrder = ref<OrderResponse | null>(null)
   const orders = ref<OrderResponse[] | null>(null)
   const orderFailed = ref(false)
+
+  const fetchOrders = async () => {
+    isLoading.value = true
+    try {
+      const response = await OrderService.fetchOrders()
+      if (response.data?.success) {
+        orders.value = response.data?.data as OrderResponse[]
+      }
+    } catch (error) {
+      console.error('Error fetching orders:', error)
+    } finally {
+      isLoading.value = false
+    }
+  }
+
   const saveOrder = async (orderData: CheckoutForm) => {
     isLoading.value = true
     try {
@@ -30,5 +45,6 @@ export const useOrderStore = defineStore('order', () => {
     saveOrder,
     orders,
     orderFailed,
+    fetchOrders,
   }
 })

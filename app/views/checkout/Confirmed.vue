@@ -16,7 +16,9 @@
 
         <div class="inline-block rounded-lg bg-gray-50 p-4 dark:bg-gray-800">
           <p class="mb-1 text-sm text-gray-600 dark:text-gray-400">Order Number</p>
-          <p class="text-2xl font-bold">#{{ orderStore.selectedOrder?.orderNumber }}</p>
+          <p class="text-lg font-bold sm:text-xl lg:text-2xl">
+            #{{ orderStore.selectedOrder?.orderNumber }}
+          </p>
         </div>
       </div>
 
@@ -25,7 +27,7 @@
       <div>
         <h3 class="mb-4 text-xl font-bold">Order Items</h3>
 
-        <div class="space-y-4">
+        <div class="max-h-[40dvh] space-y-4 overflow-y-auto pr-2">
           <div
             v-for="item in orderStore.selectedOrder?.items"
             :key="item.productId"

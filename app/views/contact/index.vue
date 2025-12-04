@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { SettingResponse } from '~/services/setting.service'
+
 const formData = reactive({
   name: '',
   email: '',
@@ -8,7 +10,7 @@ const formData = reactive({
 })
 const toast = useToast()
 const submitted = ref(false)
-
+const { setting } = useSettingStore()
 const subjects = [
   { label: 'General Inquiry', value: 'general' },
   { label: 'Order Status', value: 'order' },
@@ -17,6 +19,20 @@ const subjects = [
   { label: 'Feedback', value: 'feedback' },
   { label: 'Other', value: 'other' },
 ]
+
+const formatLocation = (setting: SettingResponse) => {
+  if (!setting) return 'New York, NY 10001'
+
+  const parts = []
+  if (setting.city) parts.push(setting.city)
+  if (setting.state) {
+    if (setting.city) parts.push(', ')
+    parts.push(setting.state)
+  }
+  if (setting.postalCode) parts.push(` ${setting.postalCode}`)
+
+  return parts.length ? parts.join('') : 'New York, NY 10001'
+}
 
 const handleSubmit = () => {
   console.log('Form submitted:', formData)
@@ -47,10 +63,10 @@ const handleSubmit = () => {
         </p>
       </div>
       <div
-        class="absolute top-0 right-0 h-64 w-64 rounded-full bg-gradient-to-br from-blue-200/30 to-purple-200/30 blur-3xl"
+        class="absolute top-0 right-0 h-64 w-64 rounded-full bg-linear-to-br from-blue-200/30 to-purple-200/30 blur-3xl"
       />
       <div
-        class="absolute bottom-0 left-0 h-96 w-96 rounded-full bg-gradient-to-tr from-orange-200/30 to-pink-200/30 blur-3xl"
+        class="absolute bottom-0 left-0 h-96 w-96 rounded-full bg-linear-to-tr from-orange-200/30 to-pink-200/30 blur-3xl"
       />
     </div>
 
@@ -67,10 +83,10 @@ const handleSubmit = () => {
           <h3 class="mb-2 text-lg font-bold text-gray-900">Email Us</h3>
           <p class="mb-3 text-sm text-gray-600">Send us an email anytime</p>
           <a
-            href="mailto:support@fashionstore.com"
+            :href="`mailto:${setting?.email || 'support@fashionstore.com'}`"
             class="text-primary-600 hover:text-primary-700 font-medium"
           >
-            support@fashionstore.com
+            {{ setting?.email || 'support@fashionstore.com' }}
           </a>
         </UCard>
 
@@ -83,8 +99,11 @@ const handleSubmit = () => {
           </template>
           <h3 class="mb-2 text-lg font-bold text-gray-900">Call Us</h3>
           <p class="mb-3 text-sm text-gray-600">Mon-Fri from 9am to 6pm</p>
-          <a href="tel:+1234567890" class="text-primary-600 hover:text-primary-700 font-medium">
-            +1 (234) 567-890
+          <a
+            :href="`tel:${setting?.phone || '+1234567890'}`"
+            class="text-primary-600 hover:text-primary-700 font-medium"
+          >
+            {{ setting?.phone || '+1 (234) 567-890' }}
           </a>
         </UCard>
 
@@ -98,14 +117,14 @@ const handleSubmit = () => {
           <h3 class="mb-2 text-lg font-bold text-gray-900">Visit Us</h3>
           <p class="mb-3 text-sm text-gray-600">Come say hello at our office</p>
           <address class="text-gray-700 not-italic">
-            123 Fashion Street<br />
-            New York, NY 10001<br />
+            {{ setting?.address || '123 Fashion Street' }}<br />
+            {{ formatLocation(setting as SettingResponse) }}<br />
             United States
           </address>
         </UCard>
 
         <!-- Hours Card -->
-        <UCard class="hover:shadow-lg">
+        <!-- <UCard class="hover:shadow-lg">
           <template #header>
             <div class="header-icon-container bg-orange-100">
               <UIcon name="i-heroicons-clock" class="header-icon text-orange-600" />
@@ -126,38 +145,38 @@ const handleSubmit = () => {
               <span class="font-medium">Closed</span>
             </div>
           </div>
-        </UCard>
+        </UCard> -->
 
         <!-- Social Media Card -->
-        <UCard class="bg-gradient-to-br from-blue-600 to-purple-600 text-white hover:shadow-lg">
+        <UCard class="bg-linear-to-br from-blue-600 to-purple-600 text-white hover:shadow-lg">
           <template #header>
             <h3 class="mb-2 text-lg font-bold">Follow Us</h3>
             <p class="mb-2 text-sm text-blue-100">Stay connected on social media</p>
           </template>
           <div class="flex gap-1">
             <a
-              href="#"
+              v-if="setting?.facebook"
+              :href="setting?.facebook || '#'"
               class="social-icon-container bg-white/20 transition-colors hover:bg-white/30"
+              target="_blank"
             >
               <UIcon name="i-simple-icons-facebook" class="social-icon" />
             </a>
             <a
-              href="#"
+              v-if="setting?.instagram"
+              :href="setting?.instagram || '#'"
               class="social-icon-container bg-white/20 transition-colors hover:bg-white/30"
+              target="_blank"
             >
               <UIcon name="i-simple-icons-instagram" class="social-icon" />
             </a>
+
             <a
-              href="#"
+              :href="setting?.tiktok || '#'"
               class="social-icon-container bg-white/20 transition-colors hover:bg-white/30"
+              target="_blank"
             >
-              <UIcon name="i-simple-icons-x" class="social-icon" />
-            </a>
-            <a
-              href="#"
-              class="social-icon-container bg-white/20 transition-colors hover:bg-white/30"
-            >
-              <UIcon name="i-heroicons-chat-bubble-left-right" class="social-icon" />
+              <UIcon name="i-simple-icons-tiktok" class="social-icon" />
             </a>
           </div>
         </UCard>
@@ -232,7 +251,7 @@ const handleSubmit = () => {
               type="submit"
               size="xl"
               block
-              class="bg-gradient-to-r from-blue-600 to-purple-600 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl"
+              class="bg-linear-to-r from-blue-600 to-purple-600 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl"
             >
               <UIcon name="i-heroicons-paper-airplane" class="mr-2 h-5 w-5 -rotate-45" />
               Send Message
@@ -282,7 +301,7 @@ const handleSubmit = () => {
     <div class="mt-16">
       <h2 class="mb-6 text-center text-3xl font-bold">Find Us Here</h2>
       <UCard>
-        <div class="relative flex aspect-[21/9] items-center justify-center bg-gray-100">
+        <div class="relative flex aspect-21/9 items-center justify-center bg-gray-100">
           <div class="text-center">
             <UIcon name="i-heroicons-map-pin" class="mx-auto mb-4 h-16 w-16 text-gray-400" />
             <p class="text-lg font-medium text-gray-500">Map View</p>

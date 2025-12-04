@@ -18,7 +18,7 @@
         </template>
 
         <div class="flex flex-col gap-4">
-          <!-- <UFormField label="Full Name" name="fullName">
+          <UFormField label="Full Name" name="fullName">
             <UInput v-model="checkoutStore.formInputs.name" />
           </UFormField>
           <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -28,7 +28,7 @@
             <UFormField label="Phone Number" name="phone">
               <UInput v-model="checkoutStore.formInputs.phone" />
             </UFormField>
-          </div> -->
+          </div>
           <UFormField label="Notes" name="notes">
             <UTextarea v-model="checkoutStore.formInputs.notes" :rows="3" />
           </UFormField>
@@ -103,7 +103,7 @@
         >
           <template #label="{ item }">
             <div class="flex items-center gap-3">
-              <span class="text-2xl">{{ item.icon }}</span>
+              <UIcon :name="item.icon" class="h-6 w-6" />
               <span class="font-medium">{{ item.label }}</span>
             </div>
           </template>
@@ -193,15 +193,14 @@ import AddressSelectionModal from './components/AddressSelectionModal.vue'
 const checkoutStore = useCheckoutStore()
 const cartStore = useCartStore()
 const authStore = useAuthStore()
-
+const toast = useToast()
 const openAddressModal = ref(false)
 
 const isPlacingOrder = ref(false)
 
 const checkoutMethods = ref([
-  { label: 'Credit / Debit Card', value: 'card', icon: '💳' },
-  { label: 'PayPal', value: 'paypal', icon: '🅿️' },
-  { label: 'Cash on Delivery', value: 'cod', icon: '💵' },
+  { label: 'Credit / Debit Card', value: 'card', icon: 'i-lucide-credit-card' },
+  { label: 'Apple Pay', value: 'apple_pay', icon: 'i-simple-icons-applepay' },
 ])
 
 const totals = computed(() => {
@@ -216,9 +215,9 @@ const totals = computed(() => {
 
 const disableButton = computed(() => {
   return !(
-    // checkoutStore.formInputs.name &&
-    // checkoutStore.formInputs.email &&
-    // checkoutStore.formInputs.phone &&
+    checkoutStore.formInputs.name &&
+    checkoutStore.formInputs.email &&
+    checkoutStore.formInputs.phone &&
     checkoutStore.formInputs.paymentMethod
   )
 })
@@ -234,9 +233,9 @@ const populateUserData = () => {
 
   const user = authStore.user
 
-  // if (user.name) checkoutStore.formInputs.name = user.name
-  // if (user.email) checkoutStore.formInputs.email = user.email
-  // if (user.phone) checkoutStore.formInputs.phone = user.phone
+  if (user.name) checkoutStore.formInputs.name = user.name
+  if (user.email) checkoutStore.formInputs.email = user.email
+  if (user.phone) checkoutStore.formInputs.phone = user.phone
 
   // Auto-select default address
   const defaultAddr = user.shippingAddresses?.find((a) => a.isDefault)
@@ -268,6 +267,14 @@ const onSubmit = async () => {
   const response = await checkoutStore.saveOrder(payload)
   if (response?.data?.success) {
     await navigateTo('/checkout/confirmed')
+  } else {
+    toast.add({
+      color: 'error',
+      title: 'Order Failed',
+      description:
+        response?.data?.message || 'There was an issue placing your order. Please try again.',
+    })
+    isPlacingOrder.value = false
   }
 }
 </script>

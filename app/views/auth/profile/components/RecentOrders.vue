@@ -1,5 +1,5 @@
 <template>
-  <div class="rounded-xl border border-gray-200 bg-white p-6">
+  <UPageCard class="rounded-xl">
     <div class="mb-4 flex items-center justify-between">
       <h3 class="text-lg font-bold text-gray-900">Recent Orders</h3>
       <UButton
@@ -15,23 +15,25 @@
     </div>
     <div class="space-y-3">
       <div
-        v-for="order in orderStore.orders?.slice(0, 3)"
+        v-for="order in orderStore.orders?.slice(0, 5)"
         :key="order._id"
         class="flex items-center justify-between rounded-lg bg-gray-50 p-3"
       >
         <div>
-          <div class="font-medium text-gray-900">{{ order._id }}</div>
-          <div class="text-xs text-gray-500">{{ order.date }}</div>
+          <div class="sm:text-md text-sm font-medium text-gray-900">{{ order.orderNumber }}</div>
+          <div class="text-xs text-gray-500">
+            {{ new Date(order.createdAt).toLocaleDateString() }}
+          </div>
         </div>
         <OrderStatusBadge :status="order.status" />
       </div>
     </div>
-  </div>
+  </UPageCard>
 </template>
 
 <script setup lang="ts">
-import { useOrderStore } from '~/stores/order.store'
 import OrderStatusBadge from '~/components/ui/OrderStatusBadge.vue'
+import { useOrderStore } from '~/stores/order.store'
 
 const orderStore = useOrderStore()
 

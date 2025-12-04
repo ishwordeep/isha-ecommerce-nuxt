@@ -4,7 +4,7 @@
   >
     <div class="mx-auto max-w-[1440px] px-6">
       <!-- Main Footer Content -->
-      <div class="grid grid-cols-1 gap-12 py-16 md:grid-cols-2 lg:grid-cols-5">
+      <div class="grid grid-cols-1 gap-12 py-8 md:grid-cols-2 md:py-16 lg:grid-cols-5">
         <!-- Brand Column -->
         <div class="lg:col-span-2">
           <h2 class="e mb-4 text-3xl font-bold">
