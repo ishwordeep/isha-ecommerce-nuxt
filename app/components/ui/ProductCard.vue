@@ -7,7 +7,7 @@
     <!-- Badge -->
     <div v-if="collection" class="absolute top-4 left-4 z-10">
       <span
-        class="flex items-center gap-1.5 rounded-full bg-gradient-to-r px-3 py-1.5 text-xs font-bold text-white shadow-md transition-transform group-hover:scale-105"
+        class="flex items-center gap-1.5 rounded-full bg-linear-to-r px-3 py-1.5 text-xs font-bold text-white shadow-md transition-transform group-hover:scale-105"
         :class="collection?.gradient"
       >
         <UIcon
@@ -20,7 +20,7 @@
     </div>
 
     <!-- Wishlist Button -->
-    <button
+    <!-- <button
       @click="toggleWishlist"
       :aria-label="isWishlisted ? 'Remove from wishlist' : 'Add to wishlist'"
       class="absolute top-4 right-4 z-10 flex h-9 w-9 items-center justify-center rounded-full bg-white/90 opacity-0 shadow-md backdrop-blur-sm transition-all duration-200 group-hover:opacity-100 hover:scale-110 hover:bg-rose-50"
@@ -30,12 +30,12 @@
         :name="isWishlisted ? 'i-lucide-heart-filled' : 'i-lucide-heart'"
         class="h-4 w-4 text-gray-700 transition-colors"
       />
-    </button>
+    </button> -->
 
     <!-- Product Image -->
     <NuxtLink :to="`/products/${product._id}`" class="block">
       <div
-        class="relative flex aspect-square items-center justify-center overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 transition-transform duration-500 group-hover:scale-105"
+        class="relative flex aspect-square items-center justify-center overflow-hidden bg-linear-to-br from-gray-50 to-gray-100 transition-transform duration-500 group-hover:scale-105"
       >
         <NuxtImg
           v-if="product.image"
@@ -137,7 +137,7 @@
 
     <!-- Hover Overlay -->
     <div
-      class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+      class="pointer-events-none absolute inset-0 bg-linear-to-t from-black/10 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"
     />
   </div>
 </template>

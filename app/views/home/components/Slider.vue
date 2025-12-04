@@ -33,10 +33,7 @@ const isMdUp = useMediaQuery('(min-width: 768px)')
       viewport: 'rounded-xl',
     }"
   >
-    <USkeleton
-      :key="item"
-      class="aspect-[4/3] w-full rounded-xl sm:aspect-[16/9] xl:aspect-[21/9]"
-    />
+    <USkeleton :key="item" class="aspect-4/3 w-full rounded-xl sm:aspect-video xl:aspect-21/9" />
   </UCarousel>
   <UCarousel
     v-else
@@ -57,7 +54,7 @@ const isMdUp = useMediaQuery('(min-width: 768px)')
     <NuxtImg
       :src="item"
       loading="lazy"
-      class="aspect-[4/3] h-full w-full rounded-xl object-cover sm:aspect-[16/9] xl:aspect-[21/9]"
+      class="aspect-4/3 h-full w-full rounded-xl object-cover sm:aspect-video xl:aspect-21/9"
     />
   </UCarousel>
 </template>

@@ -20,7 +20,6 @@ export const useCartStore = defineStore('cart', () => {
       // Simulate API call
       const response = await CartService.fetchCartItems()
       if (response.data?.success) {
-        console.log(response.data?.data)
         carts.value = response.data.data?.items as Item[]
         cartTotal.value =
           response.data.data?.items.reduce(

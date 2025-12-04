@@ -18,10 +18,10 @@ const items: DropdownMenuItem[][] = [
       label: 'My Orders',
       to: '/auth/orders',
     },
-    {
-      label: 'My Wishlist',
-      to: '/auth/wishlist',
-    },
+    // {
+    //   label: 'My Wishlist',
+    //   to: '/auth/wishlist',
+    // },
   ],
   [
     {
