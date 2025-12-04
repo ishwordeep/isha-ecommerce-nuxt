@@ -40,10 +40,56 @@ export const useCartStore = defineStore('cart', () => {
     isLoading.value = true
     try {
       const response = await CartService.addToCart(payload)
-      return response
+      console.log(response.data?.data)
+      if (response.data?.success) {
+        const itemResponse = response.data?.data
+        const existingItem = carts.value?.find((item) => item._id === itemResponse?._id)
+        if (existingItem) {
+          existingItem.quantity += payload?.quantity || 0
+          cartTotal.value += (itemResponse?.price || 0) * (payload?.quantity || 0)
+        } else {
+          carts.value = carts.value
+            ? [...carts.value, itemResponse as Item]
+            : [itemResponse as Item]
+          cartTotal.value += (itemResponse?.price || 0) * (payload?.quantity || 0)
+        }
+        return response
+      }
     } catch (error) {
       console.log('Error', error)
       // Handle error if needed
+    } finally {
+      isLoading.value = false
+    }
+  }
+
+  const updateCart = async (itemId: string, payload: Partial<CartPayload>) => {
+    const existingItemIndex = carts.value?.findIndex((item) => item._id === itemId)
+
+    if (existingItemIndex === -1 || existingItemIndex === undefined) {
+      return
+    }
+
+    const existingItem = carts.value![existingItemIndex]
+
+    isLoading.value = true
+    try {
+      const response = await CartService.updateCart(itemId, payload)
+
+      if (response.data?.success) {
+        const updatedItem = response.data.data // the fresh item from the server
+
+        cartTotal.value -= (existingItem?.price || 0) * (existingItem?.quantity || 0)
+
+        cartTotal.value += (updatedItem?.price || 0) * (updatedItem?.quantity || 0)
+
+        carts.value![existingItemIndex] = updatedItem as Item
+
+        return response
+      }
+    } catch (error) {
+      console.error('Error updating cart item:', error)
+      // Optionally show a toast/notification here
     } finally {
       isLoading.value = false
     }
@@ -57,7 +103,8 @@ export const useCartStore = defineStore('cart', () => {
         carts.value = carts.value?.filter((item) => item._id !== itemId) || null
         cartTotal.value =
           carts.value?.reduce(
-            (total: number, item: Item) => total + item.price * item.quantity,
+            (total: number, item: Partial<Item>) =>
+              total + (item.price || 0) * (item.quantity || 0),
             0
           ) || 0
       }
@@ -77,5 +124,6 @@ export const useCartStore = defineStore('cart', () => {
     addToCart,
     cartTotal,
     removeFromCart,
+    updateCart,
   }
 })

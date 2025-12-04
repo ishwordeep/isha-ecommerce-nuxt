@@ -26,9 +26,17 @@ class CartService {
     return await AxiosService.get<ItemResponse<CartResponse>>(url)
   }
 
-  async addToCart(payload: CartPayload): Promise<RootServiceInterface<ItemResponse<CartResponse>>> {
+  async addToCart(payload: CartPayload): Promise<RootServiceInterface<ItemResponse<Item>>> {
     const url = `/cart`
-    return await AxiosService.post<ItemResponse<CartResponse>>(url, payload)
+    return await AxiosService.post<ItemResponse<Item>>(url, payload)
+  }
+
+  async updateCart(
+    itemId: string,
+    payload: Partial<CartPayload>
+  ): Promise<RootServiceInterface<ItemResponse<Item>>> {
+    const url = `/cart/${itemId}`
+    return await AxiosService.patch<ItemResponse<Item>>(url, payload)
   }
 
   async removeFromCart(itemId: string): Promise<RootServiceInterface<ItemResponse<CartResponse>>> {

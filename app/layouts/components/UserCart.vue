@@ -194,24 +194,18 @@ onMounted(async () => {
 
 const stepQuantity = async (item: Item, type: 'increase' | 'decrease') => {
   state.isUpdating = true
-  setTimeout(() => {
-    if (type === 'increase') {
-      cartStore.carts?.find((cartItem) => {
-        if (cartItem.productId === item.productId) {
-          cartItem.quantity += 1
-        }
-      })
-    } else {
-      cartStore.carts?.find((cartItem) => {
-        if (cartItem.productId === item.productId) {
-          cartItem.quantity -= 1
-        }
-      })
-    }
-    cartStore.cartTotal =
-      cartStore.carts?.reduce((total, item) => total + item.price * item.quantity, 0) || 0
-    state.isUpdating = false
-  }, 500)
+  if (type === 'increase') {
+    await cartStore.updateCart(item._id, {
+      quantity: item.quantity + 1,
+    })
+  } else {
+    await cartStore.updateCart(item._id, {
+      quantity: item.quantity - 1,
+    })
+  }
+  cartStore.cartTotal =
+    cartStore.carts?.reduce((total, item) => total + item.price * item.quantity, 0) || 0
+  state.isUpdating = false
 }
 
 const removeItem = async () => {
