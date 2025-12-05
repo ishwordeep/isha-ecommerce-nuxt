@@ -55,6 +55,19 @@
           </div>
         </div>
 
+        <!-- Shipping Address -->
+        <div>
+          <h3 class="mb-3 font-bold">Shipping</h3>
+          <UCard variant="soft">
+            {{ orderStore.selectedOrder?.shippingAddress.street }},
+            {{ orderStore.selectedOrder?.shippingAddress.apartment }},
+            {{ orderStore.selectedOrder?.shippingAddress.city }},
+            {{ orderStore.selectedOrder?.shippingAddress.state }},
+            {{ orderStore.selectedOrder?.shippingAddress.zipCode }},
+            {{ orderStore.selectedOrder?.shippingAddress.country }}
+          </UCard>
+        </div>
+
         <!-- Totals -->
         <div class="border-t border-t-gray-300 pt-4">
           <div class="space-y-2">
