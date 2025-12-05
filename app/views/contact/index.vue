@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import axiosService from '~/services/axios.service'
 import type { SettingResponse } from '~/services/setting.service'
 
 const formData = reactive({
@@ -34,20 +35,31 @@ const formatLocation = (setting: SettingResponse) => {
   return parts.length ? parts.join('') : 'New York, NY 10001'
 }
 
-const handleSubmit = () => {
-  console.log('Form submitted:', formData)
-  toast.add({
-    color: 'success',
-    title: 'Message Sent',
-    description: 'Thank you for reaching out! We will get back to you shortly.',
-  })
+const handleSubmit = async () => {
   submitted.value = true
-  // Reset form
-  formData.name = ''
-  formData.email = ''
-  formData.phone = ''
-  formData.subject = ''
-  formData.message = ''
+  try {
+    const response = await axiosService.post('/contact', formData)
+    if (response.data?.success) {
+      toast.add({
+        color: 'success',
+        title: 'Message Sent',
+        description: 'Thank you for reaching out! We will get back to you shortly.',
+      })
+      formData.name = ''
+      formData.email = ''
+      formData.phone = ''
+      formData.subject = ''
+      formData.message = ''
+    }
+  } catch (error) {
+    toast.add({
+      color: 'error',
+      title: 'Submission Failed',
+      description: 'There was an issue sending your message. Please try again later.',
+    })
+  } finally {
+    submitted.value = false
+  }
 }
 </script>
 
