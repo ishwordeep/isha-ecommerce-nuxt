@@ -134,11 +134,9 @@ watch(
 const onSubmit = async () => {
   isSubmitting.value = true
   const isAdd = props.mode === 'add'
-  const action = () => auth.addShippingAddress(authStore.addressFormInputs)
-  //   const action = isAdd
-  //     ? () => auth.addShippingAddress(authStore.addressFormInputs)
-  //     :
-  //     () => auth.updateShippingAddress(authStore.selectedAddress?._id!, authStore.addressFormInputs)
+  const action = isAdd
+    ? () => auth.addShippingAddress(authStore.addressFormInputs)
+    : () => auth.updateShippingAddress(authStore.selectedAddress?._id!, authStore.addressFormInputs)
 
   const response = await action()
 

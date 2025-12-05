@@ -91,6 +91,29 @@ export const useAuth = () => {
     }
   }
 
+  const updateShippingAddress = async (addressId: string, payload: Partial<AddressForm>) => {
+    try {
+      const response = await AuthService.updateShippingAddress(addressId, payload)
+      if (response.data?.success && response.data.data) {
+        authStore.updateShippingAddress(response.data.data)
+      }
+      return response
+    } catch (error) {
+      console.error('Error updating shipping address:', error)
+    }
+  }
+
+  const deleteShippingAddress = async (addressId: string) => {
+    try {
+      const response = await AuthService.deleteShippingAddress(addressId)
+      if (response.data?.success) {
+        authStore.deleteShippingAddress(addressId)
+      }
+      return response
+    } catch (error) {
+      console.error('Error deleting shipping address:', error)
+    }
+  }
   return {
     // Store state
     user: computed(() => authStore.user),
@@ -103,5 +126,7 @@ export const useAuth = () => {
     logout,
     fetchCurrentUser,
     addShippingAddress,
+    updateShippingAddress,
+    deleteShippingAddress,
   }
 }

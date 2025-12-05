@@ -16,6 +16,7 @@ const openForm = ref(false)
 const openDeleteModal = ref(false)
 const isDeleting = ref(false)
 const authStore = useAuthStore()
+const { deleteShippingAddress } = useAuth()
 const handleOpenForm = (address: Address) => {
   authStore.selectedAddress = address
   openForm.value = true
@@ -30,7 +31,7 @@ const onDelete = async () => {
   if (!authStore.selectedAddress) return
   isDeleting.value = true
   try {
-    // await authStore.deleteAddress(authStore.selectedAddress._id)
+    await deleteShippingAddress(authStore.selectedAddress._id)
     console.log('Deleting Address', authStore.selectedAddress)
     openDeleteModal.value = false
   } catch (error) {

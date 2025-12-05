@@ -195,6 +195,13 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
+  const deleteShippingAddress = (addressId: string): void => {
+    if (!user.value?.shippingAddresses) return
+    user.value.shippingAddresses = user.value.shippingAddresses.filter(
+      (addr) => addr._id !== addressId
+    )
+  }
+
   const resetAddressForm = (): void => {
     Object.assign(addressFormInputs, emptyAddressForm())
   }
@@ -223,5 +230,6 @@ export const useAuthStore = defineStore('auth', () => {
     userProfileFormInputs,
     addShippingAddress,
     updateShippingAddress,
+    deleteShippingAddress,
   }
 })

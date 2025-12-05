@@ -125,6 +125,22 @@ class AuthService {
   ): Promise<RootServiceInterface<ItemResponse<Address>>> {
     return await AxiosService.post<ItemResponse<Address>>('/user/shipping-address', payload)
   }
+
+  async updateShippingAddress(
+    addressId: string,
+    payload: Partial<AddressForm>
+  ): Promise<RootServiceInterface<ItemResponse<Address>>> {
+    return await AxiosService.put<ItemResponse<Address>>(
+      `/user/shipping-address/${addressId}`,
+      payload
+    )
+  }
+
+  async deleteShippingAddress(
+    addressId: string
+  ): Promise<RootServiceInterface<ItemResponse<Address>>> {
+    return await AxiosService.delete<ItemResponse<Address>>(`/user/shipping-address/${addressId}`)
+  }
 }
 
 export default new AuthService()
