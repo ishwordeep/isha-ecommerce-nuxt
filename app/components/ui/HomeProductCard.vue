@@ -1,11 +1,11 @@
 <template>
   <div
-    class="group cursor-pointer overflow-hidden rounded-2xl border border-gray-200 bg-white transition-all duration-300 hover:border-gray-300 hover:shadow-xl"
+    class="group w-full cursor-pointer overflow-hidden rounded-2xl border border-gray-200 bg-white transition-all duration-300 hover:border-gray-300 hover:shadow-xl"
   >
     <!-- Product Image -->
     <NuxtLink :to="`/products/${product._id}`">
       <div
-        class="relative flex aspect-square items-center justify-center overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100"
+        class="relative flex aspect-square items-center justify-center overflow-hidden bg-linear-to-br from-gray-50 to-gray-100"
       >
         <!--        <div class="text-6xl transition-transform duration-300 group-hover:scale-105">-->
         <!--          {{ product.image }}-->
