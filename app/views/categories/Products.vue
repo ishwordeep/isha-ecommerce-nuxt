@@ -23,7 +23,7 @@
           <UiBrowseByCategories />
         </div>
         <div
-          class="grid w-full grid-cols-1 justify-center gap-2 min-[450px]:grid-cols-2 sm:gap-4 lg:grid-cols-3 2xl:grid-cols-4"
+          class="grid w-full grid-cols-1 justify-center gap-2 min-[380px]:grid-cols-2 sm:gap-4 lg:grid-cols-3 2xl:grid-cols-4"
         >
           <UiProductSkeletonCard v-if="isLoading" v-for="n in 8" :key="n" />
 

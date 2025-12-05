@@ -44,6 +44,18 @@ export const useCheckoutStore = defineStore('checkout', () => {
   const isLoading = ref(false)
   const formInputs = reactive<CheckoutForm>(emptyForm())
   const orderStore = useOrderStore()
+  const cartStore = useCartStore()
+
+  const initialState = () => ({
+    isLoading: false,
+    formInputs: emptyForm(),
+  })
+
+  const reset = () => {
+    // Reset all reactive state to initial values
+    isLoading.value = initialState().isLoading
+    Object.assign(formInputs, initialState().formInputs)
+  }
 
   const saveOrder = async (orderData: CheckoutForm) => {
     isLoading.value = true
@@ -52,6 +64,7 @@ export const useCheckoutStore = defineStore('checkout', () => {
       if (response.data?.success) {
         orderStore.orders = [...(orderStore.orders || []), response.data.data as OrderResponse]
         orderStore.selectedOrder = response.data?.data
+        cartStore.reset()
       }
       return response
     } catch (error) {
@@ -65,5 +78,6 @@ export const useCheckoutStore = defineStore('checkout', () => {
     isLoading,
     formInputs,
     saveOrder,
+    reset,
   }
 })

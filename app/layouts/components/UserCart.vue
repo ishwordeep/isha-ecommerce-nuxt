@@ -40,7 +40,12 @@
         </template>
 
         <template v-else-if="!cartStore.carts?.length && !state.isFetching">
-          <p>Your cart is currently empty.</p>
+          <p>
+            Your cart is currently empty.
+            <NuxtLink to="/products" class="text-primary underline" @click="open = false"
+              >Browse products</NuxtLink
+            >
+          </p>
         </template>
 
         <template v-else>
@@ -146,6 +151,7 @@
           }"
           to="/checkout"
           @click="open = false"
+          :disabled="!cartStore.carts?.length"
         />
       </div>
     </template>

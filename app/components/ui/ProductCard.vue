@@ -1,6 +1,6 @@
 <template>
   <div
-    class="group relative w-full overflow-hidden rounded-2xl border border-gray-100 bg-white transition-all duration-300 hover:border-gray-200 hover:bg-[#FAF9F5] hover:shadow-lg"
+    class="group relative h-full w-full overflow-hidden rounded-2xl border border-gray-100 bg-white transition-all duration-300 hover:border-gray-200 hover:bg-[#FAF9F5] hover:shadow-lg"
     role="article"
     aria-labelledby="product-title"
   >

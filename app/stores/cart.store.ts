@@ -14,6 +14,21 @@ export const useCartStore = defineStore('cart', () => {
   const isLoading = ref(false)
   const carts = ref<Item[] | null>(null)
   const cartTotal = ref<number>(0)
+
+  // Initial state (for reset)
+  const initialState = () => ({
+    isLoading: false,
+    carts: null as Item[] | null,
+    cartTotal: 0,
+  })
+
+  const reset = () => {
+    // Reset all reactive state to initial values
+    isLoading.value = initialState().isLoading
+    carts.value = initialState().carts
+    cartTotal.value = initialState().cartTotal
+  }
+
   const fetchCarts = async () => {
     isLoading.value = true
     try {
@@ -124,5 +139,6 @@ export const useCartStore = defineStore('cart', () => {
     cartTotal,
     removeFromCart,
     updateCart,
+    reset,
   }
 })

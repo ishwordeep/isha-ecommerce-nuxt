@@ -82,6 +82,7 @@ export const useAuthStore = defineStore('auth', () => {
   const addressFormInputs = reactive<AddressForm>(emptyAddressForm())
   const userProfileFormInputs = reactive<UserProfileForm>(emptyUserProfileForm())
   const isFetchingProfile = ref<boolean>(false)
+
   const setLoading = (loading: boolean): void => {
     isLoading.value = loading
   }

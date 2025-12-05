@@ -49,7 +49,15 @@ export const useAuth = () => {
    * Logout user
    */
   const logout = async () => {
+    //stores
+
+    const cartStore = useCartStore()
+    const checkoutStore = useCheckoutStore()
+    const orderStore = useOrderStore()
     // await AuthService.logout()
+    cartStore.reset()
+    checkoutStore.reset()
+    orderStore.reset()
     authStore.clearAuth()
   }
 

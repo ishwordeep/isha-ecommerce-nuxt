@@ -2,7 +2,7 @@
   <div class="space-y-4">
     <OrderSkeleton v-if="state.fetching" />
     <div
-      v-else
+      v-else-if="!state.fetching && orderStore.orders?.length"
       v-for="order in orderStore.orders"
       :key="order._id"
       class="rounded-xl border border-gray-200 bg-white p-6 transition-shadow hover:shadow-md"
@@ -76,6 +76,34 @@
         >
           Return
         </button>
+      </div>
+    </div>
+
+    <!-- Empty State – Beautiful & Engaging -->
+    <div v-else class="py-16 text-center">
+      <div class="mx-auto max-w-md">
+        <!-- Illustration / Icon -->
+        <div
+          class="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-gray-100"
+        >
+          <UIcon name="i-lucide-package-open" class="h-12 w-12 text-gray-400" />
+        </div>
+
+        <h3 class="mb-3 text-xl font-semibold text-gray-900">No orders yet</h3>
+
+        <p class="mb-8 text-gray-600">
+          Looks like you haven't placed any orders. When you do, they'll appear here.
+        </p>
+
+        <!-- Call to Action -->
+        <UButton
+          to="/products"
+          color="primary"
+          size="lg"
+          label="Start Shopping"
+          leading-icon="i-lucide-shopping-bag"
+          class="font-medium"
+        />
       </div>
     </div>
 

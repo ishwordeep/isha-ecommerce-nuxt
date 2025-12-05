@@ -1,5 +1,5 @@
 <template>
-  <div class="relative min-h-screen w-full">
+  <div class="relative flex min-h-screen w-full flex-col">
     <!-- Wait for client-side auth initialization to avoid flashing unauthenticated UI -->
     <div v-if="!isHydrated" class="fixed inset-0 z-50 flex items-center justify-center bg-white">
       <div
@@ -9,7 +9,7 @@
 
     <template v-else-if="isAuthenticated">
       <UiNavbar />
-      <main class="mx-auto h-full max-w-[1440px] flex-1 px-4 py-4 sm:px-6 lg:px-8">
+      <main class="mx-auto h-full w-full max-w-[1440px] flex-1 px-4 py-4 sm:px-6 lg:px-8">
         <div class="flex w-full flex-col gap-4">
           <slot name="heading">
             <h1 class="text-2xl font-bold text-black">{{ pageHeading }}</h1>

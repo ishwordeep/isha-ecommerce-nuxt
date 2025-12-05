@@ -4,7 +4,7 @@
 
     <div class="mt-8 flex flex-col items-center justify-center gap-2">
       <div
-        class="grid w-full grid-cols-1 place-items-center gap-x-2 gap-y-4 min-[360px]:grid-cols-2 sm:gap-4 md:gap-6 lg:grid-cols-4"
+        class="grid w-full grid-cols-1 place-items-center gap-x-2 gap-y-4 min-[380px]:grid-cols-2 sm:gap-4 md:gap-6 lg:grid-cols-4"
       >
         <template v-if="isLoading">
           <ProductSkeletonCard v-for="i in 4" :key="i" />

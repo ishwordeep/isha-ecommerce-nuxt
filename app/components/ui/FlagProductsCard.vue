@@ -1,13 +1,13 @@
 <template>
   <div
-    class="group relative w-full overflow-hidden rounded-2xl border border-gray-100 bg-white transition-all duration-300 hover:border-gray-200 hover:bg-[#FAF9F5] hover:shadow-lg"
+    class="group relative h-full w-full overflow-hidden rounded-2xl border border-gray-100 bg-white transition-all duration-300 hover:border-gray-200 hover:bg-[#FAF9F5] hover:shadow-lg"
     role="article"
     aria-labelledby="product-title"
   >
     <!-- Badge -->
-    <div v-if="collection" class="absolute top-4 left-4 z-10">
+    <div v-if="collection" class="absolute top-2 left-2 z-10">
       <span
-        class="flex items-center gap-1.5 rounded-full bg-linear-to-r px-3 py-1.5 text-xs font-bold text-white shadow-md transition-transform group-hover:scale-105"
+        class="flex items-center gap-1.5 rounded-full bg-linear-to-r px-3 py-1.5 text-[10px] font-bold text-white shadow-md transition-transform group-hover:scale-105 sm:text-xs"
         :class="collection?.gradient"
       >
         <UIcon

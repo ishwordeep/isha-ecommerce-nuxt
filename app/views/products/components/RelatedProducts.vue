@@ -17,24 +17,11 @@ const isMdUp = useMediaQuery('(min-width: 768px)')
 <template>
   <div class="mt-12 flex flex-col items-center justify-center gap-4 text-center text-black">
     <h4 class="text-xl font-semibold md:text-3xl xl:text-4xl">Related Products</h4>
-    <UCarousel
-      dots
-      loop
-      :items="items"
-      class="w-full"
-      :arrows="isMdUp"
-      :autoplay="{ delay: 4000 }"
-      :ui="{
-        prev: '!start-4',
-        next: '!end-4',
-        viewport: 'rounded-xl',
-        item: 'min-[450px]:basis-1/2 md:basis-1/3 min-[960px]:basis-1/5',
-      }"
+    <div
+      class="grid w-full grid-cols-1 place-items-center gap-x-2 gap-y-4 min-[400px]:grid-cols-2 sm:gap-4 md:gap-6 lg:grid-cols-4"
     >
-      <template #default="{ item }">
-        <UiProductSkeletonCard v-if="isLoading" v-for="n in 8" :key="n" />
-        <UiProductCard :product="item" v-else />
-      </template>
-    </UCarousel>
+      <UiProductSkeletonCard v-if="isLoading" v-for="n in 8" :key="n" />
+      <UiProductCard v-for="product in products" :product="product" v-else />
+    </div>
   </div>
 </template>

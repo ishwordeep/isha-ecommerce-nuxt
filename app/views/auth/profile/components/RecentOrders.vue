@@ -9,11 +9,12 @@
         to="/auth/orders"
         size="sm"
         viewTransition
+        v-if="orderStore.orders?.length"
       >
         View All
       </UButton>
     </div>
-    <div class="space-y-3">
+    <div class="space-y-3" v-if="orderStore.orders?.length">
       <div
         v-for="order in orderStore.orders?.slice(0, 5)"
         :key="order._id"
@@ -28,6 +29,13 @@
         <OrderStatusBadge :status="order.status" />
       </div>
     </div>
+
+    <p v-else class="text-gray-600">
+      You have no recent orders.
+      <NuxtLink to="/products" class="text-primary ml-1 underline" viewTransition>
+        Start shopping now!
+      </NuxtLink>
+    </p>
   </UPageCard>
 </template>
 

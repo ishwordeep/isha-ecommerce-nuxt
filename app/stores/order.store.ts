@@ -9,6 +9,21 @@ export const useOrderStore = defineStore('order', () => {
   const orders = ref<OrderResponse[] | null>(null)
   const orderFailed = ref(false)
 
+  const initialState = () => ({
+    isLoading: false,
+    selectedOrder: null as OrderResponse | null,
+    orders: null as OrderResponse[] | null,
+    orderFailed: false,
+  })
+
+  const reset = () => {
+    // Reset all reactive state to initial values
+    isLoading.value = initialState().isLoading
+    selectedOrder.value = initialState().selectedOrder
+    orders.value = initialState().orders
+    orderFailed.value = initialState().orderFailed
+  }
+
   const fetchOrders = async () => {
     isLoading.value = true
     try {
@@ -46,5 +61,6 @@ export const useOrderStore = defineStore('order', () => {
     orders,
     orderFailed,
     fetchOrders,
+    reset,
   }
 })
