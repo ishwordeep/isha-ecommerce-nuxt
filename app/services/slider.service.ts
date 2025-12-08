@@ -11,6 +11,14 @@ export interface SliderResponse {
   updatedAt: string
   __v: number
   id: string
+  button?: Button
+}
+
+export interface Button {
+  title: string
+  textColor: string
+  bgColor: string
+  link: string
 }
 
 class SliderService {
