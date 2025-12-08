@@ -11,7 +11,7 @@ const formData = reactive({
 })
 const toast = useToast()
 const submitted = ref(false)
-const { setting } = useSettingStore()
+const settingStore = useSettingStore()
 const subjects = [
   { label: 'General Inquiry', value: 'general' },
   { label: 'Order Status', value: 'order' },
@@ -25,12 +25,12 @@ const formatLocation = (setting: SettingResponse) => {
   if (!setting) return 'New York, NY 10001'
 
   const parts = []
-  if (setting.city) parts.push(setting.city)
-  if (setting.state) {
-    if (setting.city) parts.push(', ')
-    parts.push(setting.state)
+  if (settingStore.setting?.city) parts.push(settingStore.setting?.city)
+  if (settingStore.setting?.state) {
+    if (settingStore.setting?.city) parts.push(', ')
+    parts.push(settingStore.setting?.state)
   }
-  if (setting.postalCode) parts.push(` ${setting.postalCode}`)
+  if (settingStore.setting?.postalCode) parts.push(` ${settingStore.setting?.postalCode}`)
 
   return parts.length ? parts.join('') : 'New York, NY 10001'
 }
@@ -95,10 +95,10 @@ const handleSubmit = async () => {
           <h3 class="mb-2 text-lg font-bold text-gray-900">Email Us</h3>
           <p class="mb-3 text-sm text-gray-600">Send us an email anytime</p>
           <a
-            :href="`mailto:${setting?.email || 'support@fashionstore.com'}`"
+            :href="`mailto:${settingStore.setting?.email || 'support@fashionstore.com'}`"
             class="text-primary-600 hover:text-primary-700 font-medium"
           >
-            {{ setting?.email || 'support@fashionstore.com' }}
+            {{ settingStore.setting?.email || 'support@fashionstore.com' }}
           </a>
         </UCard>
 
@@ -112,10 +112,10 @@ const handleSubmit = async () => {
           <h3 class="mb-2 text-lg font-bold text-gray-900">Call Us</h3>
           <p class="mb-3 text-sm text-gray-600">Contact our support team by phone</p>
           <a
-            :href="`tel:${setting?.phone || '+1234567890'}`"
+            :href="`tel:${settingStore.setting?.phone || '+1234567890'}`"
             class="text-primary-600 hover:text-primary-700 font-medium"
           >
-            {{ setting?.phone || '+1 (234) 567-890' }}
+            {{ settingStore.setting?.phone || '+1 (234) 567-890' }}
           </a>
         </UCard>
 
@@ -129,8 +129,8 @@ const handleSubmit = async () => {
           <h3 class="mb-2 text-lg font-bold text-gray-900">Visit Us</h3>
           <p class="mb-3 text-sm text-gray-600">Come say hello at our office</p>
           <address class="text-gray-700 not-italic">
-            {{ setting?.address || '123 Fashion Street' }}<br />
-            {{ formatLocation(setting as SettingResponse) }}<br />
+            {{ settingStore.setting?.address || '123 Fashion Street' }}<br />
+            {{ formatLocation(settingStore.setting as SettingResponse) }}<br />
             United States
           </address>
         </UCard>
@@ -167,16 +167,16 @@ const handleSubmit = async () => {
           </template>
           <div class="flex gap-1">
             <a
-              v-if="setting?.facebook"
-              :href="setting?.facebook || '#'"
+              v-if="settingStore.setting?.facebook"
+              :href="settingStore.setting?.facebook || '#'"
               class="social-icon-container bg-white/20 transition-colors hover:bg-white/30"
               target="_blank"
             >
               <UIcon name="i-simple-icons-facebook" class="social-icon" />
             </a>
             <a
-              v-if="setting?.instagram"
-              :href="setting?.instagram || '#'"
+              v-if="settingStore.setting?.instagram"
+              :href="settingStore.setting?.instagram || '#'"
               class="social-icon-container bg-white/20 transition-colors hover:bg-white/30"
               target="_blank"
             >
@@ -184,7 +184,7 @@ const handleSubmit = async () => {
             </a>
 
             <a
-              :href="setting?.tiktok || '#'"
+              :href="settingStore.setting?.tiktok || '#'"
               class="social-icon-container bg-white/20 transition-colors hover:bg-white/30"
               target="_blank"
             >
