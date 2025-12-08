@@ -110,7 +110,7 @@ const handleSubmit = async () => {
             </div>
           </template>
           <h3 class="mb-2 text-lg font-bold text-gray-900">Call Us</h3>
-          <p class="mb-3 text-sm text-gray-600">Mon-Fri from 9am to 6pm</p>
+          <p class="mb-3 text-sm text-gray-600">Contact our support team by phone</p>
           <a
             :href="`tel:${setting?.phone || '+1234567890'}`"
             class="text-primary-600 hover:text-primary-700 font-medium"
