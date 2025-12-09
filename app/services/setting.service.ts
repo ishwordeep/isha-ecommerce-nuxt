@@ -4,6 +4,7 @@ import type { ItemResponse, RootServiceInterface } from './index.service'
 export interface SettingResponse {
   _id: string
   name: string
+  description: string
   email: string
   phone: string
   address: string

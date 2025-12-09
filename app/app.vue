@@ -25,6 +25,8 @@ const isHydrated = useState<boolean>('isHydrated', () => false)
 const toaster = { position: 'bottom-center', max: 3 } as const
 onMounted(async () => {
   await Promise.all([settingStore.fetchSetting(), authStore.initAuth()])
+  useSettingSeo(computed(() => settingStore.setting))
+
   if (!authStore.user && authStore.isAuthenticated) {
     await useAuth().fetchCurrentUser()
   }

@@ -26,6 +26,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       apiUrl: '',
+      appUrl: '',
     },
   },
   modules: ['@nuxt/eslint', '@nuxt/image', '@nuxt/ui', '@nuxt/fonts', '@pinia/nuxt'],
