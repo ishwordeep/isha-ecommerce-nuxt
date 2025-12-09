@@ -15,20 +15,29 @@ const data = ref([
     icon: 'i-heroicons-sparkles',
   },
 ])
+
+const aboutStore = useAboutStore()
 </script>
 
 <template>
-  <div class="my-6 grid grid-cols-1 gap-2 sm:my-10 sm:gap-6 md:grid-cols-2 lg:my-20 lg:gap-12">
-    <UCard class="transition-shadow hover:shadow-lg" v-for="(item, idx) in data" :key="idx">
+  <div
+    class="my-6 grid grid-cols-1 gap-2 sm:my-10 sm:gap-6 md:grid-cols-2 lg:my-20 lg:gap-12"
+    v-if="aboutStore.about?.statements?.length"
+  >
+    <UCard
+      class="transition-shadow hover:shadow-lg"
+      v-for="(item, idx) in aboutStore.about?.statements"
+      :key="idx"
+    >
       <template #header>
         <div
-          class="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br shadow-lg"
-          :class="[item.gradient]"
+          class="flex h-16 w-16 items-center justify-center rounded-2xl bg-linear-to-br shadow-lg"
+          :class="[item.iconBackgroundColor || 'from-gray-500 to-gray-600']"
         >
           <UIcon :name="item.icon" class="h-8 w-8 text-white" />
         </div>
       </template>
-      <h2 class="mb-4 text-3xl font-bold text-gray-900">{{ item.heading }}</h2>
+      <h2 class="mb-4 text-3xl font-bold text-gray-900">{{ item.title }}</h2>
       <p class="mb-4 text-lg text-gray-700">
         {{ item.description }}
       </p>

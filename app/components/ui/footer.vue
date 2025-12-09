@@ -10,9 +10,8 @@
           <h2 class="e mb-4 text-3xl font-bold">
             {{ settingStore.setting?.name || 'Fashion Store' }}
           </h2>
-          <p class="mb-6 leading-relaxed text-gray-700">
-            Your destination for premium fashion and timeless style. We curate the finest
-            collections to help you express your unique personality.
+          <p class="mb-6 leading-relaxed text-gray-700" v-if="settingStore.setting?.description">
+            {{ settingStore.setting?.description }}
           </p>
           <div class="flex gap-2">
             <UButton

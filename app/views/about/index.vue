@@ -3,7 +3,6 @@ import CoreValues from './components/CoreValues.vue'
 import Milestones from './components/Milestones.vue'
 import Mission from './components/Mission.vue'
 import Teams from './components/Teams.vue'
-import WhyChooseUs from './components/WhyChooseUs.vue'
 
 // Stats
 const stats = [
@@ -12,6 +11,8 @@ const stats = [
   { value: '1000+', label: 'Products' },
   { value: '25+', label: 'Countries' },
 ]
+
+const aboutStore = useAboutStore()
 </script>
 
 <template>
@@ -20,12 +21,16 @@ const stats = [
     <div class="relative overflow-hidden bg-[#F6F3E8]">
       <div class="mx-auto max-w-7xl p-6 text-center sm:py-10 lg:py-20">
         <UButton color="primary" variant="solid" size="sm" class="mb-6 rounded-full">
-          Our Story
+          {{ aboutStore.about?.hero.buttonText || 'Our Story' }}
         </UButton>
-        <h1 class="mb-6 text-5xl font-bold text-gray-900 md:text-6xl">About Fashion Store</h1>
+        <h1 class="mb-6 text-5xl font-bold text-gray-900 md:text-6xl">
+          {{ aboutStore.about?.hero.mainTitle || 'About Parish Jat Leo' }}
+        </h1>
         <p class="mx-auto max-w-3xl text-xl leading-relaxed text-gray-600">
-          We're not just a fashion retailer – we're a community of style enthusiasts dedicated to
-          bringing you the finest clothing and accessories from around the world.
+          {{
+            aboutStore.about?.hero.subtitle ||
+            "We're not just a fashion retailer – we're a community of style enthusiasts dedicated to bringing you the finest clothing and accessories from around the world."
+          }}
         </p>
       </div>
       <div
@@ -37,13 +42,16 @@ const stats = [
     </div>
 
     <!-- Stats Section -->
-    <div class="mt-12 grid grid-cols-2 gap-6 md:grid-cols-4">
+    <div
+      class="mx-auto mt-12 grid grid-cols-2 gap-6 md:grid-cols-4"
+      v-if="aboutStore.about?.hero?.stats?.length"
+    >
       <UCard
-        v-for="(stat, i) in stats"
+        v-for="(stat, i) in aboutStore.about?.hero?.stats"
         :key="i"
         class="text-center transition-shadow hover:shadow-xl"
       >
-        <h3 class="text-primary-600 mb-2 text-4xl font-bold">{{ stat.value }}</h3>
+        <h3 class="text-primary-600 mb-2 text-4xl font-bold">{{ stat.number }}</h3>
         <p class="font-medium text-gray-600">{{ stat.label }}</p>
       </UCard>
     </div>
@@ -60,6 +68,6 @@ const stats = [
     <Teams />
 
     <!-- Why Choose Us -->
-    <WhyChooseUs />
+    <!-- <WhyChooseUs /> -->
   </div>
 </template>
