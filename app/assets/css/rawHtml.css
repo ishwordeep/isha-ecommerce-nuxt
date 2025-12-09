@@ -1,0 +1,102 @@
+.raw-html * {
+  all: revert;
+}
+
+/* ====== Paragraphs ====== */
+.raw-html p {
+  margin: 0 0 0.75rem 0; /* normal paragraph spacing */
+  line-height: 1.6;
+  min-height: 0.75rem; /* ensures empty <p></p> creates visible blank space */
+}
+
+/* ====== Headings ====== */
+.raw-html h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 1.5rem 0 1rem;
+}
+
+.raw-html h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 1.25rem 0 0.75rem;
+}
+
+.raw-html h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 1rem 0 0.5rem;
+}
+
+/* ====== Lists ====== */
+.raw-html ul,
+.raw-html ol {
+  margin: 0 0 0.75rem 1.25rem; /* proper indent + spacing */
+  padding: 0;
+}
+
+.raw-html li {
+  margin: 0.25rem 0;
+  line-height: 1.5;
+}
+
+/* ====== Line breaks (<br>) ====== */
+.raw-html br {
+  line-height: 1.2;
+}
+
+/* ====== Images ====== */
+.raw-html img {
+  max-width: 100%;
+  height: auto;
+  margin: 1rem 0;
+  display: block;
+}
+
+/* ====== Tables ====== */
+.raw-html table {
+  border-collapse: collapse;
+  table-layout: fixed;
+  width: 100%;
+  margin: 1rem 0;
+  overflow: hidden;
+  display: table;
+}
+
+.raw-html table td,
+.raw-html table th {
+  min-width: 1em;
+  border: 1px solid #d1d5db;
+  padding: 0.5rem 0.75rem;
+  vertical-align: top;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.raw-html table th {
+  font-weight: bold;
+  text-align: left;
+  background-color: #f3f4f6;
+}
+
+.raw-html table p {
+  margin: 0;
+}
+
+.raw-html table colgroup {
+  display: table-column-group;
+}
+
+.raw-html table col {
+  display: table-column;
+}
+
+/* Dark mode support (optional) */
+.dark .raw-html table td,
+.dark .raw-html table th {
+  border-color: #4b5563;
+}
+
+.dark .raw-html table th {
+  background-color: #374151;
+}

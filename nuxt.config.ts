@@ -40,7 +40,7 @@ export default defineNuxtConfig({
   image: {
     dir: 'assets/images',
   },
-  css: ['~/assets/css/main.css'],
+  css: ['~/assets/css/main.css', '~/assets/css/rawHtml.css'],
   vite: {
     css: {
       devSourcemap: false,

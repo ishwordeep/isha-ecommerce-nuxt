@@ -310,7 +310,7 @@ const handleSubmit = async () => {
     </div>
 
     <!-- Map Section -->
-    <div class="mt-16">
+    <!-- <div class="mt-16">
       <h2 class="mb-6 text-center text-3xl font-bold">Find Us Here</h2>
       <UCard>
         <div class="relative flex aspect-21/9 items-center justify-center bg-gray-100">
@@ -321,7 +321,7 @@ const handleSubmit = async () => {
           </div>
         </div>
       </UCard>
-    </div>
+    </div> -->
   </div>
 </template>
 

@@ -11,10 +11,10 @@
 
     <!-- Decorative Blobs -->
     <div
-      class="pointer-events-none absolute top-0 right-0 h-96 w-96 rounded-full bg-gradient-to-br from-purple-200/40 to-pink-200/40 blur-3xl"
+      class="pointer-events-none absolute top-0 right-0 h-96 w-96 rounded-full bg-linear-to-br from-purple-200/40 to-pink-200/40 blur-3xl"
     />
     <div
-      class="pointer-events-none absolute bottom-0 left-0 h-96 w-96 rounded-full bg-gradient-to-tr from-blue-200/40 to-green-200/40 blur-3xl"
+      class="pointer-events-none absolute bottom-0 left-0 h-96 w-96 rounded-full bg-linear-to-tr from-blue-200/40 to-green-200/40 blur-3xl"
     />
   </div>
 </template>

@@ -85,9 +85,24 @@
         >
           <div>© {{ new Date().getFullYear() }} Fashion Store. All rights reserved.</div>
           <div class="flex flex-wrap justify-center gap-6">
-            <NuxtLink to="#" class="link-text">Privacy Policy</NuxtLink>
-            <NuxtLink to="#" class="link-text">Terms of Service</NuxtLink>
-            <NuxtLink to="#" class="link-text">Cookie Policy</NuxtLink>
+            <NuxtLink
+              to="https://info.parishjatleo.com/privacy-policy"
+              target="_blank"
+              class="link-text"
+              >Privacy Policy</NuxtLink
+            >
+            <NuxtLink
+              to="https://info.parishjatleo.com/terms-condition"
+              target="_blank"
+              class="link-text"
+              >Terms of Service</NuxtLink
+            >
+            <NuxtLink
+              to="https://info.parishjatleo.com/cookie-policy"
+              target="_blank"
+              class="link-text"
+              >Cookie Policy</NuxtLink
+            >
             <NuxtLink to="#" class="link-text">Sitemap</NuxtLink>
           </div>
           <div class="flex items-center gap-3 text-2xl">
@@ -155,10 +170,10 @@ const shopLinks = [
 
 const customerLinks = [
   { label: 'Contact Us', url: '/contact' },
-  { label: 'Shipping Info', url: '#' },
-  { label: 'Returns & Exchanges', url: '#' },
-  { label: 'Size Guide', url: '#' },
-  { label: 'Track Order', url: '#' },
+  { label: 'Shipping Info', url: '/shipping-information' },
+  { label: 'Returns & Exchanges', url: '/return-and-exchanges' },
+  { label: 'Size Guide', url: '/size-guides' },
+  { label: 'Track Order', url: '/track-order' },
 ]
 </script>
 
