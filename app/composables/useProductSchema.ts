@@ -16,7 +16,7 @@ export function useProductSeo(product: Ref<ProductResponse | null | undefined>) 
   )
 
   useSeoMeta({
-    title: () => (product.value?.name ? `${product.value.name} | MyStore` : 'Product | MyStore'),
+    title: () => (product.value?.name ? `${product.value.name}` : 'Product'),
     description: () =>
       product.value?.description || `Buy ${product.value?.name || 'this product'} online.`,
 
