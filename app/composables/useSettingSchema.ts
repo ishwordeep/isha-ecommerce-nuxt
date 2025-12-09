@@ -26,4 +26,22 @@ export function useSettingSeo(setting: Ref<SettingResponse | null | undefined>) 
       setting.value?.description || 'Welcome to Parish Jat Leo official website.',
     twitterImage: () => image.value,
   })
+
+  useHead(() => ({
+    link: [
+      {
+        rel: 'icon',
+        type: 'image/png',
+        href: setting.value?.faviconUrl
+          ? `${setting.value.faviconUrl}?v=${Date.now()}`
+          : '/favicon.ico',
+      },
+      {
+        rel: 'apple-touch-icon',
+        href: setting.value?.faviconUrl
+          ? `${setting.value.faviconUrl}?v=${Date.now()}`
+          : '/favicon.ico',
+      },
+    ],
+  }))
 }

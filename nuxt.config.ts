@@ -12,14 +12,11 @@ export default defineNuxtConfig({
   srcDir: 'app',
   app: {
     head: {
-      title: 'E-commerce ',
       meta: [
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
         { charset: 'utf-8' },
-        { name: 'description', content: 'E-commerce' },
         { name: 'format-detection', content: 'telephone=no' },
       ],
-      link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
     },
   },
   devtools: { enabled: true },
