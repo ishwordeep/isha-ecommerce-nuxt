@@ -23,8 +23,12 @@ const settingStore = useSettingStore()
 // Global hydration flag for app-wide usage
 const isHydrated = useState<boolean>('isHydrated', () => false)
 const toaster = { position: 'bottom-center', max: 3 } as const
+
+useAsyncData('initialize-setting', () => settingStore.fetchSetting())
+useSettingSeo(computed(() => settingStore.setting))
+
 onMounted(async () => {
-  await Promise.all([settingStore.fetchSetting(), authStore.initAuth()])
+  await authStore.initAuth()
   useSettingSeo(computed(() => settingStore.setting))
 
   if (!authStore.user && authStore.isAuthenticated) {
