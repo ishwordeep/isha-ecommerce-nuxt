@@ -3,13 +3,14 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "build": "nuxt build",
+     "build": "nuxt build",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview --port 6002",
+    "start": "nuxt start --port 6002",
+    "postinstall": "nuxt prepare",
     "deploy": "npm install && npm run build && pm2 reload frontend || pm2 start npm --name frontend -- run start",
-    "deploy:dev": "npm install && npm run build && pm2 reload frontend || pm2 start npm --name frontend -- run dev",
-    "postinstall": "nuxt prepare"
+    "deploy:dev": "npm install && npm run build && pm2 reload frontend || pm2 start npm --name frontend -- run dev"
   },
   "dependencies": {
     "@nuxt/eslint": "^1.9.0",
