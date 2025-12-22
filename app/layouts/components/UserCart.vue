@@ -67,14 +67,14 @@
             <div class="flex flex-1 flex-col">
               <h3 class="line-clamp-2 text-lg font-semibold">{{ item.name }}</h3>
               <div class="mt-2 flex gap-2 max-sm:flex-col sm:items-center">
-                <div class="flex items-center gap-1">
+                <div class="flex items-center gap-1" v-if="item.color">
                   <span class="text-sm font-medium">Color:</span>
                   <span
                     :style="{ backgroundColor: item.color }"
                     class="border-default h-5 w-5 rounded-sm border"
                   ></span>
                 </div>
-                <div class="flex items-center gap-1">
+                <div class="flex items-center gap-1" v-if="item.size">
                   <span class="text-sm font-medium">Size:</span>
                   <span class="line-clamp-1 text-sm">{{ item.size }}</span>
                 </div>

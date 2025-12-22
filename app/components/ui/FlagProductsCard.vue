@@ -166,13 +166,15 @@ const cartStore = useCartStore()
 const toast = useToast()
 
 const canAddToCart = computed(() => {
-  return selectedSize.value && selectedColor.value
+  if (props.product.sizes.length && !selectedSize.value) {
+    return false
+  } else if (props.product.colors.length && !selectedColor.value) {
+    return false
+  } else {
+    return true
+  }
 })
 
-const toggleWishlist = () => {
-  isWishlisted.value = !isWishlisted.value
-  // Emit or use Pinia store
-}
 const { addToCart } = useAddToCart()
 
 const handleAddToCart = (product: ProductResponse) => {

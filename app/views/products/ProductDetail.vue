@@ -25,8 +25,14 @@ const category = computed(() => {
   }
 })
 
-const selectedSize = ref<string>(unref(availableSizes.value[0] || ''))
-const selectedColor = ref<string>(unref(availableColors.value[0] || ''))
+const selectedSize = computed(() => {
+  return availableSizes.value.length > 0 ? availableSizes.value[0] : ''
+})
+
+const selectedColor = computed(() => {
+  return availableColors.value.length > 0 ? availableColors.value[0] : ''
+})
+
 const openLoginModal = ref(false)
 const authStore = useAuthStore()
 const toast = useToast()
@@ -100,7 +106,10 @@ const handleAddToCart = () => {
         </p>
 
         <!--Colors-->
-        <div class="border-b-default flex flex-col gap-1 border-b pb-4">
+        <div
+          class="border-b-default flex flex-col gap-1 border-b pb-4"
+          v-if="availableColors.length"
+        >
           <p class="mb-2 font-semibold">Select Color:</p>
           <div class="flex flex-wrap gap-2">
             <div
@@ -117,7 +126,10 @@ const handleAddToCart = () => {
         </div>
 
         <!--Sizes-->
-        <div class="border-b-default flex flex-col gap-1 border-b pb-4">
+        <div
+          class="border-b-default flex flex-col gap-1 border-b pb-4"
+          v-if="availableSizes.length"
+        >
           <p class="mb-2 font-semibold">Select Size:</p>
           <div class="flex flex-wrap gap-2">
             <UButton

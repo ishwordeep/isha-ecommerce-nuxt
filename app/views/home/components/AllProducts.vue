@@ -19,11 +19,7 @@
     <div
       class="grid w-full grid-cols-1 place-items-center gap-x-2 gap-y-4 min-[380px]:grid-cols-2 sm:gap-4 md:gap-6 lg:grid-cols-4"
     >
-      <HomeProductCard
-        v-for="product in productStore.products"
-        :key="product._id"
-        :product="product"
-      />
+      <ProductCard v-for="product in productStore.products" :key="product._id" :product="product" />
     </div>
 
     <!-- Load More -->
@@ -43,7 +39,7 @@
 </template>
 
 <script setup lang="ts">
-import HomeProductCard from '~/components/ui/HomeProductCard.vue'
+import ProductCard from '~/components/ui/ProductCard.vue'
 
 const isLoading = ref(true)
 const loadingMore = ref(false)

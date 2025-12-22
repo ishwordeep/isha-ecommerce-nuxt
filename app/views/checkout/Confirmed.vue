@@ -52,18 +52,20 @@
               <div
                 class="mt-1 flex flex-wrap items-center gap-2 max-sm:flex-col max-sm:items-start"
               >
-                <div class="flex items-center gap-2">
+                <div class="flex items-center gap-2" v-if="item.color">
                   <span class="text-sm text-gray-600 dark:text-gray-400"> Color: </span>
                   <div
                     class="h-4 w-4 rounded border border-gray-300 dark:border-gray-600"
                     :style="{ backgroundColor: item.color }"
                   />
                 </div>
-                <span class="text-sm text-gray-400 max-sm:hidden">•</span>
-                <span class="text-sm text-gray-600 dark:text-gray-400">
+                <span class="text-sm text-gray-400 max-sm:hidden" v-if="item.color && item.size"
+                  >•</span
+                >
+                <span class="text-sm text-gray-600 dark:text-gray-400" v-if="item.size">
                   Size: {{ item.size }}
                 </span>
-                <span class="text-sm text-gray-400 max-sm:hidden">•</span>
+                <span class="text-sm text-gray-400 max-sm:hidden" v-if="item.size">•</span>
                 <span class="text-sm text-gray-600 dark:text-gray-400">
                   Qty: {{ item.quantity }}
                 </span>
@@ -96,7 +98,14 @@
         </div>
       </div>
 
-      <div class="mt-8 text-center">
+      <div class="mt-8 flex items-center justify-center text-center">
+        <UButton
+          v-if="orderStore.selectedOrder?.paymentStatus === 'unpaid'"
+          variant="outline"
+          size="lg"
+          class="mr-4"
+          label="Pay Now"
+        />
         <UButton size="lg" @click="navigateTo('/')"> Continue Shopping</UButton>
       </div>
     </UCard>
@@ -107,6 +116,7 @@
 const orderStore = useOrderStore()
 
 onMounted(() => {
+  console.log(orderStore.selectedOrder)
   if (!orderStore.selectedOrder) {
     navigateTo('/')
   }

@@ -11,19 +11,22 @@
         <template #header>
           <div class="flex items-center gap-2">
             <div class="header-number">1</div>
-            <span class="header-text">Contact Information</span>
+            <div class="flex flex-col">
+              <span class="header-text">Contact Information</span>
+              <span class="text-sm text-gray-600">How can we reach you?</span>
+            </div>
           </div>
         </template>
 
         <div class="flex flex-col gap-4">
-          <UFormField label="Full Name" name="fullName">
+          <UFormField label="Full Name" name="fullName" required>
             <UInput v-model="checkoutStore.formInputs.name" />
           </UFormField>
           <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-            <UFormField label="Email" name="email">
+            <UFormField label="Email" name="email" required>
               <UInput v-model="checkoutStore.formInputs.email" />
             </UFormField>
-            <UFormField label="Phone Number" name="phone">
+            <UFormField label="Phone Number" name="phone" required>
               <UInput v-model="checkoutStore.formInputs.phone" />
             </UFormField>
           </div>
@@ -42,7 +45,10 @@
         <template #header>
           <div class="flex items-center gap-2">
             <div class="header-number">2</div>
-            <span class="header-text">Shipping Address</span>
+            <div class="flex flex-col">
+              <span class="header-text">Shipping Address <span class="text-error">*</span></span>
+              <span class="text-sm text-gray-600">Select a saved address for shipping</span>
+            </div>
           </div>
           <UButton
             label="Change"
@@ -89,7 +95,10 @@
         <template #header>
           <div class="flex items-center gap-2">
             <div class="header-number">3</div>
-            <span class="header-text">Payment Method</span>
+            <div class="flex flex-col">
+              <span class="header-text">Payment Method <span class="text-error">*</span></span>
+              <span class="text-sm text-gray-600">Select a Payment Method.</span>
+            </div>
           </div>
         </template>
 
@@ -110,7 +119,7 @@
     </UForm>
 
     <!-- Order Summary -->
-    <UPageCard class="h-max min-[960px]:mt-12" title="Order Summary">
+    <UPageCard class="h-max" title="Order Summary">
       <div class="flex max-h-[90dvh] flex-col overflow-y-auto pr-2 sm:max-h-[57dvh]">
         <!-- Cart Items -->
         <div
@@ -129,15 +138,19 @@
             </div>
             <div class="flex-1">
               <h3 class="font-medium">{{ item.name }}</h3>
-              <div class="mt-1 flex items-center gap-4 text-sm text-gray-600">
-                <span
+              <div
+                class="mt-1 flex items-center gap-4 text-sm text-gray-600"
+                v-if="item.size || item.color"
+              >
+                <span v-if="item.color"
                   >Color:
                   <span
                     :style="{ backgroundColor: item.color }"
                     class="inline-block h-4 w-4 rounded border"
-                  ></span
+                  >
+                  </span
                 ></span>
-                <span>Size: {{ item.size }}</span>
+                <span v-if="item.size">Size: {{ item.size }}</span>
               </div>
               <div class="mt-2 flex justify-between">
                 <span>Qty: {{ item.quantity }}</span>
@@ -173,6 +186,11 @@
             :disabled="disableButton"
             :loading="isPlacingOrder"
           />
+
+          <span class="text-sm text-gray-500 italic">
+            Fill in all required fields marked with <span class="text-error">*</span> to proceed
+            with your order.
+          </span>
         </div>
       </div>
     </UPageCard>
@@ -184,6 +202,7 @@
 
 <script lang="ts" setup>
 import type { Address } from '~/services/auth.service'
+import axiosService from '~/services/axios.service'
 import { useCartStore } from '~/stores/cart.store'
 import { useCheckoutStore } from '~/stores/checkout.store'
 import AddressSelectionModal from './components/AddressSelectionModal.vue'
@@ -243,7 +262,12 @@ const populateUserData = () => {
 }
 
 watch(() => authStore.user, populateUserData, { immediate: true })
-onMounted(populateUserData)
+onMounted(() => {
+  populateUserData()
+  if (!cartStore.carts?.length) {
+    navigateTo('/products')
+  }
+})
 
 const onSubmit = async () => {
   if (!authStore.selectedAddress) return
@@ -263,6 +287,7 @@ const onSubmit = async () => {
     shippingFee: totals.value.shipping,
   }
   const response = await checkoutStore.saveOrder(payload)
+  await axiosService.post(`/order/${response?.data?.data?.orderNumber}/payment-intent`, {})
   if (response?.data?.success) {
     await navigateTo('/checkout/confirmed')
   } else {

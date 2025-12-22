@@ -18,7 +18,7 @@
         />
       </div>
 
-      <div class="flex gap-6">
+      <div class="flex items-start gap-6">
         <div class="flex max-w-[200px] min-w-[200px] flex-col space-y-4 max-md:hidden">
           <UiBrowseByCategories />
         </div>

@@ -52,7 +52,7 @@
           <NuxtLink
             v-for="(product, idx) in order.items"
             :key="idx"
-            class="flex items-center gap-2 rounded-lg bg-gray-50 p-2"
+            class="flex items-start gap-2 rounded-lg bg-gray-50 p-2"
             :to="`/products/${product.productId}`"
             viewTransition
           >
@@ -66,10 +66,13 @@
                 v-if="product.image"
               />
             </div>
-            <div class="px-2 text-xs">
-              <div class="font-medium text-gray-900">{{ product.name }}</div>
-              <div class="text-gray-500">Qty: {{ product.quantity }}</div>
-              <div class="inline-flex items-center gap-1 text-gray-500">
+            <div class="flex flex-col gap-1 px-2">
+              <span class="text-sm font-medium text-gray-900">{{ product.name }}</span>
+              <span class="text-xs text-gray-500">Qty: {{ product.quantity }}</span>
+              <span
+                class="inline-flex items-center gap-1 text-xs text-gray-500"
+                v-if="product.color"
+              >
                 Color:
                 <UTooltip
                   :delay-duration="0"
@@ -83,13 +86,19 @@
                     class="inline-flex h-4 w-4 rounded-md border border-gray-300"
                   ></span>
                 </UTooltip>
-              </div>
+              </span>
+              <span
+                class="inline-flex items-center gap-1 text-xs text-gray-500"
+                v-if="product.size"
+              >
+                Size: {{ product.size }}
+              </span>
             </div>
           </NuxtLink>
         </div>
       </div>
 
-      <div class="mt-4 flex flex-wrap gap-2">
+      <div class="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4">
         <button
           class="flex-1 rounded-lg border border-gray-300 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
         >
@@ -104,6 +113,12 @@
           class="flex-1 rounded-lg border border-gray-300 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
         >
           Return
+        </button>
+        <button
+          class="flex-1 rounded-lg border border-gray-300 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+          v-if="order.paymentStatus === 'unpaid'"
+        >
+          Pay Now
         </button>
       </div>
     </div>
