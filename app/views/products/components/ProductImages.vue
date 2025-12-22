@@ -11,7 +11,11 @@
         viewport: 'rounded-md',
       }"
     >
-      <NuxtImg :src="item" class="mx-auto aspect-square h-full w-full rounded-md object-cover" />
+      <NuxtImg
+        :src="item"
+        class="mx-auto aspect-square h-full w-full cursor-pointer rounded-md object-cover"
+        @click="showImg"
+      />
     </UCarousel>
 
     <!-- Thumbnails -->
@@ -29,6 +33,15 @@
         >
           <NuxtImg :src="item" class="aspect-square min-w-[50px] rounded-sm object-cover" />
         </div>
+        <VueEasyLightbox
+          :visible="visibleRef"
+          :imgs="images"
+          :index="activeIndex"
+          :moveDisabled="true"
+          :minZoom="0.5"
+          :loop="true"
+          @hide="onHide"
+        />
       </div>
 
       <!-- Left Arrow -->
@@ -55,11 +68,14 @@
 </template>
 
 <script setup lang="ts">
+import VueEasyLightbox from 'vue-easy-lightbox'
+
 const productStore = useProductStore()
 
 const carousel = useTemplateRef('carousel')
 const activeIndex = ref(0)
 const thumbContainer = ref<HTMLElement | null>(null)
+const visibleRef = ref(false)
 
 const images = computed(() => {
   const product = productStore.selectedProduct
@@ -70,6 +86,11 @@ const images = computed(() => {
 
   return [...singleImage, ...multipleImages]
 })
+
+const showImg = () => {
+  visibleRef.value = true
+}
+const onHide = () => (visibleRef.value = false)
 
 function onSelect(index: number) {
   activeIndex.value = index

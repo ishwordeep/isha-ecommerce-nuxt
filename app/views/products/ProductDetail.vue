@@ -4,6 +4,7 @@ import { useProductSeo } from '~/composables/useProductSchema'
 import type { ProductResponse } from '~/services/product.service'
 import Faqs from './components/Faqs.vue'
 import ProductImages from './components/ProductImages.vue'
+import ProductStory from './components/ProductStory.vue'
 import RelatedProducts from './components/RelatedProducts.vue'
 
 const quantity = ref(1)
@@ -135,12 +136,22 @@ const handleAddToCart = () => {
           </div>
         </div>
 
-        <p
-          class="text-md text-primary border-b-default border-b pb-4 font-bold md:text-lg 2xl:text-xl"
-        >
-          ${{ productStore.selectedProduct?.price || '' }} &nbsp;
-          <!-- <span class="text-secondary line-through">Rs. 4000</span> -->
-        </p>
+        <div class="border-b-default flex items-center space-x-6 border-b pb-4">
+          <p class="text-md text-primary font-bold md:text-lg 2xl:text-xl">
+            ${{ productStore.selectedProduct?.price || '' }} &nbsp;
+            <!-- <span class="text-secondary line-through">Rs. 4000</span> -->
+          </p>
+
+          <UBadge
+            v-if="productStore.selectedProduct?.discount ?? 0 > 0"
+            color="error"
+            class="max-w-max"
+            variant="soft"
+            size="xl"
+          >
+            - {{ productStore.selectedProduct?.discount || 0 }}%
+          </UBadge>
+        </div>
 
         <UFormField name="quantity" label="Quantity">
           <UInputNumber v-model="quantity" :min="1" class="max-w-32" />
@@ -151,20 +162,11 @@ const handleAddToCart = () => {
           <!-- <UButton icon="i-lucide-heart" variant="outline" /> -->
           <UButton icon="i-lucide-share-2" variant="outline" />
         </div>
-
-        <UBadge
-          v-if="productStore.selectedProduct?.discount ?? 0 > 0"
-          color="error"
-          class="max-w-max"
-          variant="soft"
-          size="xl"
-        >
-          - {{ productStore.selectedProduct?.discount || 0 }}%
-        </UBadge>
       </div>
     </div>
 
-    <Faqs />
+    <ProductStory v-if="productStore.selectedProduct?.story" />
+    <Faqs v-if="productStore.selectedProduct?.faqs?.length" />
     <RelatedProducts />
   </div>
 </template>

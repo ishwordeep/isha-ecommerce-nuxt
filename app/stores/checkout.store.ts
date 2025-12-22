@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { reactive, ref } from 'vue'
 import type { Address } from '~/services/auth.service'
+import axiosService from '~/services/axios.service'
 import OrderService, { type OrderResponse } from '~/services/order.service'
 import type { ProductResponse } from '~/services/product.service'
 
@@ -60,7 +61,11 @@ export const useCheckoutStore = defineStore('checkout', () => {
   const saveOrder = async (orderData: CheckoutForm) => {
     isLoading.value = true
     try {
-      const response = await OrderService.saveOrder(orderData)
+      const orderResponse = await OrderService.saveOrder(orderData)
+      const response = await axiosService.post(
+        `/${orderResponse?.data?.data?.orderNumber}/payment-intent`,
+        {}
+      )
       if (response.data?.success) {
         orderStore.orders = [...(orderStore.orders || []), response.data.data as OrderResponse]
         orderStore.selectedOrder = response.data?.data

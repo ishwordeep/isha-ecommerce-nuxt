@@ -25,6 +25,7 @@ export interface ProductResponse {
   tags: string[]
   createdAt?: string
   updatedAt: string
+  story?: string
   faqs: Faq[]
   __v: number
   categoryDetails: CategoryDetails

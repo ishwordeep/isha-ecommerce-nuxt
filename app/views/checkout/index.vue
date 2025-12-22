@@ -6,8 +6,6 @@
       @submit.prevent="onSubmit"
       id="checkout-form"
     >
-      <h2 class="text-2xl font-semibold text-black">Checkout</h2>
-
       <!-- 1. Contact Information -->
       <UPageCard>
         <template #header>

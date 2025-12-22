@@ -1,5 +1,19 @@
 <template>
   <div class="space-y-4">
+    <!-- Status Tabs -->
+    <UCard class="mb-6">
+      <UTabs
+        :items="
+          statusOptions.map((s) => ({
+            ...s,
+            label: `${s.label} (${statusCounts[s.value as keyof typeof statusCounts]})`,
+          }))
+        "
+        v-model="selectedStatus"
+        class="w-full"
+      />
+    </UCard>
+
     <OrderSkeleton v-if="state.fetching" />
     <div
       v-else-if="!state.fetching && orderStore.orders?.length"
@@ -11,7 +25,7 @@
         <div>
           <div class="mb-2 flex flex-wrap items-center gap-3">
             <h3 class="text-md font-bold text-gray-900 sm:text-lg">{{ order.orderNumber }}</h3>
-            <OrderStatusBadge :status="order.status" />
+            <OrderStatusBadge :status="order.status as OrderStatus" />
           </div>
           <div class="text-sm text-gray-500">
             Placed on {{ new Date(order.createdAt).toLocaleDateString() }} •
@@ -52,9 +66,24 @@
                 v-if="product.image"
               />
             </div>
-            <div class="text-xs">
+            <div class="px-2 text-xs">
               <div class="font-medium text-gray-900">{{ product.name }}</div>
               <div class="text-gray-500">Qty: {{ product.quantity }}</div>
+              <div class="inline-flex items-center gap-1 text-gray-500">
+                Color:
+                <UTooltip
+                  :delay-duration="0"
+                  :text="product.color"
+                  :content="{
+                    side: 'top',
+                  }"
+                >
+                  <span
+                    :style="{ backgroundColor: product.color }"
+                    class="inline-flex h-4 w-4 rounded-md border border-gray-300"
+                  ></span>
+                </UTooltip>
+              </div>
             </div>
           </NuxtLink>
         </div>
@@ -92,7 +121,7 @@
         <h3 class="mb-3 text-xl font-semibold text-gray-900">No orders yet</h3>
 
         <p class="mb-8 text-gray-600">
-          Looks like you haven't placed any orders. When you do, they'll appear here.
+          {{ getEmptyMessage }}
         </p>
 
         <!-- Call to Action -->
@@ -113,24 +142,98 @@
 
 <script setup lang="ts">
 import OrderStatusBadge from '~/components/ui/OrderStatusBadge.vue'
-import type { OrderResponse } from '~/services/order.service'
+import type { OrderResponse, OrderStatus } from '~/services/order.service'
 import { useOrderStore } from '~/stores/order.store'
 import OrderDetail from './components/OrderDetail.vue'
 import OrderSkeleton from './components/OrderSkeleton.vue'
 
 const openDetail = ref(false)
+const searchTerm = ref('')
+const selectedStatus = ref<'pending' | string>('pending')
+// Pagination
+const pagination = reactive({
+  page: 1,
+  limit: 10,
+  total: computed(() => orderStore.pagination?.total || 0),
+})
+
+const getSelectedStatus = computed(() => {
+  return selectedStatus.value === 'pending'
+    ? 'PENDING_PAYMENT'
+    : selectedStatus.value === 'paid'
+      ? 'PAID'
+      : selectedStatus.value === 'shipped'
+        ? 'SHIPPED'
+        : selectedStatus.value === 'completed'
+          ? 'COMPLETED'
+          : selectedStatus.value === 'cancelled'
+            ? 'CANCELLED'
+            : ''
+})
+
+const getEmptyMessage = computed(() => {
+  if (searchTerm.value) {
+    return `No orders found for "${searchTerm.value}". Please try a different search term.`
+  }
+  switch (selectedStatus.value) {
+    case 'pending':
+      return 'You have no pending orders.'
+    case 'paid':
+      return 'You have no paid orders.'
+    case 'shipped':
+      return 'You have no shipped orders.'
+    case 'completed':
+      return 'You have no completed orders.'
+    case 'cancelled':
+      return 'You have no cancelled orders.'
+    default:
+      return 'You have no orders.'
+  }
+})
+
+const statusOptions = [
+  { value: 'pending', label: 'Pending', icon: 'i-lucide-clock' },
+  { value: 'paid', label: 'Paid', icon: 'i-lucide-package' },
+  { value: 'shipped', label: 'Shipped', icon: 'i-lucide-truck' },
+  { value: 'completed', label: 'Completed', icon: 'i-lucide-check-circle' },
+  { value: 'cancelled', label: 'Cancelled', icon: 'i-lucide-x-circle' },
+]
+
+// Status tabs with counts
+const statusCounts = computed(() => {
+  const pending = orderStore.orders?.length || 0
+  const map = { pending, paid: 0, shipped: 0, completed: 0, cancelled: 0 }
+
+  orderStore.orders?.forEach((o: OrderResponse) => {
+    if (map[o.status as keyof typeof map] !== undefined) {
+      map[o.status as keyof typeof map]++
+    }
+  })
+
+  return map
+})
+
 const state = reactive({
   fetching: false,
 })
 
 const orderStore = useOrderStore()
 
-onMounted(async () => {
+// Fetch orders
+const fetchOrders = async () => {
   state.fetching = true
-  if (!orderStore.orders?.length) {
-    await orderStore.fetchOrders()
-  }
+
+  await orderStore.fetchOrders({
+    page: pagination.page,
+    limit: pagination.limit,
+    search: searchTerm.value,
+    status: getSelectedStatus.value,
+  })
   state.fetching = false
+}
+
+watch([() => pagination.page, () => pagination.limit, searchTerm, selectedStatus], fetchOrders, {
+  immediate: true,
 })
 
 const viewOrderDetail = (order: OrderResponse) => {

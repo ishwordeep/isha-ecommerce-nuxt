@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
+import type { PaginationInterface, QueryInterface } from '~/services/index.service'
 import type { OrderResponse } from '~/services/order.service'
 import OrderService from '~/services/order.service'
 
@@ -8,6 +9,7 @@ export const useOrderStore = defineStore('order', () => {
   const selectedOrder = ref<OrderResponse | null>(null)
   const orders = ref<OrderResponse[] | null>(null)
   const orderFailed = ref(false)
+  const pagination = ref<PaginationInterface | null>(null)
 
   const initialState = () => ({
     isLoading: false,
@@ -24,12 +26,18 @@ export const useOrderStore = defineStore('order', () => {
     orderFailed.value = initialState().orderFailed
   }
 
-  const fetchOrders = async () => {
+  const fetchOrders = async ({
+    page = 1,
+    limit = 10,
+    search = '',
+    status = '',
+  }: QueryInterface) => {
     isLoading.value = true
     try {
-      const response = await OrderService.fetchOrders()
+      const response = await OrderService.fetchOrders({ page, limit, search, status })
       if (response.data?.success) {
         orders.value = response.data?.data as OrderResponse[]
+        // pagination.value = response.data?.pagination || null
       }
     } catch (error) {
       console.error('Error fetching orders:', error)
@@ -57,6 +65,7 @@ export const useOrderStore = defineStore('order', () => {
   return {
     isLoading,
     selectedOrder,
+    pagination,
     saveOrder,
     orders,
     orderFailed,

@@ -123,5 +123,10 @@ export default defineAppConfig({
         overlay: 'bg-black/60',
       },
     },
+    tooltip: {
+      slots: {
+        content: 'bg-gray-800 text-white text-sm',
+      },
+    },
   },
 })

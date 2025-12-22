@@ -1,4 +1,3 @@
-<!-- components/OrderStatusBadge.vue -->
 <script setup lang="ts">
 enum OrderStatus {
   PENDING_PAYMENT = 'PENDING_PAYMENT',

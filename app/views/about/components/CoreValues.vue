@@ -14,7 +14,8 @@ const aboutStore = useAboutStore()
       <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
         <div v-for="(item, i) in aboutStore.about?.coreValues" :key="i" class="group text-center">
           <div
-            :class="`h-20 w-20 bg-linear-to-br ${item.color} mx-auto mb-6 flex items-center justify-center rounded-2xl shadow-lg transition-transform group-hover:scale-110`"
+            class="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-2xl bg-linear-to-b shadow-lg transition-transform group-hover:scale-110"
+            :class="item.color"
           >
             <UIcon :name="item.icon" class="h-10 w-10 text-white" />
           </div>

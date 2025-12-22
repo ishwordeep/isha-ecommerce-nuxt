@@ -20,7 +20,7 @@ const isEmpty = computed(
 
 <template>
   <UContainer class="mx-auto max-w-5xl py-12">
-    <UCard>
+    <UPageCard title="Return and Exchanges">
       <!-- Loading / Empty State -->
       <div v-if="isEmpty" class="py-20 text-center">
         <UIcon
@@ -38,6 +38,6 @@ const isEmpty = computed(
         Last updated:
         {{ new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' }) }}
       </p>
-    </UCard>
+    </UPageCard>
   </UContainer>
 </template>

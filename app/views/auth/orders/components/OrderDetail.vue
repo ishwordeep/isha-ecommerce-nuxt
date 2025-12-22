@@ -37,11 +37,19 @@
                 <h5 class="font-semibold text-gray-900">{{ product.name }}</h5>
                 <div class="mt-1 flex items-center gap-2 text-sm text-gray-600">
                   Color:
-                  <span
-                    class="border-default inline-flex h-4 w-4 shrink-0 rounded-md border"
-                    :class="`bg-${product.color}`"
-                    :style="{ background: product.color }"
-                  />
+                  <UTooltip
+                    :delay-duration="0"
+                    :text="product.color"
+                    :content="{
+                      side: 'top',
+                    }"
+                  >
+                    <span
+                      class="border-default inline-flex h-4 w-4 shrink-0 rounded-md border"
+                      :class="`bg-${product.color}`"
+                      :style="{ background: product.color }"
+                    />
+                  </UTooltip>
                   • Size: {{ product.size }}
                 </div>
                 <div class="mt-2 flex items-center justify-between">

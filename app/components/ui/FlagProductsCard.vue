@@ -84,6 +84,7 @@
                 : 'border-transparent',
           ]"
           :style="{ backgroundColor: color }"
+          v-if="product.colors.length"
         >
           <span
             v-if="selectedColor === color"
@@ -93,6 +94,7 @@
             ✓
           </span>
         </button>
+        <div v-else class="h-6"></div>
       </div>
 
       <!-- Size Pills -->

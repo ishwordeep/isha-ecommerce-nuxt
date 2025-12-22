@@ -29,4 +29,5 @@ export interface QueryInterface {
   search?: string
   category?: string
   sort?: string
+  status?: string
 }
