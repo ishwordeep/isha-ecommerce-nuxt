@@ -25,18 +25,23 @@ const category = computed(() => {
   }
 })
 
-const selectedSize = computed(() => {
-  return availableSizes.value.length > 0 ? availableSizes.value[0] : ''
-})
+const selectedSize = ref('')
 
-const selectedColor = computed(() => {
-  return availableColors.value.length > 0 ? availableColors.value[0] : ''
-})
+const selectedColor = ref('')
 
 const openLoginModal = ref(false)
 const authStore = useAuthStore()
 const toast = useToast()
 const route = useRoute()
+
+onMounted(() => {
+  if (availableColors.value.length > 0) {
+    selectedColor.value = availableColors.value[0] || ''
+  }
+  if (availableSizes.value.length > 0) {
+    selectedSize.value = availableSizes.value[0] || ''
+  }
+})
 
 const breadcrumbs = computed(() => [
   {

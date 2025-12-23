@@ -116,6 +116,7 @@
         </button>
         <button
           class="flex-1 rounded-lg border border-gray-300 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+          @click="handlePayment(order)"
           v-if="order.paymentStatus === 'unpaid'"
         >
           Pay Now
@@ -157,6 +158,7 @@
 
 <script setup lang="ts">
 import OrderStatusBadge from '~/components/ui/OrderStatusBadge.vue'
+import axiosService from '~/services/axios.service'
 import type { OrderResponse, OrderStatus } from '~/services/order.service'
 import { useOrderStore } from '~/stores/order.store'
 import OrderDetail from './components/OrderDetail.vue'
@@ -255,5 +257,9 @@ const viewOrderDetail = (order: OrderResponse) => {
   console.log(order)
   orderStore.selectedOrder = order
   openDetail.value = true
+}
+
+const handlePayment = async (order: OrderResponse) => {
+  await axiosService.post(`/order/${order?.orderNumber}/payment-intent`, {})
 }
 </script>

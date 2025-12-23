@@ -104,6 +104,7 @@
           variant="outline"
           size="lg"
           class="mr-4"
+          @click="handlePayment(orderStore.selectedOrder!)"
           label="Pay Now"
         />
         <UButton size="lg" @click="navigateTo('/')"> Continue Shopping</UButton>
@@ -113,12 +114,18 @@
 </template>
 
 <script setup lang="ts">
+import axiosService from '~/services/axios.service'
+import type { OrderResponse } from '~/services/order.service'
+
 const orderStore = useOrderStore()
 
 onMounted(() => {
-  console.log(orderStore.selectedOrder)
   if (!orderStore.selectedOrder) {
     navigateTo('/')
   }
 })
+
+const handlePayment = async (order: OrderResponse) => {
+  await axiosService.post(`/order/${order?.orderNumber}/payment-intent`, {})
+}
 </script>
