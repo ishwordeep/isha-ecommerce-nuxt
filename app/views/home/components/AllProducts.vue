@@ -9,7 +9,7 @@
       <UButton
         to="/products"
         variant="outline"
-        class="rounded-xl border-2 border-gray-900 px-6 py-3 font-bold text-gray-900 transition-all duration-300 hover:bg-gray-900 hover:text-white"
+        class="ml-auto rounded-xl border-2 border-gray-900 px-6 py-3 font-bold text-gray-900 transition-all duration-300 hover:bg-gray-900 hover:text-white"
       >
         View All Products
       </UButton>

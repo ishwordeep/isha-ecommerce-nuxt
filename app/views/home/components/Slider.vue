@@ -80,13 +80,11 @@ function darkenHex(hex: string, percent = 18) {
       viewport: 'rounded-xl',
     }"
   >
-    <div
-      class="relative aspect-4/3 h-full w-full rounded-xl object-cover sm:aspect-video xl:aspect-21/9"
-    >
+    <div class="relative aspect-video h-full w-full rounded-xl object-cover sm:aspect-21/9">
       <NuxtImg
         :src="item.image"
         loading="lazy"
-        class="h-full w-full rounded-xl object-fill"
+        class="h-full w-full rounded-xl object-cover"
         format="webp"
         width="1920"
         height="1080"
@@ -94,7 +92,7 @@ function darkenHex(hex: string, percent = 18) {
       <NuxtLink
         v-if="item.isButtonEnabled && item.button?.link"
         :to="item.button.link"
-        class="group hover:shadow-3xl absolute right-4 bottom-6 z-10 flex items-center gap-3 overflow-hidden rounded-full px-7 py-4 font-bold tracking-wide shadow-2xl transition-all duration-300 hover:scale-110 focus:ring-4 focus:ring-white/50 focus:outline-none"
+        class="group hover:shadow-3xl absolute right-4 bottom-6 z-10 flex items-center gap-3 overflow-hidden rounded-full px-4 py-2 font-bold tracking-wide shadow-2xl transition-all duration-300 hover:scale-110 focus:ring-4 focus:ring-white/50 focus:outline-none max-sm:text-sm sm:px-7 sm:py-4"
         :style="buttonStyles(item.button)"
         @mouseover="
           (e) =>
