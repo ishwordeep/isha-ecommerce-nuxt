@@ -6,6 +6,7 @@ import Faqs from './components/Faqs.vue'
 import ProductImages from './components/ProductImages.vue'
 import ProductStory from './components/ProductStory.vue'
 import RelatedProducts from './components/RelatedProducts.vue'
+import Share from './components/Share.vue'
 
 const quantity = ref(1)
 
@@ -177,7 +178,7 @@ const handleAddToCart = () => {
         <div class="flex space-x-2">
           <UButton label="Add To Cart" class="max-w-32 justify-center" @click="handleAddToCart" />
           <!-- <UButton icon="i-lucide-heart" variant="outline" /> -->
-          <UButton icon="i-lucide-share-2" variant="outline" />
+          <Share />
         </div>
       </div>
     </div>
