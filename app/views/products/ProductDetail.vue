@@ -22,7 +22,7 @@ const availableSizes = computed(() => {
 const category = computed(() => {
   return {
     label: productStore.selectedProduct?.categoryDetails?.name || 'Category',
-    to: `/categories/${productStore.selectedProduct?.categoryDetails?._id || ''}`,
+    to: `/categories/${productStore.selectedProduct?.categoryDetails?.slug || productStore.selectedProduct?.categoryDetails?._id || ''}`,
   }
 })
 
@@ -103,7 +103,7 @@ const handleAddToCart = () => {
         <p class="border-b-default border-b pb-4 text-sm md:text-base 2xl:text-lg">
           Category
           <ULink
-            :to="`/categories/${productStore.selectedProduct?.categoryDetails?._id || ''}`"
+            :to="`/categories/${productStore.selectedProduct?.categoryDetails?.slug || productStore.selectedProduct?.categoryDetails?._id || ''}`"
             class="text-blue-500"
             viewTransition
           >

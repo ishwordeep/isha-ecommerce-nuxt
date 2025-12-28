@@ -40,6 +40,7 @@ export interface Faq {
 export interface CategoryDetails {
   _id: string
   name: string
+  slug?: string
 }
 
 class ProductService {

@@ -11,11 +11,14 @@ const aboutStore = useAboutStore()
           The passionate people behind Fashion Store
         </p>
       </div>
-      <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+      <div class="xs:grid-cols-2 grid grid-cols-1 gap-x-2 gap-y-4 sm:gap-4 lg:grid-cols-4">
         <UCard
           v-for="(member, i) in aboutStore.about?.team"
           :key="i"
-          class="overflow-hidden border border-gray-200 transition-all duration-300 hover:shadow-xl"
+          class="overflow-hidden border border-gray-200"
+          :ui="{
+            body: '!p-2',
+          }"
         >
           <div
             class="flex aspect-square items-center justify-center bg-linear-to-br from-blue-100 to-purple-100 text-8xl"
