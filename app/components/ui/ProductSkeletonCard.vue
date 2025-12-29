@@ -3,7 +3,7 @@
     class="group relative w-full overflow-hidden rounded-2xl border border-gray-100 bg-white transition-all duration-300 hover:bg-[#F6F3E8] hover:shadow-md"
   >
     <!-- Product Image Skeleton (only 1 skeleton) -->
-    <USkeleton class="aspect-[4/3] w-full" />
+    <USkeleton class="aspect-4/3 w-full" />
 
     <!-- Product Info Skeleton -->
     <div class="p-5">

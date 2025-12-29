@@ -99,14 +99,14 @@
       </div>
 
       <div class="mt-8 flex items-center justify-center text-center">
-        <UButton
+        <!-- <UButton
           v-if="orderStore.selectedOrder?.paymentStatus === 'unpaid'"
           variant="outline"
           size="lg"
           class="mr-4"
           @click="handlePayment(orderStore.selectedOrder!)"
           label="Pay Now"
-        />
+        /> -->
         <UButton size="lg" @click="navigateTo('/')"> Continue Shopping</UButton>
       </div>
     </UCard>

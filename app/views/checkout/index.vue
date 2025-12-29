@@ -235,7 +235,8 @@ const disableButton = computed(() => {
     checkoutStore.formInputs.name &&
     checkoutStore.formInputs.email &&
     checkoutStore.formInputs.phone &&
-    checkoutStore.formInputs.paymentMethod
+    checkoutStore.formInputs.paymentMethod &&
+    authStore.selectedAddress
   )
 })
 
@@ -287,7 +288,7 @@ const onSubmit = async () => {
     shippingFee: totals.value.shipping,
   }
   const response = await checkoutStore.saveOrder(payload)
-  await axiosService.post(`/order/${response?.data?.data?.orderNumber}/payment-intent`, {})
+  await axiosService.post(`/order/${response?.data?.data?._id}/payment-intent`, {})
   if (response?.data?.success) {
     await navigateTo('/checkout/confirmed')
   } else {
