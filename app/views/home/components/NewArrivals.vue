@@ -10,7 +10,7 @@
           <ProductSkeletonCard v-for="i in 4" :key="i" />
         </template>
 
-        <ProductCard
+        <UiProductCard2
           v-else
           :collection="collection"
           v-for="product in productStore.flagCollections.new.slice(0, 4)"
@@ -37,7 +37,6 @@
 </template>
 
 <script setup lang="ts">
-import ProductCard from '~/components/ui/ProductCard.vue'
 import ProductSkeletonCard from '~/components/ui/ProductSkeletonCard.vue'
 import SectionHeader from '~/components/ui/SectionHeader.vue'
 import { useProductStore } from '~/stores/product.store'

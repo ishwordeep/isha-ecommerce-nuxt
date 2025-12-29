@@ -5,7 +5,7 @@
   >
     <!-- Image Container -->
     <NuxtLink :to="`/products/${product.slug || product._id}`">
-      <div class="relative aspect-square w-full bg-gray-50">
+      <div class="relative aspect-square w-full overflow-hidden bg-gray-50">
         <!-- Discount Badge -->
         <div v-if="product.discount > 0" class="absolute top-3 left-3 z-10">
           <UBadge color="error" variant="solid" size="sm" class="font-bold">

@@ -23,7 +23,7 @@
         class="grid w-full grid-cols-1 justify-center gap-2 min-[420px]:grid-cols-2 sm:gap-4 lg:grid-cols-3 2xl:grid-cols-4"
       >
         <UiProductSkeletonCard v-if="state.isFetching" v-for="n in 8" :key="n" />
-        <UiProductCard
+        <UiProductCard2
           v-for="product in productStore.products"
           :product="product"
           :key="product._id"

@@ -26,7 +26,7 @@
       >
         <UiProductSkeletonCard v-if="isLoading" v-for="n in 8" :key="n" />
 
-        <UiProductCard
+        <UiProductCard2
           v-else
           v-for="product in collectionProducts"
           :product="product"

@@ -126,6 +126,6 @@ onMounted(() => {
 })
 
 const handlePayment = async (order: OrderResponse) => {
-  await axiosService.post(`/order/${order?.orderNumber}/payment-intent`, {})
+  await axiosService.post(`/order/${order?._id}/payment-intent`, {})
 }
 </script>

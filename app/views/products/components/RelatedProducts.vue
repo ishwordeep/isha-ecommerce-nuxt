@@ -21,7 +21,7 @@ const isMdUp = useMediaQuery('(min-width: 768px)')
       class="grid w-full grid-cols-1 place-items-center gap-x-2 gap-y-4 min-[400px]:grid-cols-2 sm:gap-4 md:gap-6 lg:grid-cols-4"
     >
       <UiProductSkeletonCard v-if="isLoading" v-for="n in 8" :key="n" />
-      <UiProductCard v-for="product in products" :product="product" v-else />
+      <UiProductCard2 v-for="product in products" :product="product" v-else />
     </div>
   </div>
 </template>
