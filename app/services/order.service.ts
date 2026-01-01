@@ -64,6 +64,12 @@ class OrderService {
   ): Promise<RootServiceInterface<ItemResponse<OrderResponse>>> {
     return await AxiosService.post('/order', orderData)
   }
+
+  async fetchOrderById(
+    orderId: string
+  ): Promise<RootServiceInterface<ItemResponse<OrderResponse>>> {
+    return await AxiosService.get(`/order/${orderId}`)
+  }
 }
 
 export default new OrderService()

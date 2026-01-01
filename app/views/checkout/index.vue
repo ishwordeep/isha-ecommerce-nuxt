@@ -1,5 +1,7 @@
 <template>
-  <div class="grid grid-cols-1 gap-4 min-[960px]:grid-cols-2">
+  <UiLoader v-if="cartStore.isFetching" />
+
+  <div class="grid grid-cols-1 gap-4 min-[960px]:grid-cols-2" v-else>
     <UForm
       :state="checkoutStore.formInputs"
       class="flex flex-col gap-4"
@@ -7,7 +9,11 @@
       id="checkout-form"
     >
       <!-- 1. Contact Information -->
-      <UPageCard>
+      <UPageCard
+        :ui="{
+          header: '!mb-0',
+        }"
+      >
         <template #header>
           <div class="flex items-center gap-2">
             <div class="header-number">1</div>
@@ -39,7 +45,7 @@
       <!-- 2. Shipping Address (Saved Addresses Only) -->
       <UPageCard
         :ui="{
-          header: 'justify-between items-center flex gap-4 w-full',
+          header: 'justify-between items-center flex gap-4 w-full !mb-0',
         }"
       >
         <template #header>
@@ -62,7 +68,7 @@
         <!-- Selected Address Display -->
         <div
           v-if="authStore.selectedAddress"
-          class="flex flex-col gap-2 rounded-lg bg-gray-50 p-5 dark:bg-gray-900"
+          class="flex flex-col gap-2 rounded-lg bg-gray-50 dark:bg-gray-900"
         >
           <p class="font-medium text-gray-900 dark:text-white">
             {{ authStore.selectedAddress.street }}
@@ -91,7 +97,11 @@
       </UPageCard>
 
       <!-- 3. Payment Method -->
-      <UPageCard>
+      <UPageCard
+        :ui="{
+          header: '!mb-0',
+        }"
+      >
         <template #header>
           <div class="flex items-center gap-2">
             <div class="header-number">3</div>
@@ -119,81 +129,7 @@
     </UForm>
 
     <!-- Order Summary -->
-    <UPageCard class="h-max" title="Order Summary">
-      <div class="flex max-h-[90dvh] flex-col overflow-y-auto pr-2 sm:max-h-[57dvh]">
-        <!-- Cart Items -->
-        <div
-          v-for="item in cartStore.carts"
-          :key="item.productId"
-          class="border-b border-gray-200 py-4 last:border-b-0"
-        >
-          <div class="flex gap-4">
-            <div class="border-default aspect-square w-20 shrink-0 rounded-md border">
-              <NuxtImg
-                v-if="item.image"
-                :src="item.image"
-                alt="Product"
-                class="h-full w-full rounded-md object-cover"
-              />
-            </div>
-            <div class="flex-1">
-              <h3 class="font-medium">{{ item.name }}</h3>
-              <div
-                class="mt-1 flex items-center gap-4 text-sm text-gray-600"
-                v-if="item.size || item.color"
-              >
-                <span v-if="item.color"
-                  >Color:
-                  <span
-                    :style="{ backgroundColor: item.color }"
-                    class="inline-block h-4 w-4 rounded border"
-                  >
-                  </span
-                ></span>
-                <span v-if="item.size">Size: {{ item.size }}</span>
-              </div>
-              <div class="mt-2 flex justify-between">
-                <span>Qty: {{ item.quantity }}</span>
-                <span class="font-medium">${{ (item.price * item.quantity).toFixed(2) }}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Totals -->
-        <div class="sticky bottom-0 border-t border-gray-600 bg-white pt-4">
-          <div class="space-y-2">
-            <div class="flex justify-between">
-              <span>Subtotal</span>
-              <span>${{ totals.subTotal.toFixed(2) }}</span>
-            </div>
-            <div class="flex justify-between">
-              <span>Shipping</span>
-              <span>${{ totals.shipping.toFixed(2) }}</span>
-            </div>
-            <div class="flex justify-between text-lg font-bold">
-              <span>Total</span>
-              <span class="text-primary">${{ totals.total.toFixed(2) }}</span>
-            </div>
-          </div>
-
-          <UButton
-            type="submit"
-            form="checkout-form"
-            label="Place Order"
-            class="mt-4 w-full justify-center"
-            color="primary"
-            :disabled="disableButton"
-            :loading="isPlacingOrder"
-          />
-
-          <span class="text-sm text-gray-500 italic">
-            Fill in all required fields marked with <span class="text-error">*</span> to proceed
-            with your order.
-          </span>
-        </div>
-      </div>
-    </UPageCard>
+    <OrderSummary :isPlacingOrder="isPlacingOrder" />
   </div>
 
   <!-- Address Selection Modal -->
@@ -202,10 +138,10 @@
 
 <script lang="ts" setup>
 import type { Address } from '~/services/auth.service'
-import axiosService from '~/services/axios.service'
 import { useCartStore } from '~/stores/cart.store'
 import { useCheckoutStore } from '~/stores/checkout.store'
 import AddressSelectionModal from './components/AddressSelectionModal.vue'
+import OrderSummary from './components/OrderSummary.vue'
 
 const checkoutStore = useCheckoutStore()
 const cartStore = useCartStore()
@@ -219,26 +155,6 @@ const checkoutMethods = ref([
   { label: 'Credit / Debit Card', value: 'card', icon: 'i-lucide-credit-card' },
   { label: 'Apple Pay', value: 'apple_pay', icon: 'i-simple-icons-applepay' },
 ])
-
-const totals = computed(() => {
-  const subTotal = cartStore.cartTotal
-  const shipping = (cartStore.carts?.length || 0) > 0 ? 5 : 0
-  return {
-    subTotal,
-    shipping,
-    total: subTotal + shipping,
-  }
-})
-
-const disableButton = computed(() => {
-  return !(
-    checkoutStore.formInputs.name &&
-    checkoutStore.formInputs.email &&
-    checkoutStore.formInputs.phone &&
-    checkoutStore.formInputs.paymentMethod &&
-    authStore.selectedAddress
-  )
-})
 
 const handleAddressSelect = (address: Address) => {
   authStore.selectedAddress = address // For display
@@ -265,10 +181,16 @@ const populateUserData = () => {
 watch(() => authStore.user, populateUserData, { immediate: true })
 onMounted(() => {
   populateUserData()
-  if (!cartStore.carts?.length) {
-    navigateTo('/products')
-  }
 })
+
+watch(
+  () => cartStore.isFetching,
+  (newVal) => {
+    if (!newVal && !cartStore.carts?.length) {
+      navigateTo('/products')
+    }
+  }
+)
 
 const onSubmit = async () => {
   if (!authStore.selectedAddress) return
@@ -282,13 +204,13 @@ const onSubmit = async () => {
     ...checkoutStore.formInputs,
     shippingAddress: shippingAddress,
     items: products || [],
-    grandTotal: totals.value.total,
-    subtotal: totals.value.subTotal,
+    grandTotal: cartStore.totals.total,
+    subtotal: cartStore.totals.subTotal,
     discountTotal: 0,
-    shippingFee: totals.value.shipping,
+    shippingFee: cartStore.totals.shipping,
   }
   const response = await checkoutStore.saveOrder(payload)
-  await axiosService.post(`/order/${response?.data?.data?._id}/payment-intent`, {})
+  // await axiosService.post(`/order/${response?.data?.data?._id}/payment-intent`, {})
   if (response?.data?.success) {
     await navigateTo('/checkout/confirmed')
   } else {

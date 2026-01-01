@@ -45,6 +45,8 @@ export const useCheckoutStore = defineStore('checkout', () => {
   const formInputs = reactive<CheckoutForm>(emptyForm())
   const orderStore = useOrderStore()
   const cartStore = useCartStore()
+  const clientSecret = ref('')
+  const selectedOrder = ref<OrderResponse | null>(null)
 
   const initialState = () => ({
     isLoading: false,
@@ -80,5 +82,7 @@ export const useCheckoutStore = defineStore('checkout', () => {
     formInputs,
     saveOrder,
     reset,
+    clientSecret,
+    selectedOrder,
   }
 })

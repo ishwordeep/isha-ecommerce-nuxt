@@ -114,18 +114,51 @@
 </template>
 
 <script setup lang="ts">
-import axiosService from '~/services/axios.service'
-import type { OrderResponse } from '~/services/order.service'
+import { loadStripe } from '@stripe/stripe-js'
 
 const orderStore = useOrderStore()
+const cartStore = useCartStore()
+const config = useRuntimeConfig()
+const route = useRoute()
 
-onMounted(() => {
-  if (!orderStore.selectedOrder) {
-    navigateTo('/')
+const isLoading = ref(true)
+const paymentStatus = ref<'loading' | 'success' | 'failed' | 'processing'>('loading')
+
+onMounted(async () => {
+  // 1. Get the Payment Intent secret from the URL redirect
+  const clientSecret = route.query.payment_intent_client_secret
+
+  if (clientSecret) {
+    try {
+      const stripe = await loadStripe(config.public.stripePublishableKey)
+      if (stripe) {
+        const { paymentIntent } = await stripe.retrievePaymentIntent(clientSecret as string)
+
+        if (paymentIntent?.status === 'succeeded') {
+          paymentStatus.value = 'success'
+          // 2. Fetch fresh order data from backend (which should now be marked as 'paid')
+          if (orderStore.selectedOrder?._id) {
+            await orderStore.fetchOrderById(orderStore.selectedOrder._id)
+          }
+          // 3. Clear the cart since purchase is confirmed
+          cartStore.reset()
+        } else {
+          paymentStatus.value = 'failed'
+        }
+      }
+    } catch (e) {
+      console.error('Verification error:', e)
+      paymentStatus.value = 'failed'
+    } finally {
+      isLoading.value = false
+    }
+  } else {
+    // If we arrived here without a clientSecret, check if we have a pre-existing order
+    if (!orderStore.selectedOrder) {
+      navigateTo('/')
+    }
+    paymentStatus.value = 'success'
+    isLoading.value = false
   }
 })
-
-const handlePayment = async (order: OrderResponse) => {
-  await axiosService.post(`/order/${order?._id}/payment-intent`, {})
-}
 </script>

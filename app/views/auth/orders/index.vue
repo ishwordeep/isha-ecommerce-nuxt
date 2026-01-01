@@ -174,6 +174,8 @@ import OrderSkeleton from './components/OrderSkeleton.vue'
 const openDetail = ref(false)
 const searchTerm = ref('')
 const selectedStatus = ref<'pending' | string>('pending')
+const checkoutStore = useCheckoutStore()
+
 // Pagination
 const pagination = reactive({
   page: 1,
@@ -267,6 +269,9 @@ const viewOrderDetail = (order: OrderResponse) => {
 }
 
 const handlePayment = async (order: OrderResponse) => {
-  await axiosService.post(`/order/${order?._id}/payment-intent`, {})
+  const response = await axiosService.post(`/order/${order?._id}/payment-intent`, {})
+  checkoutStore.clientSecret = response.data.data.clientSecret
+  checkoutStore.selectedOrder = order
+  navigateTo(`/checkout/pay-now/${order._id}`)
 }
 </script>

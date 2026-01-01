@@ -14,12 +14,24 @@ export const useCartStore = defineStore('cart', () => {
   const isLoading = ref(false)
   const carts = ref<Item[] | null>(null)
   const cartTotal = ref<number>(0)
+  const totals = computed(() => {
+    const subTotal = cartTotal.value
+    const shipping = (carts.value?.length || 0) > 0 ? 5 : 0
+    return {
+      subTotal,
+      shipping,
+      total: subTotal + shipping,
+    }
+  })
+
+  const isFetching = ref(false)
 
   // Initial state (for reset)
   const initialState = () => ({
     isLoading: false,
     carts: null as Item[] | null,
     cartTotal: 0,
+    isFetching: false,
   })
 
   const reset = () => {
@@ -30,7 +42,7 @@ export const useCartStore = defineStore('cart', () => {
   }
 
   const fetchCarts = async () => {
-    isLoading.value = true
+    isFetching.value = true
     try {
       // Simulate API call
       const response = await CartService.fetchCartItems()
@@ -46,7 +58,7 @@ export const useCartStore = defineStore('cart', () => {
       console.log('Error', error)
       // Handle error if needed
     } finally {
-      isLoading.value = false
+      isFetching.value = false
     }
   }
 
@@ -140,5 +152,7 @@ export const useCartStore = defineStore('cart', () => {
     removeFromCart,
     updateCart,
     reset,
+    totals,
+    isFetching,
   }
 })

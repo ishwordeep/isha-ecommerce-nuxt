@@ -24,9 +24,18 @@ export default defineNuxtConfig({
     public: {
       apiUrl: '',
       appUrl: '',
+      stripePublishableKey: '',
     },
+    stripeSecretKey: '',
   },
-  modules: ['@nuxt/eslint', '@nuxt/image', '@nuxt/ui', '@nuxt/fonts', '@pinia/nuxt'],
+  modules: [
+    '@nuxt/eslint',
+    '@nuxt/image',
+    '@nuxt/ui',
+    '@nuxt/fonts',
+    '@pinia/nuxt',
+    '@unlok-co/nuxt-stripe',
+  ],
   ui: {
     colorMode: false,
     theme: {

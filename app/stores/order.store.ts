@@ -62,6 +62,20 @@ export const useOrderStore = defineStore('order', () => {
     }
   }
 
+  const fetchOrderById = async (orderId: string) => {
+    isLoading.value = true
+    try {
+      const response = await OrderService.fetchOrderById(orderId)
+      if (response.data?.success) {
+        selectedOrder.value = response.data?.data as OrderResponse
+      }
+    } catch (error) {
+      console.error('Error fetching order by ID:', error)
+    } finally {
+      isLoading.value = false
+    }
+  }
+
   return {
     isLoading,
     selectedOrder,
@@ -71,5 +85,6 @@ export const useOrderStore = defineStore('order', () => {
     orderFailed,
     fetchOrders,
     reset,
+    fetchOrderById,
   }
 })
