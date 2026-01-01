@@ -271,7 +271,7 @@ const viewOrderDetail = (order: OrderResponse) => {
 const handlePayment = async (order: OrderResponse) => {
   const response = await axiosService.post(`/order/${order?._id}/payment-intent`, {})
   checkoutStore.clientSecret = response.data.data.clientSecret
-  checkoutStore.selectedOrder = order
+  orderStore.selectedOrder = order
   navigateTo(`/checkout/pay-now/${order._id}`)
 }
 </script>

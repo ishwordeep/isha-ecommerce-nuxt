@@ -15,12 +15,12 @@ export const useCartStore = defineStore('cart', () => {
   const carts = ref<Item[] | null>(null)
   const cartTotal = ref<number>(0)
   const totals = computed(() => {
-    const subTotal = cartTotal.value
+    const subtotal = cartTotal.value
     const shipping = (carts.value?.length || 0) > 0 ? 5 : 0
     return {
-      subTotal,
+      subtotal,
       shipping,
-      total: subTotal + shipping,
+      total: subtotal + shipping,
     }
   })
 

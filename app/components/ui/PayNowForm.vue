@@ -1,9 +1,6 @@
 <script setup lang="ts">
 import { loadStripe, type Stripe, type StripeElements } from '@stripe/stripe-js'
 
-/* ----------------------------
- * State & Stripe Config
- * ---------------------------- */
 const config = useRuntimeConfig()
 const cartStore = useCartStore()
 const checkoutStore = useCheckoutStore()
@@ -14,9 +11,6 @@ const paymentElement = ref(null)
 let stripe: Stripe | null = null
 let elements: StripeElements | null = null
 
-/* ----------------------------
- * Initialization
- * ---------------------------- */
 onMounted(async () => {
   console.log(config.public.stripePublishableKey)
 
@@ -31,7 +25,12 @@ onMounted(async () => {
     })
 
     // 2. Create the unified Payment Element
-    const paymentElementInstance = elements.create('payment')
+    const paymentElementInstance = elements.create('payment', {
+      layout: {
+        type: 'tabs',
+        defaultCollapsed: false,
+      },
+    })
 
     // 3. Mount to your ref
     if (paymentElement.value) {

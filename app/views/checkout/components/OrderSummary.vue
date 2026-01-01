@@ -1,59 +1,24 @@
 <template>
   <UPageCard class="h-max" title="Order Summary">
     <div class="flex max-h-[90dvh] flex-col overflow-y-auto pr-2 sm:max-h-[57dvh]">
-      <!-- Cart Items -->
-      <div
-        v-for="item in cartStore.carts"
-        :key="item.productId"
-        class="border-b border-gray-200 py-4 last:border-b-0"
-      >
-        <div class="flex gap-4">
-          <div class="border-default aspect-square w-20 shrink-0 rounded-md border">
-            <NuxtImg
-              v-if="item.image"
-              :src="item.image"
-              alt="Product"
-              class="h-full w-full rounded-md object-cover"
-            />
-          </div>
-          <div class="flex-1">
-            <h3 class="font-medium">{{ item.name }}</h3>
-            <div
-              class="mt-1 flex items-center gap-4 text-sm text-gray-600"
-              v-if="item.size || item.color"
-            >
-              <span v-if="item.color"
-                >Color:
-                <span
-                  :style="{ backgroundColor: item.color }"
-                  class="inline-block h-4 w-4 rounded border"
-                >
-                </span
-              ></span>
-              <span v-if="item.size">Size: {{ item.size }}</span>
-            </div>
-            <div class="mt-2 flex justify-between">
-              <span>Qty: {{ item.quantity }}</span>
-              <span class="font-medium">${{ (item.price * item.quantity).toFixed(2) }}</span>
-            </div>
-          </div>
-        </div>
-      </div>
+      <!-- Items -->
+
+      <UiOrderItem v-for="item in orderItems" :key="item.productId" :item="item" />
 
       <!-- Totals -->
       <div class="sticky bottom-0 border-t border-gray-600 bg-white pt-4">
         <div class="space-y-2">
           <div class="flex justify-between">
             <span>Subtotal</span>
-            <span>${{ cartStore.totals.subTotal.toFixed(2) }}</span>
+            <span>${{ totals.subtotal.toFixed(2) }}</span>
           </div>
           <div class="flex justify-between">
             <span>Shipping</span>
-            <span>${{ cartStore.totals.shipping.toFixed(2) }}</span>
+            <span>${{ totals.shipping.toFixed(2) }}</span>
           </div>
           <div class="flex justify-between text-lg font-bold">
             <span>Total</span>
-            <span class="text-primary">${{ cartStore.totals.total.toFixed(2) }}</span>
+            <span class="text-primary">${{ totals.total.toFixed(2) }}</span>
           </div>
         </div>
 
@@ -78,13 +43,17 @@
 </template>
 
 <script setup lang="ts">
-import axiosService from '~/services/axios.service'
-
 const cartStore = useCartStore()
 const checkoutStore = useCheckoutStore()
 const authStore = useAuthStore()
-const totals = ref({ ...cartStore.totals })
+const orderStore = useOrderStore()
+const totals = ref({
+  subtotal: 0,
+  shipping: 0,
+  total: 0,
+})
 const route = useRoute()
+const id = route.params.id as string | undefined
 
 const props = withDefaults(
   defineProps<{
@@ -96,10 +65,25 @@ const props = withDefaults(
   }
 )
 
+const orderItems = computed(() => {
+  if (id && orderStore.selectedOrder?.items) {
+    console.log({
+      orderItems: orderStore.selectedOrder?.items,
+      cartItems: cartStore.carts,
+    })
+    return orderStore.selectedOrder.items
+  }
+  console.log({
+    orderItems: orderStore.selectedOrder?.items,
+    cartItems: cartStore.carts,
+  })
+  return cartStore.carts
+})
+
 watch(
   () => cartStore.totals,
   (newTotals) => {
-    if (!route.params.id) {
+    if (!id) {
       totals.value = newTotals
     }
   },
@@ -107,23 +91,24 @@ watch(
 )
 
 onMounted(async () => {
-  if (route.params.id) {
+  if (id) {
     if (!checkoutStore.selectedOrder) {
-      const response = await axiosService.get(`/orders/${route.params.id}`)
+      const response = await orderStore.fetchOrderById(id)
       // 3. Overwrite the local ref
       totals.value = {
-        subTotal: response.data.data.subTotal,
-        shipping: response.data.data.shipping,
-        total: response.data.data.total,
+        subtotal: response?.data?.data?.subtotal || 0,
+        shipping: response?.data?.data?.shippingFee || 0,
+        total: response?.data?.data?.grandTotal || 0,
       }
     } else {
       // 3. Overwrite the local ref
       totals.value = {
-        subTotal: checkoutStore.selectedOrder.subtotal,
+        subtotal: checkoutStore.selectedOrder.subtotal,
         shipping: checkoutStore.selectedOrder.shippingFee,
         total: checkoutStore.selectedOrder.grandTotal,
       }
     }
+    console.log(totals)
   }
 })
 

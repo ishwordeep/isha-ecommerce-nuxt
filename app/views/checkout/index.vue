@@ -205,7 +205,7 @@ const onSubmit = async () => {
     shippingAddress: shippingAddress,
     items: products || [],
     grandTotal: cartStore.totals.total,
-    subtotal: cartStore.totals.subTotal,
+    subtotal: cartStore.totals.subtotal,
     discountTotal: 0,
     shippingFee: cartStore.totals.shipping,
   }

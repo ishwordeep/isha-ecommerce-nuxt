@@ -68,6 +68,7 @@ export const useOrderStore = defineStore('order', () => {
       const response = await OrderService.fetchOrderById(orderId)
       if (response.data?.success) {
         selectedOrder.value = response.data?.data as OrderResponse
+        return response
       }
     } catch (error) {
       console.error('Error fetching order by ID:', error)
