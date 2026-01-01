@@ -1,11 +1,7 @@
 <template>
   <div class="relative flex min-h-screen w-full flex-col">
     <!-- Wait for client-side auth initialization to avoid flashing unauthenticated UI -->
-    <div v-if="!isHydrated" class="fixed inset-0 z-50 flex items-center justify-center bg-white">
-      <div
-        class="inline-block h-12 w-12 animate-spin rounded-full border-4 border-solid border-r-transparent"
-      ></div>
-    </div>
+    <UiLoader v-if="!isHydrated" />
 
     <template v-else-if="isAuthenticated">
       <UiNavbar />

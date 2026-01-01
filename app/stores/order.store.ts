@@ -10,6 +10,11 @@ export const useOrderStore = defineStore('order', () => {
   const orders = ref<OrderResponse[] | null>(null)
   const orderFailed = ref(false)
   const pagination = ref<PaginationInterface | null>(null)
+  const orderTotals = ref({
+    subtotal: 0,
+    shipping: 0,
+    total: 0,
+  })
 
   const initialState = () => ({
     isLoading: false,
@@ -87,5 +92,6 @@ export const useOrderStore = defineStore('order', () => {
     fetchOrders,
     reset,
     fetchOrderById,
+    orderTotals,
   }
 })

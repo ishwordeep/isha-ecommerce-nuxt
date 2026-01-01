@@ -2,7 +2,7 @@
 import { loadStripe, type Stripe, type StripeElements } from '@stripe/stripe-js'
 
 const config = useRuntimeConfig()
-const cartStore = useCartStore()
+const orderStore = useOrderStore()
 const checkoutStore = useCheckoutStore()
 const processing = ref(false)
 const errorMessage = ref('')
@@ -12,8 +12,6 @@ let stripe: Stripe | null = null
 let elements: StripeElements | null = null
 
 onMounted(async () => {
-  console.log(config.public.stripePublishableKey)
-
   // 1. Initialize Stripe
   stripe = await loadStripe(config.public.stripePublishableKey)
 
@@ -21,7 +19,7 @@ onMounted(async () => {
     // 1. Initialize elements with the secret from your backend
     elements = stripe.elements({
       clientSecret: checkoutStore.clientSecret,
-      appearance: { theme: 'stripe' }, // Optional: customize the look
+      appearance: { theme: 'stripe' },
     })
 
     // 2. Create the unified Payment Element
@@ -51,7 +49,7 @@ const handlePayment = async () => {
   const { error } = await stripe.confirmPayment({
     elements,
     confirmParams: {
-      return_url: `${window.location.origin}/checkout/confirmed`,
+      return_url: `${window.location.origin}/checkout/${orderStore.selectedOrder?._id}/confirmed`,
     },
   })
 
@@ -64,15 +62,13 @@ const handlePayment = async () => {
 </script>
 
 <template>
-  <UCard :ui="{ header: '!p-0' }">
+  <UCard :ui="{ header: 'from-secondary to-secondary/80 rounded-t-xl bg-linear-to-r text-white' }">
     <template #header>
-      <div class="from-secondary to-secondary/80 rounded-t-xl bg-linear-to-r p-6 text-white">
-        <div class="mb-2 flex items-center gap-3">
-          <Icon name="i-lucide-lock" class="h-6 w-6" />
-          <h1 class="text-2xl font-bold">Secure Payment</h1>
-        </div>
-        <p class="text-sm text-blue-100">PCI-compliant encryption via Stripe</p>
+      <div class="mb-2 flex items-center gap-3">
+        <Icon name="i-lucide-lock" class="h-6 w-6" />
+        <h1 class="text-2xl font-bold">Secure Payment</h1>
       </div>
+      <p class="text-sm text-blue-100">PCI-compliant encryption via Stripe</p>
     </template>
 
     <div class="space-y-6">
@@ -106,7 +102,7 @@ const handlePayment = async () => {
         <template #leading>
           <Icon name="i-lucide-lock" class="h-5 w-5" />
         </template>
-        Pay ${{ cartStore.totals.total.toFixed(2) }}
+        Pay ${{ orderStore.orderTotals.total.toFixed(2) }}
       </UButton>
     </div>
   </UCard>

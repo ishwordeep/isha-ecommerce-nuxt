@@ -22,6 +22,9 @@ const open = computed({
 const showPassword = ref(false)
 const auth = useAuth()
 const toast = useToast()
+const state = reactive({
+  isLoading: false,
+})
 defineShortcuts({
   o: () => (open.value = !open.value),
 })
@@ -32,6 +35,7 @@ const inputs = reactive({
 })
 
 const onSubmit = async () => {
+  state.isLoading = true
   const response = await auth.login({
     email: inputs.email,
     password: inputs.password,
@@ -47,6 +51,7 @@ const onSubmit = async () => {
       duration: 5000,
     })
   }
+  state.isLoading = false
 }
 // props are defined above via withDefaults
 </script>
@@ -83,7 +88,7 @@ const onSubmit = async () => {
         <div class="flex justify-end">
           <span class="cursor-pointer hover:underline"> Forgot Password? </span>
         </div>
-        <UButton type="submit" label="Login" class="justify-center" />
+        <UButton type="submit" label="Login" class="justify-center" :loading="state.isLoading" />
       </UForm>
     </template>
   </UModal>

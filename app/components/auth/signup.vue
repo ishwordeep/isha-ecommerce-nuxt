@@ -1,10 +1,13 @@
 <script setup lang="ts">
-import { useAuth } from '~/composables/useAuth'
 import { z } from 'zod'
+import { useAuth } from '~/composables/useAuth'
 const open = ref(false)
 const showPassword = ref(false)
 const auth = useAuth()
 const toast = useToast()
+const state = reactive({
+  isLoading: false,
+})
 defineShortcuts({
   o: () => (open.value = !open.value),
 })
@@ -40,6 +43,7 @@ const inputs = reactive({
 })
 
 const onSubmit = async () => {
+  state.isLoading = true
   const response = await auth.register({
     name: inputs.name,
     email: inputs.email,
@@ -63,6 +67,7 @@ const onSubmit = async () => {
       duration: 5000,
     })
   }
+  state.isLoading = false
 }
 </script>
 
@@ -101,10 +106,7 @@ const onSubmit = async () => {
         <UFormField name="phone" label="Phone" required>
           <UInput name="phone" type="phone" v-model="inputs.phone" />
         </UFormField>
-        <div class="flex justify-end">
-          <span class="cursor-pointer hover:underline"> Forgot Password? </span>
-        </div>
-        <UButton type="submit" label="Login" class="justify-center" />
+        <UButton type="submit" label="Sign Up" class="justify-center" :loading="state.isLoading" />
       </UForm>
     </template>
   </UModal>

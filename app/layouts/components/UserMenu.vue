@@ -29,6 +29,7 @@ const items: DropdownMenuItem[][] = [
       color: 'error',
       onSelect: async () => {
         await auth.logout()
+        navigateTo('/')
       },
     },
   ],

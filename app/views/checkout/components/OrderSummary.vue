@@ -80,35 +80,29 @@ const orderItems = computed(() => {
   return cartStore.carts
 })
 
-watch(
-  () => cartStore.totals,
-  (newTotals) => {
-    if (!id) {
-      totals.value = newTotals
-    }
-  },
-  { deep: true }
-)
-
 onMounted(async () => {
   if (id) {
     if (!checkoutStore.selectedOrder) {
       const response = await orderStore.fetchOrderById(id)
-      // 3. Overwrite the local ref
       totals.value = {
         subtotal: response?.data?.data?.subtotal || 0,
         shipping: response?.data?.data?.shippingFee || 0,
         total: response?.data?.data?.grandTotal || 0,
       }
+
+      orderStore.orderTotals = totals.value
     } else {
-      // 3. Overwrite the local ref
       totals.value = {
         subtotal: checkoutStore.selectedOrder.subtotal,
         shipping: checkoutStore.selectedOrder.shippingFee,
         total: checkoutStore.selectedOrder.grandTotal,
       }
+
+      orderStore.orderTotals = totals.value
     }
-    console.log(totals)
+  } else {
+    totals.value = cartStore.totals
+    orderStore.orderTotals = cartStore.totals
   }
 })
 

@@ -212,7 +212,7 @@ const onSubmit = async () => {
   const response = await checkoutStore.saveOrder(payload)
   // await axiosService.post(`/order/${response?.data?.data?._id}/payment-intent`, {})
   if (response?.data?.success) {
-    await navigateTo('/checkout/confirmed')
+    await navigateTo(`/checkout/${response?.data?.data?._id}/confirmed`)
   } else {
     toast.add({
       color: 'error',
