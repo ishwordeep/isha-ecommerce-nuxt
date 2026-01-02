@@ -165,7 +165,6 @@
 
 <script setup lang="ts">
 import OrderStatusBadge from '~/components/ui/OrderStatusBadge.vue'
-import axiosService from '~/services/axios.service'
 import type { OrderResponse, OrderStatus } from '~/services/order.service'
 import { useOrderStore } from '~/stores/order.store'
 import OrderDetail from './components/OrderDetail.vue'
@@ -269,9 +268,8 @@ const viewOrderDetail = (order: OrderResponse) => {
 }
 
 const handlePayment = async (order: OrderResponse) => {
-  const response = await axiosService.post(`/order/${order?._id}/payment-intent`, {})
-  checkoutStore.clientSecret = response.data.data.clientSecret
   orderStore.selectedOrder = order
+  await orderStore.initiatePayment()
   navigateTo(`/checkout/pay-now/${order._id}`)
 }
 </script>

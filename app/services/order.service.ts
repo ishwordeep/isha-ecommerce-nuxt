@@ -39,6 +39,15 @@ export interface OrderResponse {
   updatedAt: string
   __v: number
   id: string
+  paymentIntent: PaymentIntent | null
+}
+
+export interface PaymentIntent {
+  orderId: string
+  clientSecret: string
+  paymentIntentId: string
+  amount: number
+  currency: string
 }
 
 class OrderService {
@@ -69,6 +78,12 @@ class OrderService {
     orderId: string
   ): Promise<RootServiceInterface<ItemResponse<OrderResponse>>> {
     return await AxiosService.get(`/order/${orderId}`)
+  }
+
+  async initiatePayment(
+    orderId: string
+  ): Promise<RootServiceInterface<ItemResponse<PaymentIntent>>> {
+    return await AxiosService.post(`/order/${orderId}/payment-intent`, {})
   }
 }
 

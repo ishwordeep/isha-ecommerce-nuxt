@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import OrderSummary from './components/OrderSummary.vue'
 
-const checkoutStore = useCheckoutStore()
 const loadPage = ref(false)
 
 onMounted(() => {

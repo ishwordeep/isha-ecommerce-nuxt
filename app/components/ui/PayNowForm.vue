@@ -3,7 +3,6 @@ import { loadStripe, type Stripe, type StripeElements } from '@stripe/stripe-js'
 
 const config = useRuntimeConfig()
 const orderStore = useOrderStore()
-const checkoutStore = useCheckoutStore()
 const processing = ref(false)
 const errorMessage = ref('')
 const paymentElement = ref(null)
@@ -15,10 +14,10 @@ onMounted(async () => {
   // 1. Initialize Stripe
   stripe = await loadStripe(config.public.stripePublishableKey)
 
-  if (stripe && checkoutStore.clientSecret) {
+  if (stripe && orderStore.paymentIntent?.clientSecret) {
     // 1. Initialize elements with the secret from your backend
     elements = stripe.elements({
-      clientSecret: checkoutStore.clientSecret,
+      clientSecret: orderStore.paymentIntent.clientSecret,
       appearance: { theme: 'stripe' },
     })
 
@@ -34,6 +33,8 @@ onMounted(async () => {
     if (paymentElement.value) {
       paymentElementInstance.mount(paymentElement.value)
     }
+  } else {
+    errorMessage.value = 'Failed to initialize payment form. Please try again.'
   }
 })
 
@@ -72,7 +73,7 @@ const handlePayment = async () => {
     </template>
 
     <div class="space-y-6">
-      <div ref="paymentElement"></div>
+      <div ref="paymentElement" v-if="!errorMessage"></div>
 
       <UAlert
         v-if="errorMessage"
@@ -94,7 +95,7 @@ const handlePayment = async () => {
         type="button"
         block
         size="xl"
-        color="info"
+        color="secondary"
         :loading="processing"
         class="from-secondary to-secondary/80 bg-linear-to-r"
         @click="handlePayment"

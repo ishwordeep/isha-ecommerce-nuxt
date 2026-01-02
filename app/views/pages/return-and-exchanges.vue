@@ -20,7 +20,12 @@ const isEmpty = computed(
 
 <template>
   <UContainer class="mx-auto max-w-5xl py-12">
-    <UPageCard title="Return and Exchanges">
+    <UPageCard
+      title="Return and Exchanges"
+      :ui="{
+        title: 'text-2xl font-semibold',
+      }"
+    >
       <!-- Loading / Empty State -->
       <div v-if="isEmpty" class="py-20 text-center">
         <UIcon
