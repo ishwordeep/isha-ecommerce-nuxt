@@ -1,5 +1,5 @@
 import AxiosService from './axios.service'
-import type { ListResponse, RootServiceInterface } from './index.service'
+import type { ItemResponse, ListResponse, RootServiceInterface } from './index.service'
 
 export interface CategoryResponse {
   _id: string
@@ -23,6 +23,13 @@ class CategoryService {
   async fetchCategories(): Promise<RootServiceInterface<ListResponse<CategoryResponse>>> {
     const url = `/frontend/category`
     return await AxiosService.get<ListResponse<CategoryResponse>>(url)
+  }
+
+  async fetchCategoryById(
+    id: string
+  ): Promise<RootServiceInterface<ItemResponse<CategoryResponse>>> {
+    const url = `/frontend/category/${id}`
+    return await AxiosService.get<ItemResponse<CategoryResponse>>(url)
   }
 }
 

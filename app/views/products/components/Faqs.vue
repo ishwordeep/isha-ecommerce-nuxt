@@ -20,8 +20,9 @@ const items = computed(
       class="w-full max-w-4xl space-y-4"
       :ui="{
         label: 'text-left text-lg md:text-xl xl:text-2xl font-medium',
-        body: 'text-gray-600 text-base md:text-md xl:text-lg text-left',
-        item: 'border border-gray-500  px-2  last:border-b',
+        body: 'text-gray-600 text-base md:text-md xl:text-lg text-left px-2',
+        item: 'border border-gray-400   last:border-b',
+        header: 'hover:bg-gray-100 px-2',
       }"
       v-if="items.length"
     />

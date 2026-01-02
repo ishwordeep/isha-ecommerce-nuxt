@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import type { PaginationInterface, QueryInterface } from '~/services/index.service'
+import type { PaginationInterface, QueryInterface, StatusCount } from '~/services/index.service'
 import type { OrderResponse, PaymentIntent } from '~/services/order.service'
 import OrderService from '~/services/order.service'
 
@@ -11,6 +11,7 @@ export const useOrderStore = defineStore('order', () => {
   const orderFailed = ref(false)
   const pagination = ref<PaginationInterface | null>(null)
   const paymentIntent = ref<PaymentIntent | null>(null)
+  const statusCounts = ref<StatusCount | null>(null)
   const orderTotals = ref({
     subtotal: 0,
     shipping: 0,
@@ -43,7 +44,8 @@ export const useOrderStore = defineStore('order', () => {
       const response = await OrderService.fetchOrders({ page, limit, search, status })
       if (response.data?.success) {
         orders.value = response.data?.data as OrderResponse[]
-        // pagination.value = response.data?.pagination || null
+        pagination.value = response.data?.pagination || null
+        statusCounts.value = response.data?.statusCounts || null
       }
     } catch (error) {
       console.error('Error fetching orders:', error)
@@ -89,10 +91,6 @@ export const useOrderStore = defineStore('order', () => {
       isLoading.value = false
       return null
     }
-    if (selectedOrder.value.paymentIntent) {
-      paymentIntent.value = selectedOrder.value.paymentIntent
-      return selectedOrder.value.paymentIntent
-    }
     isLoading.value = true
     try {
       const response = await OrderService.initiatePayment(selectedOrder.value?._id || '')
@@ -120,5 +118,6 @@ export const useOrderStore = defineStore('order', () => {
     orderTotals,
     initiatePayment,
     paymentIntent,
+    statusCounts,
   }
 })

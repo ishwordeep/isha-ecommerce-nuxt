@@ -37,7 +37,7 @@
       </span>
 
       <!-- Name -->
-      <h3 class="mb-1 line-clamp-1 font-semibold text-gray-900">
+      <h3 class="mb-1 line-clamp-1 font-semibold text-gray-900 max-sm:text-sm">
         <NuxtLink
           :to="`/products/${product.slug || product._id}`"
           class="hover:text-secondary transition-colors"
@@ -48,7 +48,7 @@
 
       <!-- Price -->
       <div class="flex items-baseline gap-2">
-        <span class="text-lg font-bold text-gray-900"> ${{ product.price.toFixed(2) }} </span>
+        <span class="font-bold text-gray-900 sm:text-lg"> ${{ product.price.toFixed(2) }} </span>
         <!-- <span
           v-if="product.originalPrice > product.price"
           class="text-sm text-gray-400 line-through"

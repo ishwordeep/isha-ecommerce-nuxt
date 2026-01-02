@@ -15,6 +15,7 @@ export interface ListResponse<T> {
   message: string
   success: boolean
   pagination?: PaginationInterface
+  statusCounts?: StatusCount
 }
 
 export interface ItemResponse<T> {
@@ -30,4 +31,13 @@ export interface QueryInterface {
   category?: string
   sort?: string
   status?: string
+}
+
+export interface StatusCount {
+  ALL: number
+  PENDING_PAYMENT: number
+  PAID: number
+  SHIPPED: number
+  COMPLETED: number
+  CANCELLED: number
 }

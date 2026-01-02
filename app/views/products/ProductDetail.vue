@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import Login from '~/components/auth/login.vue'
 import { useProductSeo } from '~/composables/useProductSchema'
+import type { CategoryResponse } from '~/services/category.service'
 import type { ProductResponse } from '~/services/product.service'
 import Faqs from './components/Faqs.vue'
 import ProductImages from './components/ProductImages.vue'
@@ -11,7 +12,7 @@ import Share from './components/Share.vue'
 const quantity = ref(1)
 
 const productStore = useProductStore()
-
+const categoryStore = useCategoryStore()
 const availableColors = computed(() => {
   return productStore.selectedProduct?.colors || []
 })
@@ -104,8 +105,13 @@ const handleAddToCart = () => {
           Category
           <ULink
             :to="`/categories/${productStore.selectedProduct?.categoryDetails?.slug || productStore.selectedProduct?.categoryDetails?._id || ''}`"
-            class="text-blue-500"
+            class="text-primary font-medium"
             viewTransition
+            @click="
+              categoryStore.setSelectedCategory(
+                productStore.selectedProduct?.categoryDetails as CategoryResponse
+              )
+            "
           >
             {{ productStore.selectedProduct?.categoryDetails?.name || '' }}
           </ULink>

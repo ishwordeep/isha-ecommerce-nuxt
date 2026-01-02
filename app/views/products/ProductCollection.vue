@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col gap-6">
-    <div class="flex flex-wrap items-end justify-between gap-4 border-y border-y-gray-300 py-4">
+    <div class="flex flex-wrap items-end justify-between gap-4 border-b border-b-gray-300 pb-4">
       <div class="flex flex-col space-y-5">
         <h2 class="text-2xl font-medium text-black md:text-4xl">
           {{ title }}
@@ -22,7 +22,7 @@
         <UiBrowseByCategories />
       </div>
       <div
-        class="grid w-full grid-cols-1 justify-center gap-2 min-[450px]:grid-cols-2 sm:gap-4 lg:grid-cols-3 2xl:grid-cols-4"
+        class="grid w-full grid-cols-1 justify-center gap-2 min-[360px]:grid-cols-2 sm:gap-4 lg:grid-cols-3 2xl:grid-cols-4"
       >
         <UiProductSkeletonCard v-if="isLoading" v-for="n in 8" :key="n" />
 

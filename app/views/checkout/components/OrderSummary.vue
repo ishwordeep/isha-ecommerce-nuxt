@@ -111,7 +111,6 @@ const disableButton = computed(() => {
     checkoutStore.formInputs.name &&
     checkoutStore.formInputs.email &&
     checkoutStore.formInputs.phone &&
-    checkoutStore.formInputs.paymentMethod &&
     authStore.selectedAddress
   )
 })

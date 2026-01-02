@@ -66,10 +66,7 @@
         </template>
 
         <!-- Selected Address Display -->
-        <div
-          v-if="authStore.selectedAddress"
-          class="flex flex-col gap-2 rounded-lg bg-gray-50 dark:bg-gray-900"
-        >
+        <div v-if="authStore.selectedAddress" class="flex flex-col gap-2 rounded-lg">
           <p class="font-medium text-gray-900 dark:text-white">
             {{ authStore.selectedAddress.street }}
             {{
@@ -95,37 +92,6 @@
           />
         </div>
       </UPageCard>
-
-      <!-- 3. Payment Method -->
-      <UPageCard
-        :ui="{
-          header: '!mb-0',
-        }"
-      >
-        <template #header>
-          <div class="flex items-center gap-2">
-            <div class="header-number">3</div>
-            <div class="flex flex-col">
-              <span class="header-text">Payment Method <span class="text-error">*</span></span>
-              <span class="text-sm text-gray-600">Select a Payment Method.</span>
-            </div>
-          </div>
-        </template>
-
-        <URadioGroup
-          v-model="checkoutStore.formInputs.paymentMethod"
-          :items="checkoutMethods"
-          variant="card"
-          class="gap-3"
-        >
-          <template #label="{ item }">
-            <div class="flex items-center gap-3">
-              <UIcon :name="item.icon" class="h-6 w-6" />
-              <span class="font-medium">{{ item.label }}</span>
-            </div>
-          </template>
-        </URadioGroup>
-      </UPageCard>
     </UForm>
 
     <!-- Order Summary -->
@@ -150,11 +116,6 @@ const toast = useToast()
 const openAddressModal = ref(false)
 
 const isPlacingOrder = ref(false)
-
-const checkoutMethods = ref([
-  { label: 'Credit / Debit Card', value: 'card', icon: 'i-lucide-credit-card' },
-  { label: 'Apple Pay', value: 'apple_pay', icon: 'i-simple-icons-applepay' },
-])
 
 const handleAddressSelect = (address: Address) => {
   authStore.selectedAddress = address // For display

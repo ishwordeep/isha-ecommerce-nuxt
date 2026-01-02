@@ -1,6 +1,11 @@
 import type { Address } from './auth.service'
 import AxiosService from './axios.service'
-import type { ItemResponse, QueryInterface, RootServiceInterface } from './index.service'
+import type {
+  ItemResponse,
+  ListResponse,
+  QueryInterface,
+  RootServiceInterface,
+} from './index.service'
 
 export enum OrderStatus {
   PENDING_PAYMENT = 'PENDING_PAYMENT',
@@ -39,7 +44,6 @@ export interface OrderResponse {
   updatedAt: string
   __v: number
   id: string
-  paymentIntent: PaymentIntent | null
 }
 
 export interface PaymentIntent {
@@ -52,19 +56,18 @@ export interface PaymentIntent {
 
 class OrderService {
   async fetchOrders({
-    page,
-    limit,
-    search,
-    status,
-  }: QueryInterface): Promise<RootServiceInterface<ItemResponse<OrderResponse[]>>> {
-    const params = new URLSearchParams()
+    page = 1,
+    limit = 10,
+    search = '',
+    status = '',
+  }: QueryInterface): Promise<RootServiceInterface<ListResponse<OrderResponse>>> {
+    let url = `/order/user?page=${page}&limit=${limit}`
     if (search) {
-      params.append('search', search)
+      url += `&search=${encodeURIComponent(search)}`
     }
     if (status) {
-      params.append('status', status)
+      url += `&status=${encodeURIComponent(status)}`
     }
-    const url = `/order/user?${params.toString()}`
     return await AxiosService.get(url)
   }
 

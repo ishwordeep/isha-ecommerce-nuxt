@@ -17,7 +17,7 @@
 
     <!-- Product Grid -->
     <div
-      class="grid w-full grid-cols-1 place-items-center gap-x-2 gap-y-4 min-[380px]:grid-cols-2 sm:gap-4 md:gap-6 lg:grid-cols-4"
+      class="grid w-full grid-cols-1 place-items-center gap-x-2 gap-y-4 min-[360px]:grid-cols-2 sm:gap-4 md:gap-6 lg:grid-cols-4"
     >
       <UiProductCard2
         v-for="product in productStore.products"

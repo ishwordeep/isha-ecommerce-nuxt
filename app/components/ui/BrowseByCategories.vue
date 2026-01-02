@@ -20,11 +20,13 @@
         </template>
         <ULink
           v-else
-          class="line-clamp-1"
+          class="hover:text-primary line-clamp-1 cursor-pointer text-gray-700"
           v-for="category in categoryStore.categories"
           :to="`/categories/${category.slug}`"
           :key="category._id"
           viewTransition
+          @click="categoryStore.setSelectedCategory(category)"
+          active-class="text-primary font-semibold"
         >
           {{ category.name }}
         </ULink>
