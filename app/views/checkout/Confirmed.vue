@@ -115,12 +115,10 @@
 </template>
 
 <script setup lang="ts">
-import axiosService from '~/services/axios.service'
 import type { OrderResponse } from '~/services/order.service'
 
 const orderStore = useOrderStore()
 const route = useRoute()
-const checkoutStore = useCheckoutStore()
 const isLoading = ref(true)
 
 onMounted(async () => {
@@ -131,9 +129,8 @@ onMounted(async () => {
 })
 
 const handlePayment = async (order: OrderResponse) => {
-  const response = await axiosService.post(`/order/${order?._id}/payment-intent`, {})
-  checkoutStore.clientSecret = response.data.data.clientSecret
   orderStore.selectedOrder = order
+  await orderStore.initiatePayment()
   navigateTo(`/checkout/pay-now/${order._id}`)
 }
 </script>

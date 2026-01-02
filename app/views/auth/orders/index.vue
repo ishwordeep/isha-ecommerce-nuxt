@@ -261,20 +261,6 @@ const statusOptions = computed(() => [
   },
 ])
 
-// Status tabs with counts
-const statusCounts = computed(() => {
-  const pending = orderStore.orders?.length || 0
-  const map = { pending, paid: 0, shipped: 0, completed: 0, cancelled: 0 }
-
-  orderStore.orders?.forEach((o: OrderResponse) => {
-    if (map[o.status as keyof typeof map] !== undefined) {
-      map[o.status as keyof typeof map]++
-    }
-  })
-
-  return map
-})
-
 const state = reactive({
   fetching: false,
 })

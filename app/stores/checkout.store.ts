@@ -14,7 +14,6 @@ export interface CheckoutForm {
   shippingFee: number
   grandTotal: number
   shippingAddress: Partial<Address>
-  paymentMethod: string
   notes: string
 }
 
@@ -36,7 +35,6 @@ const emptyForm = (): CheckoutForm => ({
     zipCode: '',
     country: '',
   },
-  paymentMethod: '',
   notes: '',
 })
 
