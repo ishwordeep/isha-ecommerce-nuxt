@@ -46,7 +46,7 @@
               alt="Category Image"
               class="h-full w-full object-contain transition-all duration-300 group-hover:scale-125 group-hover:rotate-6"
             />
-            <div v-else class="h-24 w-24 rounded-full bg-gray-200" />
+            <div v-else class="h-full w-full bg-gray-200" />
           </div>
 
           <!-- Item Count Badge -->

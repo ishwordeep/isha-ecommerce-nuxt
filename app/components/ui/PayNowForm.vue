@@ -50,7 +50,7 @@ const handlePayment = async () => {
   const { error } = await stripe.confirmPayment({
     elements,
     confirmParams: {
-      return_url: `${window.location.origin}/checkout/${orderStore.selectedOrder?._id}/confirmed`,
+      return_url: `${window.location.origin}/checkout/${orderStore.selectedOrder?._id}/payment-confirmed`,
     },
   })
 

@@ -67,16 +67,8 @@ const props = withDefaults(
 
 const orderItems = computed(() => {
   if (id && orderStore.selectedOrder?.items) {
-    console.log({
-      orderItems: orderStore.selectedOrder?.items,
-      cartItems: cartStore.carts,
-    })
     return orderStore.selectedOrder.items
   }
-  console.log({
-    orderItems: orderStore.selectedOrder?.items,
-    cartItems: cartStore.carts,
-  })
   return cartStore.carts
 })
 

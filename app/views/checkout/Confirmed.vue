@@ -1,6 +1,6 @@
 <template>
   <UiLoader v-if="isLoading" />
-  <div class="mx-auto max-w-4xl py-4 lg:py-12" v-else>
+  <div class="mx-auto w-full max-w-4xl py-4 lg:py-12" v-else>
     <UCard>
       <div class="mb-8 text-center">
         <div
@@ -9,10 +9,10 @@
           <UIcon name="i-heroicons-cube" class="h-10 w-10 text-green-600" />
         </div>
 
-        <h2 class="mb-4 text-3xl font-bold">Order Confirmed!</h2>
+        <h2 class="mb-4 text-3xl font-bold">{{ title }}</h2>
 
         <p class="mb-4 text-gray-600 dark:text-gray-400">
-          Thank you for your purchase. Your order has been successfully placed.
+          {{ description }}
         </p>
 
         <div class="inline-block rounded-lg bg-gray-50 p-4 dark:bg-gray-800">
@@ -116,6 +116,17 @@
 
 <script setup lang="ts">
 import type { OrderResponse } from '~/services/order.service'
+
+defineProps({
+  title: {
+    type: String,
+    default: 'Order Confirmed',
+  },
+  description: {
+    type: String,
+    default: 'Thank you for your purchase! Your order has been successfully placed.',
+  },
+})
 
 const orderStore = useOrderStore()
 const route = useRoute()

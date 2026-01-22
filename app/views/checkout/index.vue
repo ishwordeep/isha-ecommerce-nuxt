@@ -114,7 +114,7 @@ const cartStore = useCartStore()
 const authStore = useAuthStore()
 const toast = useToast()
 const openAddressModal = ref(false)
-
+const orderStore = useOrderStore()
 const isPlacingOrder = ref(false)
 
 const handleAddressSelect = (address: Address) => {
@@ -173,7 +173,9 @@ const onSubmit = async () => {
   const response = await checkoutStore.saveOrder(payload)
   // await axiosService.post(`/order/${response?.data?.data?._id}/payment-intent`, {})
   if (response?.data?.success) {
-    await navigateTo(`/checkout/${response?.data?.data?._id}/confirmed`)
+    orderStore.selectedOrder = response?.data?.data
+    await orderStore.initiatePayment()
+    navigateTo(`/checkout/pay-now/${response?.data?.data?._id}`)
   } else {
     toast.add({
       color: 'error',
